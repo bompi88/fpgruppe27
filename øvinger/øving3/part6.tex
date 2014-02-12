@@ -1,0 +1,177 @@
+%--------------------------------------------------------------------------------------------------%
+% Testing
+%--------------------------------------------------------------------------------------------------%
+
+%--------------------------------------------------------------------------------------------------%
+% Scenario 1
+%--------------------------------------------------------------------------------------------------%
+
+\begin{table}
+    \centering
+	\begin{tabularx}{1.2\textwidth}{| p{5cm} | X |}
+	\hline
+	\textbf{TestID} 																& 1\\ \hline
+	\textbf{Test item (features to be tested)} 											& Register product\\ \hline
+	\textbf{Approach} 															& An employee runs a test on the system. The system has to be run on a representative computer. 
+																			The test is repeated at different time intervals.\\ \hline
+	\textbf{Item pass / fail criteria} 													& The product has to be registered in a database with the correct information.\\ \hline
+	\textbf{Input data} 															& Product name: Intel CPU\\ 
+																			& Product price: 2499 NOK\\ 
+																			& Product image: http://www.intel.com/images/26262\\ 
+																			& Tests: {http://www.cnet.com/tests/intel/23434, http://www.itavisen.no/tester/7367} \\ 
+																			& Manufacturer links: {http://www.intel.com/product/3432/v2}\\ \hline
+	\textbf{Expected results}									 					& Product with the specific input data should be added to the system.\\ \hline
+	\textbf{Testing task (description of test)} 											& 1.The employee clicks on Register a product \\
+																			& 2. The employee fills in name, price, info and product image.  Additional information like manufacture links and tests is optional.\\
+																			& 3. He publishes the product.\\
+																			& 4. He verifies that the product has been correctly added.\\ \hline
+	\textbf{Necessary environmental requirements} 										& The user must be an employee and logged into the system.\\ \hline
+	\textbf{References to user scenario, use case, sequence diagrams and overall class diagram} 		& Scenario 1\\ \hline
+	\textbf{Any dependability between this test and the other tests defined.}		 				& NaN\\ \hline
+	\end{tabularx}
+\end{table}
+
+%--------------------------------------------------------------------------------------------------%
+% Scenario 2
+%--------------------------------------------------------------------------------------------------%
+
+\begin{table}
+    \centering
+	\begin{tabularx}{1.2\textwidth}{| p{5cm} | X |}
+	\hline
+	\textbf{TestID} 																& 2.1\\ \hline
+	\textbf{Test item (features to be tested)} 											& Register experience with product\\ \hline
+	\textbf{Approach} 															& A user runs a test on the system. The system has to be run on a representative computer. 
+																			The test is repeated at different time intervals.\\ \hline
+	\textbf{Item pass / fail criteria} 													& The experience has to be registered in a database with the correct information.\\ \hline
+	\textbf{Input data} 															& Title: Great product!\\
+																			& Text: I like this fantastic product!\\ \hline
+	\textbf{Expected results}									 					& The product experience should be added to the system.\\ \hline
+	\textbf{Testing task (description of test)} 											& 1. The user finds the item he wants to register a product experience for.\\
+																			& 2. He writes an experience. \\
+																			& 3. He publishes.\\
+																			& 4. He verifies that the experience is correctly added to the system. \\ \hline
+	\textbf{Necessary environmental requirements} 										& The user must be logged in.\\ \hline
+	\textbf{References to user scenario, use case, sequence diagrams and overall class diagram} 		& Scenario 2\\ \hline
+	\textbf{Any dependability between this test and the other tests defined.}		 				& Scenario 1 has to be completed at least once.\\ \hline
+	\end{tabularx}
+\end{table}
+
+\begin{table}
+    \centering
+	\begin{tabularx}{1.2\textwidth}{| p{5cm} | X |}
+	\hline
+	\textbf{TestID} 																& 2.2\\ \hline
+	\textbf{Test item (features to be tested)} 											& Rate experience\\ \hline
+	\textbf{Approach} 															& A user runs a test on the system. The system has to be run on a representative computer. 
+																			The test is repeated at different time intervals.\\ \hline
+	\textbf{Item pass / fail criteria} 													& The rating of the experience has to be registered in a database with the correct information.\\ \hline
+	\textbf{Input data} 															& Value: true/false\\
+	\textbf{Expected results}									 					& The rating of the experience should be added to the system.\\ \hline
+	\textbf{Testing task (description of test)} 											& 1. The customer finds the product experience he wants to rate.\\
+																			& 2. He rates it useful or not useful.\\
+																			& 3. He verifies that the rating of the experience is registered.\\ \hline
+	\textbf{Necessary environmental requirements} 										& The user must be logged in.\\ \hline
+	\textbf{References to user scenario, use case, sequence diagrams and overall class diagram} 		& Scenario 2\\ \hline
+	\textbf{Any dependability between this test and the other tests defined.}		 				& Scenario 1 and scenario 2.1 has to be completed at least once.\\ \hline
+	\end{tabularx}
+\end{table}
+
+%--------------------------------------------------------------------------------------------------%
+% Scenario 3
+%--------------------------------------------------------------------------------------------------%
+
+\begin{table}
+    \centering
+	\begin{tabularx}{1.2\textwidth}{| p{5cm} | X |}
+	\hline
+	\textbf{TestID} 																&3 \\ \hline
+	\textbf{Test item (features to be tested)} 											& Search for product\\ \hline
+	\textbf{Approach} 															&  A user runs a test on the system. The system has to be run on a representative computer. 
+																			The test is repeated at different time intervals. \\ \hline
+	\textbf{Item pass / fail criteria} 													& The correct information has to be retrieved and displayed on screen.\\ \hline
+	\textbf{Input data} 															& Search input: Intel CPU.\\ \hline
+	\textbf{Expected results}									 					& The entry for Intel CPU should be displayed on screen.\\ \hline
+	\textbf{Testing task (description of test)} 											& 1. The customer enters a query in the search field. He clicks on search.\\
+																			& 2. The customer filters by product attributes (optional).\\
+																			& 3. He clicks on a product and views detailed product information.          \\ \hline
+	\textbf{Necessary environmental requirements} 										& None.\\ \hline
+	\textbf{References to user scenario, use case, sequence diagrams and overall class diagram} 		& Scenario 3\\ \hline
+	\textbf{Any dependability between this test and the other tests defined.}		 				& Scenario 1 has to be completed at least  once.\\ \hline
+	\end{tabularx}
+\end{table}
+
+%--------------------------------------------------------------------------------------------------%
+% Scenario 4
+%--------------------------------------------------------------------------------------------------%
+
+\begin{table}
+    \centering
+	\begin{tabularx}{1.2\textwidth}{| p{5cm} | X |}
+	\hline
+	\textbf{TestID} 																& 4\\ \hline
+	\textbf{Test item (features to be tested)} 											& Edit product\\ \hline
+	\textbf{Approach} 															& A user runs a test on the system. The system has to be run on a representative computer. 
+																			The test is repeated at different time intervals.\\ \hline
+	\textbf{Item pass / fail criteria} 													& Information about the product was correctly updated.\\ \hline
+	\textbf{Input data} 															& Product name: Intel CPU\\
+																			& Product price: 4999 NOK\\ 
+																			& Product image: http://www.intel.com/images/26276\\ 
+																			& Tests: {http://www.cnet.com/tests/intel/23435, http://www.itavisen.no/tester/7331} \\ 
+																			& Manufacturer links: {http://www.intel.com/product/3432/v2}\\ \hline
+	\textbf{Expected results}									 					& The new information should be displayed in the entry.\\ \hline
+	\textbf{Testing task (description of test)} 											& 1. The employee searches for the product he wants to edit. \\
+																			& 2. He edits the product information. \\
+																			& 3. He publishes and logs out. \\ \hline
+	\textbf{Necessary environmental requirements} 										& The user must be an employee and logged into the system.\\ \hline
+	\textbf{References to user scenario, use case, sequence diagrams and overall class diagram} 		& Scenario 4\\ \hline
+	\textbf{Any dependability between this test and the other tests defined.}		 				& Scenario 1 has to be completed at least once.\\ \hline
+	\end{tabularx}
+\end{table}
+
+%--------------------------------------------------------------------------------------------------%
+% Scenario 5
+%--------------------------------------------------------------------------------------------------%
+
+\begin{table}
+    \centering
+	\begin{tabularx}{1.2\textwidth}{| p{5cm} | X |}
+	\hline
+	\textbf{TestID} 																& 5\\ \hline
+	\textbf{Test item (features to be tested)} 											& Edit shopping cart\\ \hline
+	\textbf{Approach} 															& A user runs a test on the system. The system has to be run on a representative computer. 
+																			The test is repeated at different time intervals.\\ \hline
+	\textbf{Item pass / fail criteria} 													& The user's shopping cart has to be updated with the correct data.\\ \hline
+	\textbf{Input data} 															& Product name: Intel CPU\\ \hline
+	\textbf{Expected results}									 					& The product should get added to the shopping cart.\\ \hline
+	\textbf{Testing task (description of test)} 											& 1. The customer finds a product and adds it to the shopping cart. \\
+																			& 2. He can change quantity or remove product from the cart (optional). \\ \hline
+	\textbf{Necessary environmental requirements} 										& The user must be logged in.\\ \hline
+	\textbf{References to user scenario, use case, sequence diagrams and overall class diagram} 		& Scenario 5\\ \hline
+	\textbf{Any dependability between this test and the other tests defined.}		 				& Scenario 1 has to be completed at least once.\\ \hline
+	\end{tabularx}
+\end{table}
+
+%--------------------------------------------------------------------------------------------------%
+% Scenario 6
+%--------------------------------------------------------------------------------------------------%
+
+\begin{table}
+    \centering
+	\begin{tabularx}{1.2\textwidth}{| p{5cm} | X |}
+	\hline
+	\textbf{TestID} 																& 6\\ \hline
+	\textbf{Test item (features to be tested)} 											& Buy product\\ \hline
+	\textbf{Approach} 															& A user runs a test on the system. The system has to be run on a representative computer. 
+																			The test is repeated at different time intervals.\\ \hline
+	\textbf{Item pass / fail criteria} 													& The correct products must get shpped to the provided address.\\ \hline
+	\textbf{Input data} 															& A shopping cart\\ \hline
+	\textbf{Expected results}									 					& The product is to be found in your mailbox within a limited amount of time.\\ \hline
+	\textbf{Testing task (description of test)} 											& 1. The customer proceeds to checkout. \\
+																			& 2. He chooses payment option. \\
+																			& 3. He completes the transaction on a 3rd party website and is sent back for confirmation and receipt. \\ \hline
+	\textbf{Necessary environmental requirements} 										& The user must be logged in and have at least one item in his shopping cart. \\ \hline
+	\textbf{References to user scenario, use case, sequence diagrams and overall class diagram} 		& Scenario 6\\ \hline
+	\textbf{Any dependability between this test and the other tests defined.}		 				& Scenario 1 and 5 each have to be completed at least once.\\ \hline
+	\end{tabularx}
+\end{table}
