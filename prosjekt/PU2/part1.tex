@@ -2,21 +2,238 @@
 % Testingplan
 %--------------------------------------------------------------------------------------------------%
 
-\begin{table}
-    \centering
+%--------------------------------------------------------------------------------------------------%
+% Test 1
+%--------------------------------------------------------------------------------------------------%
+
 	\begin{tabularx}{1.2\textwidth}{| p{5cm} | X |}
 	\hline
-	\textbf{TestID} 																& 1\\ \hline
-	\textbf{Testobject} 															& Logge på\\ \hline
-	\textbf{Testkriterier} 															& En bruker starter programmet, og kjører en test på systemet.
-																			Testen gjentas flere ganger etter gitte intervaller.\\ \hline
-	\textbf{Testindikator} 															& Brukeren blir logget inn.\\ \hline
-	\textbf{Input data} 															& Brukernavn: gjest\\ 
-																			& Passord: pass1234\\  \hline
-	\textbf{Forventede resultater}									 				& Brukeren får bedskjed om at han/hun er logget inn og kalenderen vises.\\ \hline
-	\textbf{Testbeskrivelse} 														& 1. Brukeren skriver inn brukernavn og passord og klikker logg inn.\\ \hline
-	\textbf{Environmental requirements} 												& The user must be an employee and logged into the system.\\ \hline
-	\textbf{References to user scenario, use case, sequence diagrams and overall class diagram} 		& Scenario 1\\ \hline
-	\textbf{Any dependability between this test and the other tests defined.}		 				& NaN\\ \hline
+	\textbf{TestID} 																& 1																	\\ \hline
+	\textbf{Testobject} 															& Logge på															\\ \hline
+	\textbf{Testkriterier} 															& En bruker starter programmet, og forsøker å logge seg inn.							\\ \hline
+	\textbf{Testindikator} 															& Brukeren blir logget inn.													\\ \hline
+	\textbf{Inputdata} 															& Brukernavn: testbruker													\\ 
+																			& Passord: abc123														\\  \hline
+	\textbf{Forventede resultater}									 				& Brukeren får bedskjed om at han/hun er logget inn og kalenderen vises.				\\ \hline
+	\textbf{Testbeskrivelse} 														& 1. Bruker skriver inn sin innloggingsinformasjon og trykker logg inn.					\\
+																			& 2. Bruker observerer at han er blitt logget inn, og at riktig tilgang har blitt gitt.			\\ \hline
+	\textbf{Miljøkrav}			 												& Systemet må fungere, og innloggingsdataen som prøves må ligge inne.				\\ \hline
+	\textbf{Avhengighet mellom denne testen og andre definerte tester.}		 				&				 													\\ \hline
 	\end{tabularx}
-\end{table}
+
+\mbox{}\\
+%--------------------------------------------------------------------------------------------------%
+% Test 2
+%--------------------------------------------------------------------------------------------------%
+
+	\begin{tabularx}{1.2\textwidth}{| p{5cm} | X |}
+	\hline
+	\textbf{TestID} 																& 2																	\\ \hline
+	\textbf{Testobject} 															& Legge inn avtale														\\ \hline
+	\textbf{Testkriterier} 															& En bruker starter programmet, og forsøker å legge inn en avtale.						\\ \hline
+	\textbf{Testindikator} 															& Avtalen blir opprettet med riktige parametere.									\\ \hline
+	\textbf{Inputdata} 															& Startdato: 24/12/2014													\\
+																			& Starttidspunkt: 19:00													\\
+																			& Sluttdato: 31/12/2014													\\
+																			& Sluttidspunkt: 23:59														\\
+																			& Beskrivelse: papirarbeid													\\
+																			& Sted: kontoret															\\  \hline
+	\textbf{Forventede resultater}									 				& Avtalen blir registrert i systemet med riktige inputdata.							\\ \hline
+	\textbf{Testbeskrivelse} 														& 1. Brukeren velger "opprett avtale".											\\
+																			& 2. Brukeren fyller inn ønsket inputdata og registrerer avtalen.						\\
+																			& 3. Brukeren observerer at avtalen er blitt riktig lagt inn.							\\ \hline
+	\textbf{Miljøkrav}			 												& Brukeren må være logget inn.				\\ \hline
+	\textbf{Avhengighet mellom denne testen og andre definerte tester.}		 				&1				 													\\ \hline
+	\end{tabularx}
+
+\mbox{}\\
+%--------------------------------------------------------------------------------------------------%
+% Test 3
+%--------------------------------------------------------------------------------------------------%
+
+	\begin{tabularx}{1.2\textwidth}{| p{5cm} | X |}
+	\hline
+	\textbf{TestID} 																& 3																	\\ \hline
+	\textbf{Testobject} 															& Håndtere møtedeltakere															\\ \hline
+	\textbf{Testkriterier} 															& En bruker starter programmet og forsøker å legge til noen brukere og en gruppe til en avtale han har opprettet. Deretter forsøker han å fjerne dem.							\\ \hline
+	\textbf{Testindikator} 															& Brukeren og gruppen blir lagt til, og deretter fjernet.												\\ \hline
+	\textbf{Inputdata} 															& Brukere: testbruker1, testbruker2, testbruker3\\
+																			& Gruppe: testgruppe														\\  \hline
+	\textbf{Forventede resultater}									 				& Brukerne og gruppen skal bli lagt til i avtalen, for deretter å bli fjernet igjen.				\\ \hline
+	\textbf{Testbeskrivelse} 														& 1. Brukeren velger avtalen han ønsker å håndtere møtedeltakere for.\\
+																			& 2. Brukeren velger "legg til".\\
+																			& 3. Brukeren velger ønskede brukere og grupper.\\
+																			& 4. Observerer at riktige brukere og grupper blir lagt til.\\
+																			& 5. Brukeren velger "fjern fra avtale" på ønsket bruker og/eller gruppe.\\
+																			& 6. Brukeren observerer at nevnte brukere/grupper blir fjernet fra avtalen.					\\ \hline
+	\textbf{Miljøkrav}			 												& Brukeren må være logget inn, og ha opprettet en avtale fra før av. Brukerne/gruppene som legges til må eksistere i systemet.						\\ \hline
+	\textbf{Avhengighet mellom denne testen og andre definerte tester.}		 				& 1, 2				 													\\ \hline
+	\end{tabularx}
+
+\mbox{}\\
+%--------------------------------------------------------------------------------------------------%
+% Test 4
+%--------------------------------------------------------------------------------------------------%
+
+	\begin{tabularx}{1.2\textwidth}{| p{5cm} | X |}
+	\hline
+	\textbf{TestID} 																& 4																	\\ \hline
+	\textbf{Testobject} 															& Endre avtale															\\ \hline
+	\textbf{Testkriterier} 															& En bruker starter programmet og forsøker å endre en allerede opprettet avtale.							\\ \hline
+	\textbf{Testindikator} 															& Avtalen blir endret og brukere/grupper som deltar i den blir varslet.												\\ \hline
+	\textbf{Inputdata} 															& Startdato: 17/05/2014\\
+																			& Starttidspunkt: 10:00\\
+																			& Sluttdato: 18/05/2014\\
+																			& Sluttidspunkt: 07:00\\
+																			& Beskrivelse: fest\\
+																			& Sted: hjemme														\\  \hline
+	\textbf{Forventede resultater}									 				& Avtalen blir endret til å bruke de nye parameterene, og brukere/grupper i avtalen blir varslet om endringen.				\\ \hline
+	\textbf{Testbeskrivelse} 														& 1. Brukeren velger avtalen han ønsker å endre.\\
+																			& 2. Brukeren velger "endre avtale".\\
+																			& 3. Brukeren endrer parameterfeltene.\\
+																			& 4. Brukeren observerer at avtalen er blitt endret.\\
+																			& 5. Brukeren logger ut og logger seg inn som en testbruker i avtalen.\\
+																			& 6. Brukeren observerer at denne brukeren har blitt varslet.					\\ \hline
+	\textbf{Miljøkrav}			 												& Brukeren må være logget inn og ha opprettet en avtale fra før av. Brukeren må ha lagt til en testbruker i avtalen.						\\ \hline
+	\textbf{Avhengighet mellom denne testen og andre definerte tester.}		 				& 1, 2, 3				 													\\ \hline
+	\end{tabularx}
+
+\mbox{}\\
+%--------------------------------------------------------------------------------------------------%
+% Test 5
+%--------------------------------------------------------------------------------------------------%
+
+	\begin{tabularx}{1.2\textwidth}{| p{5cm} | X |}
+	\hline
+	\textbf{TestID} 																& 5																	\\ \hline
+	\textbf{Testobject} 															& Logge på															\\ \hline
+	\textbf{Testkriterier} 															& En bruker starter programmet, og forsøker å logge seg inn.							\\ \hline
+	\textbf{Testindikator} 															& Brukeren blir logget inn.													\\ \hline
+	\textbf{Inputdata} 															& Brukernavn: testbruker													\\ 
+																			& Passord: abc123														\\  \hline
+	\textbf{Forventede resultater}									 				& Brukeren får bedskjed om at han/hun er logget inn og kalenderen vises.				\\ \hline
+	\textbf{Testbeskrivelse} 														& 1. Bruker skriver inn sin innloggingsinformasjon og trykker logg inn.					\\
+																			& 2. Bruker observerer at han er blitt logget inn, og at riktig tilgang har blitt gitt.					\\ \hline
+	\textbf{Miljøkrav}			 												& Systemet må fungere, og innloggingsdataen som prøves må ligge inne.						\\ \hline
+	\textbf{Avhengighet mellom denne testen og andre definerte tester.}		 				&				 													\\ \hline
+	\end{tabularx}
+
+\mbox{}\\
+%--------------------------------------------------------------------------------------------------%
+% Test 6
+%--------------------------------------------------------------------------------------------------%
+
+	\begin{tabularx}{1.2\textwidth}{| p{5cm} | X |}
+	\hline
+	\textbf{TestID} 																& 6																	\\ \hline
+	\textbf{Testobject} 															& Logge på															\\ \hline
+	\textbf{Testkriterier} 															& En bruker starter programmet, og forsøker å logge seg inn.							\\ \hline
+	\textbf{Testindikator} 															& Brukeren blir logget inn.													\\ \hline
+	\textbf{Inputdata} 															& Brukernavn: testbruker													\\ 
+																			& Passord: abc123														\\  \hline
+	\textbf{Forventede resultater}									 				& Brukeren får bedskjed om at han/hun er logget inn og kalenderen vises.				\\ \hline
+	\textbf{Testbeskrivelse} 														& 1. Bruker skriver inn sin innloggingsinformasjon og trykker logg inn.					\\
+																			& 2. Bruker observerer at han er blitt logget inn, og at riktig tilgang har blitt gitt.					\\ \hline
+	\textbf{Miljøkrav}			 												& Systemet må fungere, og innloggingsdataen som prøves må ligge inne.						\\ \hline
+	\textbf{Avhengighet mellom denne testen og andre definerte tester.}		 				&				 													\\ \hline
+	\end{tabularx}
+
+\mbox{}\\
+%--------------------------------------------------------------------------------------------------%
+% Test 7
+%--------------------------------------------------------------------------------------------------%
+
+	\begin{tabularx}{1.2\textwidth}{| p{5cm} | X |}
+	\hline
+	\textbf{TestID} 																& 7																	\\ \hline
+	\textbf{Testobject} 															& Logge på															\\ \hline
+	\textbf{Testkriterier} 															& En bruker starter programmet, og forsøker å logge seg inn.							\\ \hline
+	\textbf{Testindikator} 															& Brukeren blir logget inn.													\\ \hline
+	\textbf{Inputdata} 															& Brukernavn: testbruker													\\ 
+																			& Passord: abc123														\\  \hline
+	\textbf{Forventede resultater}									 				& Brukeren får bedskjed om at han/hun er logget inn og kalenderen vises.				\\ \hline
+	\textbf{Testbeskrivelse} 														& 1. Bruker skriver inn sin innloggingsinformasjon og trykker logg inn.					\\
+																			& 2. Bruker observerer at han er blitt logget inn, og at riktig tilgang har blitt gitt.					\\ \hline
+	\textbf{Miljøkrav}			 												& Systemet må fungere, og innloggingsdataen som prøves må ligge inne.						\\ \hline
+	\textbf{Avhengighet mellom denne testen og andre definerte tester.}		 				&				 													\\ \hline
+	\end{tabularx}
+
+\mbox{}\\
+%--------------------------------------------------------------------------------------------------%
+% Test 8
+%--------------------------------------------------------------------------------------------------%
+
+	\begin{tabularx}{1.2\textwidth}{| p{5cm} | X |}
+	\hline
+	\textbf{TestID} 																& 8																	\\ \hline
+	\textbf{Testobject} 															& Logge på															\\ \hline
+	\textbf{Testkriterier} 															& En bruker starter programmet, og forsøker å logge seg inn.							\\ \hline
+	\textbf{Testindikator} 															& Brukeren blir logget inn.													\\ \hline
+	\textbf{Inputdata} 															& Brukernavn: testbruker													\\ 
+																			& Passord: abc123														\\  \hline
+	\textbf{Forventede resultater}									 				& Brukeren får bedskjed om at han/hun er logget inn og kalenderen vises.				\\ \hline
+	\textbf{Testbeskrivelse} 														& 1. Bruker skriver inn sin innloggingsinformasjon og trykker logg inn.					\\
+																			& 2. Bruker observerer at han er blitt logget inn, og at riktig tilgang har blitt gitt.					\\ \hline
+	\textbf{Miljøkrav}			 												& Systemet må fungere, og innloggingsdataen som prøves må ligge inne.						\\ \hline
+	\textbf{Avhengighet mellom denne testen og andre definerte tester.}		 				&				 													\\ \hline
+	\end{tabularx}
+
+\mbox{}\\
+%--------------------------------------------------------------------------------------------------%
+% Test 9
+%--------------------------------------------------------------------------------------------------%
+
+	\begin{tabularx}{1.2\textwidth}{| p{5cm} | X |}
+	\hline
+	\textbf{TestID} 																& 9																	\\ \hline
+	\textbf{Testobject} 															& Logge på															\\ \hline
+	\textbf{Testkriterier} 															& En bruker starter programmet, og forsøker å logge seg inn.							\\ \hline
+	\textbf{Testindikator} 															& Brukeren blir logget inn.													\\ \hline
+	\textbf{Inputdata} 															& Brukernavn: testbruker													\\ 
+																			& Passord: abc123														\\  \hline
+	\textbf{Forventede resultater}									 				& Brukeren får bedskjed om at han/hun er logget inn og kalenderen vises.				\\ \hline
+	\textbf{Testbeskrivelse} 														& 1. Bruker skriver inn sin innloggingsinformasjon og trykker logg inn.					\\
+																			& 2. Bruker observerer at han er blitt logget inn, og at riktig tilgang har blitt gitt.					\\ \hline
+	\textbf{Miljøkrav}			 												& Systemet må fungere, og innloggingsdataen som prøves må ligge inne.						\\ \hline
+	\textbf{Avhengighet mellom denne testen og andre definerte tester.}		 				&				 													\\ \hline
+	\end{tabularx}
+
+\mbox{}\\
+%--------------------------------------------------------------------------------------------------%
+% Test 10
+%--------------------------------------------------------------------------------------------------%
+
+	\begin{tabularx}{1.2\textwidth}{| p{5cm} | X |}
+	\hline
+	\textbf{TestID} 																& 10																	\\ \hline
+	\textbf{Testobject} 															& Logge på															\\ \hline
+	\textbf{Testkriterier} 															& En bruker starter programmet, og forsøker å logge seg inn.							\\ \hline
+	\textbf{Testindikator} 															& Brukeren blir logget inn.													\\ \hline
+	\textbf{Inputdata} 															& Brukernavn: testbruker													\\ 
+																			& Passord: abc123														\\  \hline
+	\textbf{Forventede resultater}									 				& Brukeren får bedskjed om at han/hun er logget inn og kalenderen vises.				\\ \hline
+	\textbf{Testbeskrivelse} 														& 1. Bruker skriver inn sin innloggingsinformasjon og trykker logg inn.					\\
+																			& 2. Bruker observerer at han er blitt logget inn, og at riktig tilgang har blitt gitt.					\\ \hline
+	\textbf{Miljøkrav}			 												& Systemet må fungere, og innloggingsdataen som prøves må ligge inne.						\\ \hline
+	\textbf{Avhengighet mellom denne testen og andre definerte tester.}		 				&				 													\\ \hline
+	\end{tabularx}
+
+\mbox{}\\
+%--------------------------------------------------------------------------------------------------%
+% Test 11
+%--------------------------------------------------------------------------------------------------%
+
+	\begin{tabularx}{1.2\textwidth}{| p{5cm} | X |}
+	\hline
+	\textbf{TestID} 																& 11																	\\ \hline
+	\textbf{Testobject} 															& Logge på															\\ \hline
+	\textbf{Testkriterier} 															& En bruker starter programmet, og forsøker å logge seg inn.							\\ \hline
+	\textbf{Testindikator} 															& Brukeren blir logget inn.													\\ \hline
+	\textbf{Inputdata} 															& Brukernavn: testbruker													\\ 
+																			& Passord: abc123														\\  \hline
+	\textbf{Forventede resultater}									 				& Brukeren får bedskjed om at han/hun er logget inn og kalenderen vises.				\\ \hline
+	\textbf{Testbeskrivelse} 														& 1. Bruker skriver inn sin innloggingsinformasjon og trykker logg inn.					\\
+																			& 2. Bruker observerer at han er blitt logget inn, og at riktig tilgang har blitt gitt.					\\ \hline
+	\textbf{Miljøkrav}			 												& Systemet må fungere, og innloggingsdataen som prøves må ligge inne.						\\ \hline
+	\textbf{Avhengighet mellom denne testen og andre definerte tester.}		 				&				 													\\ \hline
+	\end{tabularx}
