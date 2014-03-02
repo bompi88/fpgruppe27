@@ -106,16 +106,18 @@
 	\begin{tabularx}{1.2\textwidth}{| p{5cm} | X |}
 	\hline
 	\textbf{TestID} 																& 5																	\\ \hline
-	\textbf{Testobject} 															& Logge på															\\ \hline
-	\textbf{Testkriterier} 															& En bruker starter programmet, og forsøker å logge seg inn.							\\ \hline
-	\textbf{Testindikator} 															& Brukeren blir logget inn.													\\ \hline
-	\textbf{Inputdata} 															& Brukernavn: testbruker													\\ 
-																			& Passord: abc123														\\  \hline
-	\textbf{Forventede resultater}									 				& Brukeren får bedskjed om at han/hun er logget inn og kalenderen vises.				\\ \hline
-	\textbf{Testbeskrivelse} 														& 1. Bruker skriver inn sin innloggingsinformasjon og trykker logg inn.					\\
-																			& 2. Bruker observerer at han er blitt logget inn, og at riktig tilgang har blitt gitt.					\\ \hline
-	\textbf{Miljøkrav}			 												& Systemet må fungere, og innloggingsdataen som prøves må ligge inne.						\\ \hline
-	\textbf{Avhengighet mellom denne testen og andre definerte tester.}		 				&				 													\\ \hline
+	\textbf{Testobject} 															& Slette avtale															\\ \hline
+	\textbf{Testkriterier} 															& En bruker starter programmet og forsøker å slette en allerede opprettet avtale.			\\ \hline
+	\textbf{Testindikator} 															& Avtalen blir slettet og forsvinner fra deltakere sine kalendere.						\\ \hline
+	\textbf{Inputdata} 															& 													\\  \hline
+	\textbf{Forventede resultater}									 				& Avtalen blir slettet, og dukker ikke lenger opp på deltakere sine kalendere.				\\ \hline
+	\textbf{Testbeskrivelse} 														& 1. Brukeren velger en allerede opprettet avtale.\\
+																			& 2. Brukeren velger "slett avtale" og bekrefter at han ønsker å slette avtalen.\\
+																			& 3. Brukeren observerer at avtalen er slettet.\\
+																			& 4. Brukeren logger ut og logger inn som en testbruker.\\
+																			& 5. Brukeren observerer at avtalen ikke lenger vises i kalenderen til testbrukeren.				\\ \hline
+	\textbf{Miljøkrav}			 												& Brukeren må være logget inn og ha opprettet en avtale fra før av. Brukeren må ha lagt til en testbruker i avtalen.						\\ \hline
+	\textbf{Avhengighet mellom denne testen og andre definerte tester.}		 				& 1, 2, 3				 													\\ \hline
 	\end{tabularx}
 
 \mbox{}\\
@@ -126,19 +128,27 @@
 	\begin{tabularx}{1.2\textwidth}{| p{5cm} | X |}
 	\hline
 	\textbf{TestID} 																& 6																	\\ \hline
-	\textbf{Testobject} 															& Logge på															\\ \hline
-	\textbf{Testkriterier} 															& En bruker starter programmet, og forsøker å logge seg inn.							\\ \hline
-	\textbf{Testindikator} 															& Brukeren blir logget inn.													\\ \hline
-	\textbf{Inputdata} 															& Brukernavn: testbruker													\\ 
-																			& Passord: abc123														\\  \hline
-	\textbf{Forventede resultater}									 				& Brukeren får bedskjed om at han/hun er logget inn og kalenderen vises.				\\ \hline
-	\textbf{Testbeskrivelse} 														& 1. Bruker skriver inn sin innloggingsinformasjon og trykker logg inn.					\\
-																			& 2. Bruker observerer at han er blitt logget inn, og at riktig tilgang har blitt gitt.					\\ \hline
-	\textbf{Miljøkrav}			 												& Systemet må fungere, og innloggingsdataen som prøves må ligge inne.						\\ \hline
-	\textbf{Avhengighet mellom denne testen og andre definerte tester.}		 				&				 													\\ \hline
+	\textbf{Testobject} 															& Reservere møterom													\\ \hline
+	\textbf{Testkriterier} 															& En bruker starter programmet, og forsøker å opprette en avtale med møterom i stedet for sted. Forsøker så å opprette en avtale i et tidsrom der det har vært en avtale før (som har blitt slettet).						\\ \hline
+	\textbf{Testindikator} 															& Ledige møterom vises, og det som velges blir reservert for valgt tidsrom. Rommet vises i avtalen. Rom i tidsrom der avtaler har vært booket før (slettet nå), skal også vises.													\\ \hline
+	\textbf{Inputdata} 															& Maks antall: 20													\\ 
+																			& Møterom: S22														\\  \hline
+	\textbf{Forventede resultater}									 				&Ledige rom som har kapasitet til så mange man har angitt og er ledige i gitt tidsrom vises, velges, og blir lagt til som sted for avtalen. Rom som er opptatte i valgt tidsrom vises ikke, og å endre tidspunkt på andre avtaler med valgt rom til et tidspunkt et rom er opptatt skal ikke la seg gjøre.				\\ \hline
+	\textbf{Testbeskrivelse} 														& 1. Brukeren velger "opprett avtale" eller "endre avtale".\\
+																			& 2. Brukeren huker av for "møterom".\\
+																			& 3. Brukeren skriver inn maks antall for rom.\\
+																			& 4. Brukeren velger et ledig rom.\\
+																			& 5. Brukeren observerer at avtalen nå er lagt inn med riktig møterom.\\
+																			& 6. Brukeren forsøker å opprette en ny avtale i samme tidsrom og observerer at det ikke er mulig å velge rommet som nettopp ble reservert.\\
+																			& 7. Brukeren oppretter den nye avtalen på samme rom, men forskjellig tidspunkt.\\
+																			& 8. Brukeren forsøker å endre tidspunktet på den nye avtalen til tidspunktet for den gamle avtalen, og observerer at endringen ikke lar seg gjøre grunnet reservert rom i det tidsrommet.\\
+																			& 9. Brukeren sletter så den opprinnelige avtalen, forsøker å opprette den på nytt, og observerer at det lar seg gjøre.					\\ \hline
+	\textbf{Miljøkrav}			 												& Brukeren må være logget inn. Rom må være lagt inn i systemet, og testrom S22 må være lagt inn med et maksantall på 20 eller flere personer.						\\ \hline
+	\textbf{Avhengighet mellom denne testen og andre definerte tester.}		 				& 1, 2, 4				 													\\ \hline
 	\end{tabularx}
 
 \mbox{}\\
+
 %--------------------------------------------------------------------------------------------------%
 % Test 7
 %--------------------------------------------------------------------------------------------------%
@@ -146,16 +156,20 @@
 	\begin{tabularx}{1.2\textwidth}{| p{5cm} | X |}
 	\hline
 	\textbf{TestID} 																& 7																	\\ \hline
-	\textbf{Testobject} 															& Logge på															\\ \hline
-	\textbf{Testkriterier} 															& En bruker starter programmet, og forsøker å logge seg inn.							\\ \hline
-	\textbf{Testindikator} 															& Brukeren blir logget inn.													\\ \hline
-	\textbf{Inputdata} 															& Brukernavn: testbruker													\\ 
-																			& Passord: abc123														\\  \hline
-	\textbf{Forventede resultater}									 				& Brukeren får bedskjed om at han/hun er logget inn og kalenderen vises.				\\ \hline
-	\textbf{Testbeskrivelse} 														& 1. Bruker skriver inn sin innloggingsinformasjon og trykker logg inn.					\\
-																			& 2. Bruker observerer at han er blitt logget inn, og at riktig tilgang har blitt gitt.					\\ \hline
-	\textbf{Miljøkrav}			 												& Systemet må fungere, og innloggingsdataen som prøves må ligge inne.						\\ \hline
-	\textbf{Avhengighet mellom denne testen og andre definerte tester.}		 				&				 													\\ \hline
+	\textbf{Testobject} 															& Visning															\\ \hline
+	\textbf{Testkriterier} 															& En bruker starter programmet, oppretter en avtale som både seg selv og en testbruker, og forsøker å endre på en avtale en testbruker er lagt til i. Forsøker også å bla mellom uker.						\\ \hline
+	\textbf{Testindikator} 															& Avtaler man har opprettet selv og har blitt lagt til i av andre, skal se forskjellige ut i kalenderen. Avtaler som har blitt endret siden sist en bruker observerte den, skal være markert. Man skal også kunne se status for egen deltakelse. Det skal også være mulig å bla seg mellom uker.													\\ \hline
+	\textbf{Inputdata} 															& 																	\\  \hline
+	\textbf{Forventede resultater}									 				& Det skal være tydelig om man har opprettet en avtale i kalenderen sin selv eller ikke, og tydelig hvis en avtale har blitt endret. Deltakelsesstatus skal være synlig. Det skal gå an å bla seg mellom uker.				\\ \hline
+	\textbf{Testbeskrivelse} 														& 1. Brukeren oppretter en avtale og legger til en testbruker.\\
+																			& 2. Brukeren logger seg inn som testbruker, og oppretter en avtale som han legger til seg selv i.\\
+																			& 3. Brukeren logger seg inn som seg selv igjen og observerer at avtalen han selv lagde ser forskjellig ut fra avtalen han ble lagt til i.\\
+																			& 4. Brukeren angir at han deltar i avtalen han lagde som testbruker, og observerer at status for egen deltakelse er synlig.\\
+																			& 5. Brukeren endrer på avtalen han først lagde og oppretter en ny avtale en uke senere, som han også legger til testbrukeren i.\\
+																			& 6. Brukeren logger seg inn som testbruker igjen, og observerer at det er blitt markert at avtalen er blitt endret.\\
+																			& 7. Som testbrukeren forsøker han å bla seg videre til neste uke, og observerer at det lar seg gjøre, og at avtalen neste uke vises.						\\ \hline
+	\textbf{Miljøkrav}															& Brukeren må være logget inn, og ha en testbruker. \\ \hline
+	\textbf{Avhengighet mellom denne testen og andre definerte tester.}		 				& 1, 2, 3, 4			 													\\ \hline
 	\end{tabularx}
 
 \mbox{}\\
@@ -166,16 +180,20 @@
 	\begin{tabularx}{1.2\textwidth}{| p{5cm} | X |}
 	\hline
 	\textbf{TestID} 																& 8																	\\ \hline
-	\textbf{Testobject} 															& Logge på															\\ \hline
-	\textbf{Testkriterier} 															& En bruker starter programmet, og forsøker å logge seg inn.							\\ \hline
-	\textbf{Testindikator} 															& Brukeren blir logget inn.													\\ \hline
-	\textbf{Inputdata} 															& Brukernavn: testbruker													\\ 
-																			& Passord: abc123														\\  \hline
-	\textbf{Forventede resultater}									 				& Brukeren får bedskjed om at han/hun er logget inn og kalenderen vises.				\\ \hline
-	\textbf{Testbeskrivelse} 														& 1. Bruker skriver inn sin innloggingsinformasjon og trykker logg inn.					\\
-																			& 2. Bruker observerer at han er blitt logget inn, og at riktig tilgang har blitt gitt.					\\ \hline
-	\textbf{Miljøkrav}			 												& Systemet må fungere, og innloggingsdataen som prøves må ligge inne.						\\ \hline
-	\textbf{Avhengighet mellom denne testen og andre definerte tester.}		 				&				 													\\ \hline
+	\textbf{Testobject} 															& Status for deltakelse															\\ \hline
+	\textbf{Testkriterier} 															& En bruker starter programmet, oppretter en avtale, legger til testbrukere, går inn på testbrukerne og svarer/ikke svarer, og observerer visning av avtale.						\\ \hline
+	\textbf{Testindikator} 															& Det skal stå tydelig for hver person som har blitt lagt til hvorvidt vedkommende har svart eller ikke, og hvorvidt vedkommende har godtatt eller avslått, og en egen indikator for hvorvidt alle har svart eller ikke, og hvis så, om alle har godtatt eller ikke.													\\ \hline
+	\textbf{Inputdata} 															& 														\\  \hline
+	\textbf{Forventede resultater}									 				& Det skal være synlig for alle som er lagt til i en avtale hvorvidt de andre i avtalen har godtatt, avslått eller ikke svart, og en indikator for hvorvidt alle har svart eller ikke, og hvis så, om alle har godtatt eller ikke.				\\ \hline
+	\textbf{Testbeskrivelse} 														& 1. Brukeren oppretter en avtale og legger til to testbrukere. \\
+																			& 2. Brukeren observerer at det indikeres at ingen av dem har svart, og at det indikeres at ikke alle har svart.\\
+																			& 3. Brukeren logger seg inn som første testbruker, og godkjenner avtalen. Han observerer fra denne brukeren at denne nå er indikert i avtalen som godkjent, men at det fremdeles indikeres at ikke alle har svart.\\
+																			& 4. Brukeren logger seg deretter inn som andre testbruker, og avslår avtalen. Han observerer at første testbruker står oppført som godkjent, at denne testbrukeren står oppført som avslått, og at det er indikert at alle har svart, men at ikke alle har godtatt.\\
+																			& 5. Brukeren logger seg inn som seg selv igjen, og observerer at alt stemmer fra hans egen bruker også.\\
+																			& 6. Brukeren logger seg inn som første testbruker og melder avbud.\\
+																			& 7. Brukeren logger seg inn som seg selv igjen, og observerer at det nå indikeres at alle har svart og at alle har godkjent.	\\				\\ \hline
+	\textbf{Miljøkrav}			 												& Brukeren må være logget inn. Brukeren må ha opprettet et par testbrukere på forhånd.						\\ \hline
+	\textbf{Avhengighet mellom denne testen og andre definerte tester.}		 				& 1, 2, 3				 													\\ \hline
 	\end{tabularx}
 
 \mbox{}\\
@@ -186,16 +204,16 @@
 	\begin{tabularx}{1.2\textwidth}{| p{5cm} | X |}
 	\hline
 	\textbf{TestID} 																& 9																	\\ \hline
-	\textbf{Testobject} 															& Logge på															\\ \hline
-	\textbf{Testkriterier} 															& En bruker starter programmet, og forsøker å logge seg inn.							\\ \hline
-	\textbf{Testindikator} 															& Brukeren blir logget inn.													\\ \hline
-	\textbf{Inputdata} 															& Brukernavn: testbruker													\\ 
-																			& Passord: abc123														\\  \hline
-	\textbf{Forventede resultater}									 				& Brukeren får bedskjed om at han/hun er logget inn og kalenderen vises.				\\ \hline
-	\textbf{Testbeskrivelse} 														& 1. Bruker skriver inn sin innloggingsinformasjon og trykker logg inn.					\\
-																			& 2. Bruker observerer at han er blitt logget inn, og at riktig tilgang har blitt gitt.					\\ \hline
-	\textbf{Miljøkrav}			 												& Systemet må fungere, og innloggingsdataen som prøves må ligge inne.						\\ \hline
-	\textbf{Avhengighet mellom denne testen og andre definerte tester.}		 				&				 													\\ \hline
+	\textbf{Testobject} 															& Melde avbud															\\ \hline
+	\textbf{Testkriterier} 															& Brukeren starter programmet, oppretter en avtale og legger til en testbruker. Logger seg så inn som testbruker, godkjenner og melder avbud ved å slette avtalen.						\\ \hline
+	\textbf{Testindikator} 															& Brukeren får melding om at testbrukeren har meldt avbud.													\\ \hline
+	\textbf{Inputdata} 															& 														\\  \hline
+	\textbf{Forventede resultater}									 				& Brukeren får melding om at testbrukeren har meldt avbud.				\\ \hline
+	\textbf{Testbeskrivelse} 														& 1. Brukeren oppretter en avtale og legger til en testbruker.\\
+																			& 2. Brukeren logger seg inn som testbrukeren, godkjenner avtalen, og melder så avbud ved å slette den fra kalenderen sin.\\
+																			& 3. Brukeren logger seg inn som seg selv igjen, og observerer at han har fått beskjed om avbudet.					\\ \hline
+	\textbf{Miljøkrav}			 												& Brukeren må være logget inn og ha opprettet en testbruker fra før av.						\\ \hline
+	\textbf{Avhengighet mellom denne testen og andre definerte tester.}		 				& 1, 2 				 													\\ \hline
 	\end{tabularx}
 
 \mbox{}\\
@@ -206,16 +224,16 @@
 	\begin{tabularx}{1.2\textwidth}{| p{5cm} | X |}
 	\hline
 	\textbf{TestID} 																& 10																	\\ \hline
-	\textbf{Testobject} 															& Logge på															\\ \hline
-	\textbf{Testkriterier} 															& En bruker starter programmet, og forsøker å logge seg inn.							\\ \hline
-	\textbf{Testindikator} 															& Brukeren blir logget inn.													\\ \hline
-	\textbf{Inputdata} 															& Brukernavn: testbruker													\\ 
-																			& Passord: abc123														\\  \hline
-	\textbf{Forventede resultater}									 				& Brukeren får bedskjed om at han/hun er logget inn og kalenderen vises.				\\ \hline
-	\textbf{Testbeskrivelse} 														& 1. Bruker skriver inn sin innloggingsinformasjon og trykker logg inn.					\\
-																			& 2. Bruker observerer at han er blitt logget inn, og at riktig tilgang har blitt gitt.					\\ \hline
-	\textbf{Miljøkrav}			 												& Systemet må fungere, og innloggingsdataen som prøves må ligge inne.						\\ \hline
-	\textbf{Avhengighet mellom denne testen og andre definerte tester.}		 				&				 													\\ \hline
+	\textbf{Testobject} 															& Vis flere kalendere															\\ \hline
+	\textbf{Testkriterier} 															& Brukeren starter programmet, og tester om det er mulig å se kalenderne til andre ansatte.						\\ \hline
+	\textbf{Testindikator} 															& Andre ansatte som velges sine avtaler skal dukke opp i din kalender, og markeres som at ikke er dine egne.													\\ \hline
+	\textbf{Inputdata} 															& 														\\  \hline
+	\textbf{Forventede resultater}									 				& Andre ansatte som velges sine avtaler skal dukke opp i din kalender, og markeres som at ikke er dine egne.				\\ \hline
+	\textbf{Testbeskrivelse} 														& 1. Brukeren oppretter en avtale. \\
+																			& 2. Brukeren logger inn som en testbruker, og velger "se kalender til", og skriver inn sin egen bruker.\\
+																			& 3. Brukeren observerer at sin egen avtale nå dukker opp i kalenderen til testbrukeren, markert som ikke testbrukeren sin.					\\ \hline
+	\textbf{Miljøkrav}			 												& Brukeren må være logget inn og ha opprettet en testbruker på forhånd. Testbrukeren må ha tilgang til å bruke "se kalender til".						\\ \hline
+	\textbf{Avhengighet mellom denne testen og andre definerte tester.}		 				& 1, 2 				 													\\ \hline
 	\end{tabularx}
 
 \mbox{}\\
@@ -226,14 +244,14 @@
 	\begin{tabularx}{1.2\textwidth}{| p{5cm} | X |}
 	\hline
 	\textbf{TestID} 																& 11																	\\ \hline
-	\textbf{Testobject} 															& Logge på															\\ \hline
-	\textbf{Testkriterier} 															& En bruker starter programmet, og forsøker å logge seg inn.							\\ \hline
-	\textbf{Testindikator} 															& Brukeren blir logget inn.													\\ \hline
-	\textbf{Inputdata} 															& Brukernavn: testbruker													\\ 
-																			& Passord: abc123														\\  \hline
-	\textbf{Forventede resultater}									 				& Brukeren får bedskjed om at han/hun er logget inn og kalenderen vises.				\\ \hline
-	\textbf{Testbeskrivelse} 														& 1. Bruker skriver inn sin innloggingsinformasjon og trykker logg inn.					\\
-																			& 2. Bruker observerer at han er blitt logget inn, og at riktig tilgang har blitt gitt.					\\ \hline
-	\textbf{Miljøkrav}			 												& Systemet må fungere, og innloggingsdataen som prøves må ligge inne.						\\ \hline
-	\textbf{Avhengighet mellom denne testen og andre definerte tester.}		 				&				 													\\ \hline
+	\textbf{Testobject} 															& Alarm															\\ \hline
+	\textbf{Testkriterier} 															&Brukeren starter programmet, og tester om det ringer en alarm for en testbruker på en avtale han har satt på alarm for.						\\ \hline
+	\textbf{Testindikator} 															& Alarmen ringer når den skal.													\\ \hline
+	\textbf{Inputdata} 															& Tid før møtet: 30 min														\\  \hline
+	\textbf{Forventede resultater}									 				& Alarmen ringer når den skal.				\\ \hline
+	\textbf{Testbeskrivelse} 														& 1. Brukeren oppretter en avtale med starttid om 35 minutter, og alarm som ringer 30 minutter før møtet starter.\\
+																			& 2. Brukeren legger til testbruker, og logger seg inn som testbruker.\\
+																			& 3. Brukeren observerer at alarmen ringer for testbrukeren når det er 30 minutter igjen til møtet.					\\ \hline
+	\textbf{Miljøkrav}			 												& Brukeren må være logget inn og ha laget en testbruker på forhånd.						\\ \hline
+	\textbf{Avhengighet mellom denne testen og andre definerte tester.}		 				& 1, 2, 3				 													\\ \hline
 	\end{tabularx}
