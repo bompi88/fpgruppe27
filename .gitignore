@@ -3,3 +3,4 @@
 # Virtualenv
 env/*
 .AppleDouble
+*.db
