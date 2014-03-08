@@ -6,10 +6,10 @@ import javax.swing.JPanel;
 import resources.AppConstants;
 
 @SuppressWarnings("serial")
-public class CalendarView extends JPanel {
-	private JLabel whereLabel = new JLabel(AppConstants.CALENDAR_HEADER_TEXT);
+public class InboxView extends JPanel {
+	private JLabel whereLabel = new JLabel(AppConstants.INBOX_HEADER_TEXT);
 	
-	public CalendarView() {
+	public InboxView() {
 		add(whereLabel);
 	}
 }

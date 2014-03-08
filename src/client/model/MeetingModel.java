@@ -4,7 +4,11 @@ import java.sql.SQLException;
 
 import framework.Model;
 
-public class CalendarModel extends Model {
+public class MeetingModel extends Model {
+	
+	public MeetingModel() {
+
+	}
 
 	@Override
 	public void create() throws ClassNotFoundException, SQLException {
@@ -25,9 +29,11 @@ public class CalendarModel extends Model {
 	}
 
 	@Override
-	public void fetch(String o) throws ClassNotFoundException, SQLException {
+	public void fetch(String id) throws ClassNotFoundException, SQLException {
 		// TODO Auto-generated method stub
-		
 	}
+	
+	
+	
 
 }

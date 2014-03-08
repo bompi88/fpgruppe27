@@ -4,7 +4,7 @@ import java.sql.SQLException;
 
 import framework.Model;
 
-public class CalendarModel extends Model {
+public class MessageModel extends Model {
 
 	@Override
 	public void create() throws ClassNotFoundException, SQLException {

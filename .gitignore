@@ -4,3 +4,5 @@
 env/*
 .AppleDouble
 *.db
+.settings/*
+cookie.txt
