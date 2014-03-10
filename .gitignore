@@ -7,3 +7,5 @@ env/*
 .settings/*
 cookie.txt
 bin/*
+.classpath
+.project
