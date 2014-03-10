@@ -9,7 +9,8 @@ CREATE TABLE User (
 CREATE TABLE Meeting (
 	meetid INT NOT NULL AUTO_INCREMENT,
 	description VARCHAR(255),
-	meetDate DATE,
+	startDate DATE,
+	endDate DATE, 
 	start TIME,
 	end TIME,
 	place VARCHAR(50),
@@ -36,7 +37,7 @@ CREATE TABLE MeetingParticipants (
 
 CREATE TABLE Message (
 	messid 	INT 	NOT NULL, 
-	message VARCHAR(128);
+	message 	VARCHAR(255);
 	date 	DATE;
 	timestamp TIME;
 	owner 	 VARCHAR(15); 
