@@ -47,6 +47,8 @@ public class MeetingModel extends Model {
 			db.makeSingleUpdate(peopleList.get(i));
 		}		
 		db.close();
+		
+		
 	}
 
 	@Override
