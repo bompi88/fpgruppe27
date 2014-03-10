@@ -1,15 +1,19 @@
 package view;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 import resources.AppConstants;
+import utils.RelativeLayout;
 
 import model.EmployeeModel;
 
@@ -25,28 +29,38 @@ public class SideBarView extends JPanel {
 
 	Dimension sidebarSize = new Dimension(150,800);
 	
-	JLabel userLabel = new JLabel();
-	
 	JButton calendarButton = new JButton(AppConstants.SIDE_BAR_CALENDAR_TEXT);
 	JButton createEventButton = new JButton(AppConstants.SIDE_BAR_CREATE_EVENT_TEXT);
 	JButton inboxButton = new JButton(AppConstants.SIDE_BAR_INBOX_TEXT);
 	JButton logoutButton = new JButton(AppConstants.SIDE_BAR_LOGOUT_TEXT);
+	JLabel appIcon = new JLabel("");
+	JLabel loggedInUser = new JLabel("");
 	
 	Controller ctrl;
 	
 	public SideBarView (Controller ctrl) {
 		this.ctrl = ctrl;
 		
-		userLabel.setText(((EmployeeModel)ctrl.getModel()).getUsername());
+		loggedInUser.setPreferredSize(new Dimension(120,90));
+		loggedInUser.setFont(new Font("Ariel", Font.PLAIN, 12));
+
+		RelativeLayout rl = new RelativeLayout(RelativeLayout.Y_AXIS, 0);
+		rl.setAlignment(RelativeLayout.CENTER);
 		
-		add(userLabel);
+		appIcon.setPreferredSize(new Dimension(120,90));
+		add(appIcon);
+		add(loggedInUser);
+		
 		add(calendarButton);
 		add(createEventButton);
 		add(inboxButton);
 		add(logoutButton);
+		setLayout(rl);
 		setPreferredSize(sidebarSize);
-		setBackground(Color.DARK_GRAY); // for testing
+		setBorder(new EmptyBorder(10,0,0,0));
+		setBackground(AppConstants.SIDE_BAR_BG_COLOR); // for testing
 		setVisible(true);
+		
 		
 		calendarButton.addActionListener(new ActionListener() {
 
@@ -89,4 +103,8 @@ public class SideBarView extends JPanel {
 		return ctrl;
 	}
 
+	public void init() {
+		appIcon.setIcon(((MainCtrl)ctrl.getMainCtrl()).getAppIcon());
+		loggedInUser.setText("<html><b>user:</b> " + ((EmployeeModel)((MainCtrl)ctrl.getMainCtrl()).getModel()).getUsername() + "</html>");
+	}
 }

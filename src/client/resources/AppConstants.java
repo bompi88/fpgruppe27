@@ -1,4 +1,7 @@
 package resources;
+
+import java.awt.Color;
+
 public final class AppConstants {
 	
 	public static final String COOKIE_FILE_PATH = "cookie.txt";
@@ -21,6 +24,12 @@ public final class AppConstants {
 	public static final String CALENDAR_HEADER_TEXT = "Ukeskalender";
 	public static final String INBOX_HEADER_TEXT = "Din innboks";
 	public static final String APPOINTMENT_HEADER_TEXT = "Opprett en avtale";
+	
+	
+	
+	public static final Color LOGIN_BG_COLOR = Color.lightGray;
+	public static final Color SIDE_BAR_BG_COLOR = Color.lightGray;
+	public static final Color HEADER_BG_COLOR = Color.gray;
 
 	private AppConstants() {
 		throw new AssertionError();

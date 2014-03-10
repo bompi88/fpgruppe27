@@ -47,7 +47,7 @@ public class CalendarView extends JPanel{
 		rl2.setAlignment(RelativeLayout.LEADING);
 		
 		topPanelWrapper.setLayout(rl2);
-		topPanelWrapper.setBackground(Color.gray);
+		topPanelWrapper.setBackground(AppConstants.HEADER_BG_COLOR);
 		topPanelWrapper.setPreferredSize(new Dimension(AppConstants.MAIN_FRAME_WIDTH-AppConstants.SIDEBAR_WIDTH, AppConstants.HEADER_PANEL_HEIGHT));
 		weeklyCalendarWrapper.setBackground(Color.white);
 		weeklyCalendarWrapper.setPreferredSize(new Dimension(AppConstants.MAIN_FRAME_WIDTH-AppConstants.SIDEBAR_WIDTH,
@@ -150,11 +150,13 @@ public class CalendarView extends JPanel{
 			
 			addPropertyChangeListener(previousButton);
 			
+			// So the previous week button can set itself to a disabled state. Quick fix.
+			firePropertyChange("weekChange", 0, selectedWeek.getWeekNumber());
+			
 			previousButton.addActionListener(new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					Component button = ((Component) e.getSource());
 					setPreviousWeek();
 				}
 				

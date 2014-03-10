@@ -30,7 +30,7 @@ public class MessageModel extends Model {
 	protected String changeOfTimeMessage = meeting.getMeetingName() + "Har blitt endret. Ny tid er: " + meeting.getStartTimeAsString() + meeting.getStartDateAsString() + "til" + meeting.getEndTimeAsString() + meeting.getEndDateAsString() ; 
 	protected String changeOfPlaceMessage = meeting.getMeetingName() + "har blitt flyttet til" + meeting.getPlaceOrRoom();  
 	protected String meetingCancledMessage = meeting.getMeetingName() + "har blitt avlyst"; 
-	protected String userHasConfirmedMessage = "Har bekreftet møteinkallingen til" + meeting.getMeetingName();   
+	protected String userHasConfirmedMessage = "Har bekreftet mï¿½teinkallingen til" + meeting.getMeetingName();   
 	protected String userHasDeclinedMessage = "Har medlt avbud til" + meeting.getMeetingName();
 	
 	
@@ -42,7 +42,7 @@ public class MessageModel extends Model {
 	}
 	
 	
-	public String setMessage(){
+	public void setMessage(){
 		if (type.equals("meetingCreated")){
 			message = inviteMessage;  
 		}
@@ -59,9 +59,9 @@ public class MessageModel extends Model {
 			message = userInQestion.getName() + userHasConfirmedMessage; 
 		}
 		if ((type.equals("partDeclined"))){ 
-			message = userInQestion.getName() + userHasDeclinedMessage;  
+			message = userInQestion.getName() + userHasDeclinedMessage; 
 		}
-	
+	}
 	
 	public Date getDate() {
 		return date;
@@ -100,13 +100,13 @@ public class MessageModel extends Model {
 
 	@Override
 	public void save() throws ClassNotFoundException, SQLException {
-		// Unødvendig
+		// Unï¿½dvendig
 		
 	}
 
 	@Override
 	public void delete() throws ClassNotFoundException, SQLException {
-		//skal skje automatisk når lest og etter 5 dager(ish)
+		//skal skje automatisk nï¿½r lest og etter 5 dager(ish)
 		
 	}
 

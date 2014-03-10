@@ -7,7 +7,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.sql.SQLException;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -15,6 +17,7 @@ import javax.swing.SwingUtilities;
 import resources.AppConstants;
 
 import framework.Controller;
+import framework.Model;
 import framework.State;
 
 import utils.RelativeLayout;
@@ -39,6 +42,8 @@ public class MainCtrl extends Controller {
 	
 	// Our current logged in user
 	private EmployeeModel currentEmployee;
+	
+	private ImageIcon appIcon;
 	
 	// Our controllers (Internal main states)
 	private LoginCtrl loginCtrl;
@@ -92,6 +97,17 @@ public class MainCtrl extends Controller {
         		appointmentCtrl = new AppointmentCtrl(getMainCtrl());
             	
         		if(isRemembered()) {
+        			
+        			EmployeeModel m = new EmployeeModel();
+        			
+        			try {
+        				m.fetch(((EmployeeModel)model).getUsername());
+        			} catch (ClassNotFoundException | SQLException e) {
+        				// TODO Auto-generated catch block
+        				e.printStackTrace();
+        			}
+        			currentEmployee = m;
+        			
         			login();
         		} else {
         			setState(LoginCtrl.class);
@@ -104,9 +120,12 @@ public class MainCtrl extends Controller {
 		
 		BufferedReader br = null;
 		String hash = "";
+		String username = "sr";
+		model = new EmployeeModel();
 		try {
 			br = new BufferedReader(new FileReader(cookieFileName));
 	        hash = br.readLine();
+	        ((EmployeeModel)model).setUsername(br.readLine());
 	        
 		} catch (IOException e) {
 			
@@ -148,12 +167,14 @@ public class MainCtrl extends Controller {
 	public void login() {
 		currentEmployee.setPassword("");
 		setState(CalendarCtrl.class);
+		sidebarPanel.init();
 		mainWrapperPanel.setVisible(true);
 		PrintWriter writer = null;
 		
 		try {
 			writer = new PrintWriter(cookieFileName, "UTF-8");
 			writer.println("logged in");
+			writer.println(currentEmployee.getUsername());
 			writer.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -185,5 +206,24 @@ public class MainCtrl extends Controller {
 		} else if (c.equals(appointmentCtrl.getClass())) {
 			appointmentCtrl.show();
 		}
+	}
+	
+	public void setAppIcon(ImageIcon icon) {
+		appIcon = icon;
+	}
+	
+	public ImageIcon getAppIcon() {
+		return appIcon;
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T extends Model> T getModel() {
+		return (T) currentEmployee;
+	}
+	
+	@Override
+	public <T extends Model> void setModel(T model) {
+		currentEmployee = (EmployeeModel) model;
 	}
 }

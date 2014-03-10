@@ -10,7 +10,7 @@ import javax.swing.JFrame;
 public abstract class Controller {
 
 	private Controller parentCtrl;
-	private Model model;
+	protected Model model;
 	
 	public Controller(Controller ctrl) {
 		this.parentCtrl = ctrl;

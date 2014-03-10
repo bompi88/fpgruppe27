@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -27,6 +28,7 @@ import resources.AppConstants;
 import model.EmployeeModel;
 
 import controller.LoginCtrl;
+import controller.MainCtrl;
 import framework.Controller;
 
 /**
@@ -41,6 +43,7 @@ public class LoginPanel extends JPanel implements PropertyChangeListener {
 	private JTextField usernameField = new JTextField();
 	private JTextField passwordField = new JPasswordField();
 	private JButton loginButton = new JButton();
+	private Color backgroundColor = AppConstants.LOGIN_BG_COLOR;
 	
 	public static BufferedImage resize(BufferedImage image, int width, int height) {
 	    BufferedImage bi = new BufferedImage(width, height, BufferedImage.TRANSLUCENT);
@@ -59,20 +62,23 @@ public class LoginPanel extends JPanel implements PropertyChangeListener {
 		
 		JPanel wrapper = new JPanel();
 		wrapper.setPreferredSize(new Dimension(300, 220));
+		setBackground(backgroundColor);
+		wrapper.setBackground(backgroundColor);
 		
 		BufferedImage resizedImage;
 		JLabel picLabel = null;
+		ImageIcon myPicture = null;
 		try {
 			BufferedImage image = ImageIO.read(getClass().getResource("/resources/deer.png"));
 			resizedImage = resize(image,120,90);
-			ImageIcon myPicture = new ImageIcon(resizedImage);
+			myPicture = new ImageIcon(resizedImage);
 			picLabel = new JLabel(myPicture);
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
-		
+		((MainCtrl) ctrl.getMainCtrl()).setAppIcon(myPicture);
 		
 		usernameField.setPreferredSize(new Dimension(300,30));
 		passwordField.setPreferredSize(new Dimension(300,30));

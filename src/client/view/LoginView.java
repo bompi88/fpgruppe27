@@ -43,6 +43,7 @@ public class LoginView extends JDialog {
 		
 		errorPanel.add(errorLabel);
 		errorPanel.setVisible(false);
+		errorPanel.setBackground(AppConstants.LOGIN_BG_COLOR);
 		loginPanel.add(errorPanel);
 		
 		setContentPane(this.loginPanel);
