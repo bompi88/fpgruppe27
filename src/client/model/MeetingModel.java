@@ -11,7 +11,8 @@ import framework.Model;
 public class MeetingModel extends Model {
 	
 	protected int meetID;
-	protected Date date;
+	protected Date startDate;
+	protected Date endDate;
 	protected String description;
 	protected Time startTime;
 	protected Time endTime;
@@ -20,6 +21,7 @@ public class MeetingModel extends Model {
 	protected EmployeeModel responsible;
 	protected ArrayList<ParticipantModel> participants;
 	protected boolean isAppiontment;
+	protected String name;
 	
 	public MeetingModel() {
 
@@ -30,7 +32,7 @@ public class MeetingModel extends Model {
 		// add to DB meetID, date description starttime, endtime, roomid or place, responsible(as username TABLE Meeting),      
 		// add to DB  meetID, participants, StatusModel to TABLE MeetingParticipants
 		
-		String query1=String.format( "insert into Meeting" +"(meetid, description, meetDate, START, END, place, roomid, username,) values ('%d','%d')",meetID, description, date, startTime, endTime, place, room.getRoomID(), responsible.getUsername()); 
+		String query1=String.format( "insert into Meeting" +"(meetid, description, startDate, endDate, START, END, place, roomid, username,) values ('%d','%d')",meetID, description, startDate, endDate, startTime, endTime, place, room.getRoomID(), responsible.getUsername()); 
 		
 		ArrayList<String> peopleList  = new ArrayList<String>();
 		peopleList.add(query1); 
@@ -77,14 +79,6 @@ public class MeetingModel extends Model {
 		this.meetID = meetID;
 	}
 
-	public Date getDate() {
-		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
-	}
-
 	public String getDescription() {
 		return description;
 	}
@@ -96,6 +90,10 @@ public class MeetingModel extends Model {
 	public Time getStartTime() {
 		return startTime;
 	}
+	
+	public String getStartTimeAsString() {
+		return startTime.toString();
+	}
 
 	public void setStartTime(Time startTime) {
 		this.startTime = startTime;
@@ -103,6 +101,10 @@ public class MeetingModel extends Model {
 
 	public Time getEndTime() {
 		return endTime;
+	}
+	
+	public String getEndTimeAsString() {
+		return endTime.toString();
 	}
 
 	public void setEndTime(Time endTime) {
@@ -148,7 +150,52 @@ public class MeetingModel extends Model {
 	public void setAppiontment(boolean isAppiontment) {
 		this.isAppiontment = isAppiontment;
 	}
+
+	public String getMeetingName() {
+		return name;
+	}
+
+	public void setMeetingName(String meetingName) {
+		this.name = meetingName;
+	}
+
+	public Date getStartDate() {
+		return startDate;
+	}
 	
+	public String getStartDateAsString() {
+		return startDate.toString();
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+	
+	public String getEndDateAsString() {
+		return endDate.toString();
+	}
+
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+	
+	public String getPlaceOrRoom() {
+		if (room != null) {
+			return room.getName(); 
+		}
+		else if (place != null) {
+			return place;
+		}
+		else {
+			return null;
+		}
+		
+	}
 	
 	
 

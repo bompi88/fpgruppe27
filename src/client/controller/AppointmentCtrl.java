@@ -1,5 +1,6 @@
 package controller;
 
+import model.MeetingModel;
 import view.AppointmentView;
 
 import framework.Controller;
@@ -15,7 +16,7 @@ public class AppointmentCtrl extends Controller implements State {
 	public AppointmentCtrl(Controller ctrl) {
 		super(ctrl);
 		
-		appointmentPanel = new AppointmentView();
+		appointmentPanel = new AppointmentView(this);
 		
 		ctrl.getMainFrame().getContentPane().add(appointmentPanel);
 		
