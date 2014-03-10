@@ -40,7 +40,8 @@ CREATE TABLE Message (
 	message 	VARCHAR(255);
 	date 	DATE;
 	timestamp TIME;
-	owner 	 VARCHAR(15); 
+	owner 	 VARCHAR(15);
+	isSeen	BOOLEAN 
 	)
 
 	
