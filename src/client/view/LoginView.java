@@ -6,8 +6,10 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
+import javax.swing.border.EmptyBorder;
 
 import resources.AppConstants;
+import utils.RelativeLayout;
 
 import model.EmployeeModel;
 
@@ -36,6 +38,8 @@ public class LoginView extends JDialog {
 		
 		JLabel errorLabel = new JLabel(AppConstants.LOG_IN_ERROR_TEXT);
 		errorLabel.setForeground(Color.RED);
+		
+		loginPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 		
 		errorPanel.add(errorLabel);
 		errorPanel.setVisible(false);
