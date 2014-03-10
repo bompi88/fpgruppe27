@@ -28,7 +28,7 @@ CREATE TABLE Room (
 CREATE TABLE MeetingParticipants (
 	meetid INT,
 	username VARCHAR(15),
-	status boolean,
+	status VARCHAR(10),
 	PRIMARY KEY(meetid, username),
 	FOREIGN KEY(meetid) REFERENCES Meeting(meetid) ON DELETE CASCADE,
 	FOREIGN KEY(username) REFERENCES User(username) ON DELETE CASCADE

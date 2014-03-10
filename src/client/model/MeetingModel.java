@@ -3,7 +3,8 @@ package model;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
+
 
 import framework.Model;
 
@@ -26,26 +27,47 @@ public class MeetingModel extends Model {
 
 	@Override
 	public void create() throws ClassNotFoundException, SQLException {
-		// TODO Auto-generated method stub
+		// add to DB meetID, date description starttime, endtime, roomid or place, responsible(as username TABLE Meeting),      
+		// add to DB  meetID, participants, StatusModel to TABLE MeetingParticipants
 		
+		String query1=String.format( "insert into Meeting" +"(meetid, description, meetDate, START, END, place, roomid, username,) values ('%d','%d')",meetID, description, date, startTime, endTime, place, room.getRoomID(), responsible.getUsername()); 
+		
+		ArrayList<String> peopleList  = new ArrayList<String>();
+		peopleList.add(query1); 
+		
+		for (int i = 0; i < participants.size(); i++){
+			String tempQuery = String.format("insert into MeetingParticipants" + "(meetid, username, status) values ('%d','%d,'%d')",meetID, participants.get(i).getUsername(), "INVITED"); 
+			peopleList.add(tempQuery); 		
+		}
+		
+		db.initialize();	
+		for(int i = 0; i < peopleList.size(); i++){
+			db.makeSingleUpdate(peopleList.get(i));
+		}		
+		db.close();
 	}
 
 	@Override
 	public void save() throws ClassNotFoundException, SQLException {
-		// TODO Auto-generated method stub
+		// write to DB meetID, date description starttime, endtime, roomid or place, responsible(as username TABLE Meeting),      
+		// write to DB meetID, participants, StatusModel to TABLE MeetingParticipants
 		
 	}
 
 	@Override
 	public void delete() throws ClassNotFoundException, SQLException {
-		// TODO Auto-generated method stub
+		// remove from DB meetID, date description starttime, endtime, roomid or place, responsible(as username TABLE Meeting),      
+		// remove from DB meetID, participants, StatusModel to TABLE MeetingParticipants
 		
 	}
 
 	@Override
-	public void fetch(String id) throws ClassNotFoundException, SQLException {
-		// TODO Auto-generated method stub
+	public void fetch(String meetId) throws ClassNotFoundException, SQLException {
+		// fetch and overwrite meetID, date description starttime, endtime, roomid or place, responsible(as username TABLE Meeting),      
+		// fetch and overwrite meetID, participants, StatusModel to TABLE MeetingParticipants
 	}
+	
+	// TODO: functionality for adding people 
 
 	public int getMeetID() {
 		return meetID;

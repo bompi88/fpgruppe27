@@ -34,6 +34,21 @@ public class ParticipantModel extends EmployeeModel {
 	public StatusModel getStatus() {
 		return status;
 	}
+	public String getStatusAsString() {
+		if (status == StatusModel.ATTENDING){
+			return "ATTENDING"; 
+		}
+		else if (status == StatusModel.INVITED){
+			return "INVITED"; 
+		}
+		else if (status == StatusModel.DECLINED){
+			return "DECLINED"; 
+		}
+		else{
+			return ""; 
+		}
+		
+	}
 
 	public void setStatus(StatusModel status) {
 		this.status = status;

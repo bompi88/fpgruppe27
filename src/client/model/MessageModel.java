@@ -1,7 +1,7 @@
 package model;
 
 import java.sql.SQLException;
-import java.util.Date;
+import java.sql.Date;
 
 import framework.Model;
 
