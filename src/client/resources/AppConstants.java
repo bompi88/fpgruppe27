@@ -4,6 +4,9 @@ public final class AppConstants {
 	public static final String COOKIE_FILE_PATH = "cookie.txt";
 	public static final int MAIN_FRAME_WIDTH = 1000;
 	public static final int MAIN_FRAME_HEIGHT = 600;
+	
+	public static final int SIDEBAR_WIDTH = 150;
+	public static final int HEADER_PANEL_HEIGHT = 150;
 
 	public static final String LOG_IN_BUTTON_TEXT = "Logg inn";
 
