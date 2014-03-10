@@ -2,6 +2,9 @@ package model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Calendar;
+
 import framework.Model;
 
 public class EmployeeModel extends Model {
@@ -9,6 +12,9 @@ public class EmployeeModel extends Model {
 	protected String username;
 	protected String password;
 	protected String name;
+	protected String email;
+	protected Calendar calendar;
+	protected ArrayList<MessageModel> inbox;
 	
 	public EmployeeModel() {}
 
