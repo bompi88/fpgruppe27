@@ -184,6 +184,18 @@ public class MeetingModel extends Model {
 		this.endDate = endDate;
 	}
 	
+	public String getPlaceOrRoom() {
+		if (room != null) {
+			return room.getName(); 
+		}
+		else if (place != null) {
+			return place;
+		}
+		else {
+			return null;
+		}
+		
+	}
 	
 	
 
