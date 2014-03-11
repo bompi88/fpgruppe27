@@ -104,6 +104,26 @@ public class MeetingModel extends Model {
 		
 	}
 
+	public boolean isAppointment() {
+		return isAppointment;
+	}
+
+
+	public void setAppointment(boolean isAppointment) {
+		this.isAppointment = isAppointment;
+	}
+
+
+	public String getName() {
+		return name;
+	}
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
 	public void delete() throws ClassNotFoundException, SQLException {
 		// remove entry with meetid = meetID in TABLE Meeting      
 		// associated entries in TABLE MeetingParticipants will be removed auotomaticly by database
@@ -270,6 +290,9 @@ public class MeetingModel extends Model {
 		
 	}
 	
-	
+	@Override
+	public String toString() {
+		return getName() + ": " + getPlace();
+	}
 
 }

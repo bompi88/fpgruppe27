@@ -1,12 +1,19 @@
 package view;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.ComponentOrientation;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -16,16 +23,32 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Random;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.ListCellRenderer;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+
+import framework.Model;
+import framework.Observable;
+import framework.Observer;
+
+import model.EmployeeModel;
+import model.MeetingModel;
 
 import resources.AppConstants;
+import resources.ImageManager;
 import utils.RelativeLayout;
+import utils.RoundedPanel;
 
 /**
  * CalendarView class shows weekly calendars which the user has subscribed to.
@@ -53,11 +76,13 @@ public class CalendarView extends JPanel{
 		topPanelWrapper.setLayout(rl2);
 		topPanelWrapper.setBackground(AppConstants.HEADER_BG_COLOR);
 		topPanelWrapper.setPreferredSize(new Dimension(AppConstants.MAIN_FRAME_WIDTH-AppConstants.SIDEBAR_WIDTH, AppConstants.HEADER_PANEL_HEIGHT));
-		weeklyCalendarWrapper.setBackground(Color.white);
 		weeklyCalendarWrapper.setPreferredSize(new Dimension(AppConstants.MAIN_FRAME_WIDTH-AppConstants.SIDEBAR_WIDTH,
 																AppConstants.MAIN_FRAME_HEIGHT-AppConstants.HEADER_PANEL_HEIGHT));
+		weeklyCalendarWrapper.setLayout(rl2);
+		weeklyCalendarWrapper.setBackground(AppConstants.CALENDAR_BG_COLOR);
 		setPreferredSize(new Dimension(AppConstants.MAIN_FRAME_WIDTH-AppConstants.SIDEBAR_WIDTH,
 				AppConstants.MAIN_FRAME_HEIGHT));
+		weeklyCalendarWrapper.setBorder(new EmptyBorder(10, 10, 10, 10));
 		
 		add(topPanelWrapper);
 		add(weeklyCalendarWrapper);
@@ -66,7 +91,8 @@ public class CalendarView extends JPanel{
 		AddCalendarPanel addCalendarPanel = new AddCalendarPanel();
 		CalendarCtrlPanel calendarCtrlPanel = new CalendarCtrlPanel();
 		CalendarTitlePanel calendarTitlePanel = new CalendarTitlePanel();
-		
+		WeeklyCalendarPanel weeklyCalendarPanel = new WeeklyCalendarPanel();
+		weeklyCalendarWrapper.add(weeklyCalendarPanel);
 		topPanelWrapper.add(addCalendarPanel);
 		topPanelWrapper.add(calendarTitlePanel);
 		topPanelWrapper.add(calendarCtrlPanel);
@@ -77,7 +103,282 @@ public class CalendarView extends JPanel{
 		
 	}
 	
+	public class CalendarElement extends RoundedPanel implements PropertyChangeListener, Observable {
+		
+		private List<Observer> observers = new ArrayList<Observer>();
+		
+		private JLabel meetingTitle;
+		
+		private MeetingModel model;
+		private JLabel deleteButton;
+		private ImageIcon normalDeleteIcon;
+		private ImageIcon hoverDeleteIcon;
+		
+		public CalendarElement(MeetingModel model) {
+			this.model = model;
+			
+			deleteButton = new JLabel();
+			
+			normalDeleteIcon = new ImageIcon(ImageManager.getInstance().resizeImage(ImageManager.getInstance().getImage("delete_icon"), 15, 15));
+			hoverDeleteIcon = new ImageIcon(ImageManager.getInstance().resizeImage(ImageManager.getInstance().getImage("delete_icon_hover"), 15, 15));
+			deleteButton.setIcon(normalDeleteIcon);
+			
+			setLayout(new GridBagLayout());
+			
+			int anc = GridBagConstraints.NORTHWEST;
+			setBackground(new Color(10,250,250,150));
+			meetingTitle = new JLabel(model.getName());
+			
+			add(meetingTitle, new GridBagConstraints(0,0,1,1,1,1,anc,1,new Insets(0,5,0,0),0,0));
+			add(deleteButton, new GridBagConstraints(1,0,1,1,1,1,anc,1,new Insets(0,5,0,0),0,0));
+			
+			deleteButton.addMouseListener(new MouseListener() {
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					fireObserverEvent("delete");
+					
+				}
+
+				@Override
+				public void mousePressed(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					deleteButton.setIcon(hoverDeleteIcon);
+					
+				}
+
+				@Override
+				public void mouseExited(MouseEvent e) {
+					deleteButton.setIcon(normalDeleteIcon);
+				}
+				
+			});
+			
+			this.addMouseListener(new MouseListener() {
+				
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mousePressed(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseExited(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					System.out.println(meetingTitle.getText());
+				}
+			});
+		}
+
+		public MeetingModel getModel() {
+			return model;
+		}
+
+		public void setModel(MeetingModel model) {
+			this.model = model;
+			model.addPropertyChangeListener(this);
+		}
+
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			if (evt.getPropertyName().equals("name")) {
+				meetingTitle.setText(model.getName());
+			}
+		}
+
+		@Override
+		public void addObserver(Observer ob) {
+			observers.add(ob);
+			
+		}
+
+		@Override
+		public void fireObserverEvent(String event) {
+			for (Observer ob : observers) {
+				ob.changeEvent("delete", this);
+			}
+		}
+	}
+	
+	public class CalendarColumn extends JPanel implements Observer {
+		
+		private JLabel dayLabel;
+		
+		private List<MeetingModel> model;
+		
+		private int dayViewWidth = ((AppConstants.MAIN_FRAME_WIDTH - AppConstants.SIDEBAR_WIDTH - 30) / 7) + 2;
+		private int dayViewHeight = AppConstants.MAIN_FRAME_HEIGHT - AppConstants.HEADER_PANEL_HEIGHT;
+		private Dimension columnSize = new Dimension(dayViewWidth, dayViewHeight);
+		
+		public CalendarColumn(List<MeetingModel> model) {
+			this.model = model;
+			
+			RelativeLayout rl = new RelativeLayout(RelativeLayout.Y_AXIS, 0);
+			rl.setAlignment(RelativeLayout.LEADING);
+			
+			setLayout(rl);
+			dayLabel = new JLabel("", SwingConstants.CENTER);
+			
+			setPreferredSize(columnSize);
+			setBackground(AppConstants.CALENDAR_BG_COLOR);
+			
+			add(dayLabel);
+			
+			for(MeetingModel meeting : model) {
+				CalendarElement e = new CalendarElement(meeting);
+				add(e);
+				e.setPreferredSize(new Dimension(dayViewWidth, 50));
+				e.addObserver(this);
+			}
+			
+		}
+
+		public List<MeetingModel> getModel() {
+			return model;
+		}
+
+		public void setModel(List<MeetingModel> model) {
+			this.model = model;
+		}
+		
+		public void setHeaderText(String week) {
+			dayLabel.setText(week);
+		}
+
+		@Override
+		public void changeEvent(String event, Object obj) {
+			
+			if(event.equals("delete")) {
+				model.remove(((CalendarElement)obj).model);
+				remove((CalendarElement)obj);
+				revalidate();
+				repaint();
+			}
+		}
+	}
+	
 	public class WeeklyCalendarPanel extends JPanel {
+		
+		private List<MeetingModel> monday = new ArrayList<MeetingModel>();
+		private List<MeetingModel> thuesday = new ArrayList<MeetingModel>();
+		private List<MeetingModel> wednesday = new ArrayList<MeetingModel>();
+		private List<MeetingModel> thursday = new ArrayList<MeetingModel>();
+		private List<MeetingModel> friday = new ArrayList<MeetingModel>();
+		private List<MeetingModel> saturday = new ArrayList<MeetingModel>();
+		private List<MeetingModel> sunday = new ArrayList<MeetingModel>();
+		
+		private CalendarColumn mondayView;
+		private CalendarColumn thuesdayView;
+		private CalendarColumn wednesdayView;
+		private CalendarColumn thursdayView;
+		private CalendarColumn fridayView;
+		private CalendarColumn saturdayView;
+		private CalendarColumn sundayView;
+		
+		public WeeklyCalendarPanel() {
+			
+			for (int i = 1; i <= 7; i++) {
+				int rand = 1 + (int)(Math.random() * ((10 - 1) + 1));
+				for (int j = 0; j < rand; j++) {
+					MeetingModel m = new MeetingModel();
+					m.setMeetID((i+1)*(i+1)*(j+1));
+					m.setName("meewID" + (i+1)*(i+1)*(j+1));
+					m.setPlace("this is a meeting");
+					
+					switch(i) {
+					case 1:
+						monday.add(monday.size(), m);
+						break;
+					case 2:
+						thuesday.add(thuesday.size(), m);
+						break;
+					case 3:
+						wednesday.add(wednesday.size(), m);
+						break;
+					case 4:
+						thursday.add(thursday.size(), m);
+						break;
+					case 5:
+						friday.add(friday.size(), m);
+						break;
+					case 6:
+						saturday.add(saturday.size(), m);
+						break;
+					case 7:
+						sunday.add(sunday.size(), m);
+						break;
+					}
+				}
+			}
+			
+			mondayView = new CalendarColumn(monday);
+			thuesdayView = new CalendarColumn(thuesday);
+			wednesdayView = new CalendarColumn(wednesday);
+			thursdayView = new CalendarColumn(thursday);
+			fridayView = new CalendarColumn(thursday);
+			saturdayView = new CalendarColumn(saturday);
+			sundayView = new CalendarColumn(sunday);
+			
+			RelativeLayout rl = new RelativeLayout(RelativeLayout.X_AXIS, 0);
+			rl.setAlignment(RelativeLayout.LEADING);
+			
+			setLayout(rl);
+			
+			mondayView.setModel(monday);
+			thuesdayView.setModel(thuesday);
+			wednesdayView.setModel(wednesday);
+			thursdayView.setModel(thursday);
+			fridayView.setModel(friday);
+			saturdayView.setModel(saturday);
+			sundayView.setModel(sunday);
+			
+			mondayView.setHeaderText(AppConstants.MONDAY_TEXT);
+			thuesdayView.setHeaderText(AppConstants.THUESDAY_TEXT);
+			wednesdayView.setHeaderText(AppConstants.WEDNESDAY_TEXT);
+			thursdayView.setHeaderText(AppConstants.THURSDAY_TEXT);
+			fridayView.setHeaderText(AppConstants.FRIDAY_TEXT);
+			saturdayView.setHeaderText(AppConstants.SATURDAY_TEXT);
+			sundayView.setHeaderText(AppConstants.SUNDAY_TEXT);
+			
+			add(mondayView);
+			add(thuesdayView);
+			add(wednesdayView);
+			add(thursdayView);
+			add(fridayView);
+			add(saturdayView);
+			add(sundayView);
+			
+			setBackground(AppConstants.CALENDAR_BG_COLOR);
+			
+		}
 		
 	}
 	

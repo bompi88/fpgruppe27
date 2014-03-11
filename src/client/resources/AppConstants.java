@@ -34,6 +34,15 @@ public final class AppConstants {
 	public static final Color LOGIN_BG_COLOR = Color.lightGray;
 	public static final Color SIDE_BAR_BG_COLOR = Color.lightGray;
 	public static final Color HEADER_BG_COLOR = Color.gray;
+	public static final Color CALENDAR_BG_COLOR = Color.white;
+	
+	public static final String MONDAY_TEXT = "Mandag";
+	public static final String THUESDAY_TEXT = "Tirsdag";
+	public static final String WEDNESDAY_TEXT = "Onsdag";
+	public static final String THURSDAY_TEXT = "Torsdag";
+	public static final String FRIDAY_TEXT = "Fredag";
+	public static final String SATURDAY_TEXT = "Lørdag";
+	public static final String SUNDAY_TEXT = "Søndag";
 
 	private AppConstants() {
 		throw new AssertionError();

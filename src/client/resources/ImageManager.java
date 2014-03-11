@@ -12,6 +12,7 @@ public final class ImageManager {
 	private static final String RESOURCE_PATH = "/resources/";
 
 	public static BufferedImage deleteIcon;
+	public static BufferedImage deleteIconHover;
 	public static BufferedImage appIcon;
 
 	private static volatile ImageManager INSTANCE = null;
@@ -24,7 +25,9 @@ public final class ImageManager {
 			appIcon = ImageIO.read(getClass().getResource(
 					RESOURCE_PATH + "deer.png"));
 			deleteIcon = ImageIO.read(getClass().getResource(
-					RESOURCE_PATH + "non responded icon.png"));
+					RESOURCE_PATH + "non_responded_icon.png"));
+			deleteIconHover = ImageIO.read(getClass().getResource(
+					RESOURCE_PATH + "non_responded_icon_hover.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -44,6 +47,8 @@ public final class ImageManager {
 			return deleteIcon;
 		} else if (icon.equals(IconType.APP_ICON.toString())) {
 			return appIcon;
+		} else if (icon.equals(IconType.DELETE_ICON_HOVER.toString())) {
+			return deleteIconHover;
 		}
 		return null;
 	}
@@ -69,7 +74,7 @@ public final class ImageManager {
 	}
 
 	public enum IconType {
-		DELETE_ICON("delete_icon"), APP_ICON("app_icon");
+		DELETE_ICON("delete_icon"), DELETE_ICON_HOVER("delete_icon_hover"), APP_ICON("app_icon");
 
 		private IconType(final String text) {
 			this.text = text;
