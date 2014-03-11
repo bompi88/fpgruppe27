@@ -1,13 +1,19 @@
 package controller;
 
 import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.sql.SQLException;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -15,6 +21,7 @@ import javax.swing.SwingUtilities;
 import resources.AppConstants;
 
 import framework.Controller;
+import framework.Model;
 import framework.State;
 
 import utils.RelativeLayout;
@@ -40,6 +47,8 @@ public class MainCtrl extends Controller {
 	// Our current logged in user
 	private EmployeeModel currentEmployee;
 	
+	private ImageIcon appIcon;
+	
 	// Our controllers (Internal main states)
 	private LoginCtrl loginCtrl;
 	private CalendarCtrl calendarCtrl;
@@ -61,6 +70,18 @@ public class MainCtrl extends Controller {
 	 */
 	public void initUI() {
 		
+		// load app icon
+		BufferedImage resizedImage;
+		BufferedImage image;
+		
+		try {
+			image = ImageIO.read(getClass().getResource("/resources/deer.png"));
+			resizedImage = resizeImage(image,120,90);
+			setAppIcon(new ImageIcon(resizedImage));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
 		// Create a layout fro mainFrame
 		RelativeLayout rl = new RelativeLayout(RelativeLayout.X_AXIS, 0);
 		rl.setAlignment(RelativeLayout.LEADING);
@@ -80,6 +101,10 @@ public class MainCtrl extends Controller {
 		
 	}
 	
+	/**
+	 * Creates the respective controllers and views, and and then
+	 * starts the application.
+	 */
 	public void startApp() {
 		SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -91,22 +116,43 @@ public class MainCtrl extends Controller {
         		inboxCtrl = new InboxCtrl(getMainCtrl());
         		appointmentCtrl = new AppointmentCtrl(getMainCtrl());
             	
+        		// if cookie: login
         		if(isRemembered()) {
+        			
+        			EmployeeModel m = new EmployeeModel();
+        			
+        			// get user based on username and login
+        			try {
+        				m.fetch(((EmployeeModel)model).getUsername());
+        			} catch (ClassNotFoundException | SQLException e) {
+        				e.printStackTrace();
+        			}
+        			currentEmployee = m;
+        			
         			login();
         		} else {
+        			// set login state
         			setState(LoginCtrl.class);
         		}
             }
         });
 	}
 	
+	/**
+	 * Is there  a ckoookie?!? nam.. nam..
+	 */
 	public boolean isRemembered() {
 		
 		BufferedReader br = null;
 		String hash = "";
+		
+		// create a model
+		model = new EmployeeModel();
+		
 		try {
 			br = new BufferedReader(new FileReader(cookieFileName));
 	        hash = br.readLine();
+	        ((EmployeeModel)model).setUsername(br.readLine());
 	        
 		} catch (IOException e) {
 			
@@ -123,12 +169,21 @@ public class MainCtrl extends Controller {
 		return hash.equals("logged in");
 	}
 	
+	/**
+	 * Logs out current user.
+	 */
 	public void logout() {
 		
+		// hide all views
 		mainWrapperPanel.setVisible(false);
+		
+		// reset password
 		currentEmployee.setPassword("");
+		
+		// set Login state
 		setState(LoginCtrl.class);
 		
+		// eat cookie! yummy!
 		PrintWriter writer = null;
 		
 		try {
@@ -145,15 +200,28 @@ public class MainCtrl extends Controller {
 		System.out.println("logged out");
 	}
 	
+	/**
+	 * Handles login event after authentification done by Employee model
+	 * against the database.
+	 */
 	public void login() {
-		currentEmployee.setPassword("");
+		
+		// go to calendar
 		setState(CalendarCtrl.class);
+		
+		// have to initialize our sidebar
+		sidebarPanel.init();
+		
+		// finally show the contents of our app.
 		mainWrapperPanel.setVisible(true);
+		
+		// bake a cookie! 
 		PrintWriter writer = null;
 		
 		try {
 			writer = new PrintWriter(cookieFileName, "UTF-8");
 			writer.println("logged in");
+			writer.println(currentEmployee.getUsername());
 			writer.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -171,11 +239,14 @@ public class MainCtrl extends Controller {
 	
 	@Override
 	public void setState(Class<? extends State> c) {
+		
+		// hide all states
 		calendarCtrl.hide();
 		inboxCtrl.hide();
 		appointmentCtrl.hide();
 		loginCtrl.hide();
 		
+		// show a new state
 		if(c.equals(loginCtrl.getClass())) {
 			loginCtrl.show();
 		} else if (c.equals(calendarCtrl.getClass())) {
@@ -185,5 +256,49 @@ public class MainCtrl extends Controller {
 		} else if (c.equals(appointmentCtrl.getClass())) {
 			appointmentCtrl.show();
 		}
+	}
+	
+	/**
+	 * Sets the applications' icon.
+	 * @param ImageIcon
+	 */
+	public void setAppIcon(ImageIcon icon) {
+		appIcon = icon;
+	}
+	
+	/**
+	 * Gets the applications' icon.
+	 * @return ImageIcon
+	 */
+	public ImageIcon getAppIcon() {
+		return appIcon;
+	}
+	
+	/**
+	 * Resizes an image to given width and height. 
+	 * 
+	 * @param image
+	 * @param width
+	 * @param height
+	 * @return
+	 */
+	public static BufferedImage resizeImage(BufferedImage image, int width, int height) {
+	    BufferedImage bi = new BufferedImage(width, height, BufferedImage.TRANSLUCENT);
+	    Graphics2D g2d = (Graphics2D) bi.createGraphics();
+	    g2d.addRenderingHints(new RenderingHints(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY));
+	    g2d.drawImage(image, 0, 0, width, height, null);
+	    g2d.dispose();
+	    return bi;
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T extends Model> T getModel() {
+		return (T) currentEmployee;
+	}
+	
+	@Override
+	public <T extends Model> void setModel(T model) {
+		currentEmployee = (EmployeeModel) model;
 	}
 }

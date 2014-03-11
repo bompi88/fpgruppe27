@@ -37,3 +37,14 @@ CREATE TABLE MeetingParticipants (
 	FOREIGN KEY(meetid) REFERENCES Meeting(meetid) ON DELETE CASCADE,
 	FOREIGN KEY(username) REFERENCES User(username) ON DELETE CASCADE
 	);
+
+CREATE TABLE Message (
+	messid 	INT 	NOT NULL, 
+	message 	VARCHAR(255);
+	date 	DATE;
+	timestamp TIME;
+	owner 	 VARCHAR(15);
+	isSeen	BOOLEAN 
+	)
+
+	
