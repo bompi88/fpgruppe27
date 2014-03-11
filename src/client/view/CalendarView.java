@@ -125,12 +125,14 @@ public class CalendarView extends JPanel{
 			
 			setLayout(new GridBagLayout());
 			
-			int anc = GridBagConstraints.NORTHWEST;
+			Font meetTitleFont = new Font("Arial", Font.BOLD, 12);
+			
 			setBackground(new Color(10,250,250,150));
 			meetingTitle = new JLabel(model.getName());
+			meetingTitle.setFont(meetTitleFont);
 			
-			add(meetingTitle, new GridBagConstraints(0,0,1,1,1,1,anc,1,new Insets(0,5,0,0),0,0));
-			add(deleteButton, new GridBagConstraints(1,0,1,1,1,1,anc,1,new Insets(0,5,0,0),0,0));
+			add(meetingTitle, new GridBagConstraints(0,0,1,1,1,1,GridBagConstraints.NORTHWEST,0,new Insets(5,5,0,0),0,0));
+			add(deleteButton, new GridBagConstraints(1,0,1,1,1,1,GridBagConstraints.NORTHEAST,0,new Insets(5,0,0,7),0,0));
 			
 			deleteButton.addMouseListener(new MouseListener() {
 
@@ -155,12 +157,13 @@ public class CalendarView extends JPanel{
 				@Override
 				public void mouseEntered(MouseEvent e) {
 					deleteButton.setIcon(hoverDeleteIcon);
-					
+					setBackground(new Color(250,20,20,150));
 				}
 
 				@Override
 				public void mouseExited(MouseEvent e) {
 					deleteButton.setIcon(normalDeleteIcon);
+					setBackground(new Color(10,250,250,150));
 				}
 				
 			});
@@ -181,19 +184,20 @@ public class CalendarView extends JPanel{
 				
 				@Override
 				public void mouseExited(MouseEvent e) {
-					// TODO Auto-generated method stub
+					setBackground(new Color(10,250,250,150));
 					
 				}
 				
 				@Override
 				public void mouseEntered(MouseEvent e) {
-					// TODO Auto-generated method stub
+					setBackground(new Color(10,250,250,100));
 					
 				}
 				
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					System.out.println(meetingTitle.getText());
+					
 				}
 			});
 		}

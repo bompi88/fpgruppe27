@@ -16,6 +16,8 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -37,7 +39,8 @@ public class AddCalendarPanel extends JPanel {
 	private JList<EmployeeModel> calendarSubscribedList;
 	private JButton addCalendarButton;
 	
-	private DefaultListModel<EmployeeModel> subscribedCalendars = new DefaultListModel<EmployeeModel>();
+	HashSet<EmployeeModel> subscribedCalendars = new HashSet<EmployeeModel>();
+	private DefaultListModel<EmployeeModel> subscribedCalendarsModel = new DefaultListModel<EmployeeModel>();
 	
 	public AddCalendarPanel() {
 		
@@ -45,7 +48,7 @@ public class AddCalendarPanel extends JPanel {
 		RelativeLayout rl = new RelativeLayout(RelativeLayout.Y_AXIS, 0);
 		rl.setAlignment(RelativeLayout.CENTER);
 		setLayout(rl);
-	
+		
 		addCalendarLabel = new JLabel(AppConstants.SHOW_CALENDAR_LABEL_TEXT);
 		addCalendarTextField = new JTextField();
 		addCalendarTextField.setPreferredSize(new Dimension(100, 30));
@@ -54,7 +57,7 @@ public class AddCalendarPanel extends JPanel {
 	
 		calendarSubscribedList = new JList<EmployeeModel>();
 		calendarSubscribedList.setCellRenderer(new MyCellRenderer());
-		calendarSubscribedList.setModel(subscribedCalendars);
+		calendarSubscribedList.setModel(subscribedCalendarsModel);
 		
 		calendarSubscribedList.setFixedCellHeight(15);
 		calendarSubscribedList.setFixedCellWidth(85);
@@ -103,15 +106,20 @@ public class AddCalendarPanel extends JPanel {
 	}
 	
 	public void addCalendar() {
-		if(subscribedCalendars.getSize() < 12) {
+		if(subscribedCalendarsModel.getSize() < 12) {
 			EmployeeModel emp = new EmployeeModel();
+			emp.setUsername(addCalendarTextField.getText());
 			emp.setName(addCalendarTextField.getText());
-			subscribedCalendars.add(subscribedCalendars.getSize(), emp);
+			subscribedCalendars.add(emp);
+			subscribedCalendarsModel.removeAllElements();
+			for (EmployeeModel ee : subscribedCalendars) {
+				subscribedCalendarsModel.add(subscribedCalendarsModel.size(), ee);
+			}
 		}
 	}
 	
 	public void removeCalendar(int index) {
-		subscribedCalendars.remove(index);
+		subscribedCalendarsModel.remove(index);
 	}
 	
 	@Override

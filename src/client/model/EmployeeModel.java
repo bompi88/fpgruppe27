@@ -8,9 +8,9 @@ import java.util.Calendar;
 
 import framework.Model;
 
-public class EmployeeModel extends Model {
+public class EmployeeModel extends Model{
 	
-	protected String username;
+	protected String username = "";
 	protected String password;
 	protected String name;
 	protected String email;
@@ -114,7 +114,7 @@ public class EmployeeModel extends Model {
 	}
 	
 	
-	public void fetchMessages() throws ClassNotFoundException, SQLException{  //kjøres ved oppstart av programmet. Opretter første MessageModelobjekt , sletter gamle meldinger, og lager nye objekter til inbox basert på DB.   
+	public void fetchMessages() throws ClassNotFoundException, SQLException{  //kjï¿½res ved oppstart av programmet. Opretter fï¿½rste MessageModelobjekt , sletter gamle meldinger, og lager nye objekter til inbox basert pï¿½ DB.   
 		MessageModel firstMessage = new MessageModel("none", null, null);  
 		Timestamp starttime = new Timestamp(0); 
 		
@@ -132,7 +132,7 @@ public class EmployeeModel extends Model {
 		
 	} 
 	
-	public void updateInbox() throws ClassNotFoundException, SQLException{ // kjører kontinuerlig. Henter TimeStamp fra siste melding, og ser etter nye meldinger å lage objekter av, 
+	public void updateInbox() throws ClassNotFoundException, SQLException{ // kjï¿½rer kontinuerlig. Henter TimeStamp fra siste melding, og ser etter nye meldinger ï¿½ lage objekter av, 
 		MessageModel lastMessage = inbox.get(0); 
 		int noOfNewMessages = lastMessage.countMessages(username, lastMessage.getTime()); 
 		
@@ -169,5 +169,16 @@ public class EmployeeModel extends Model {
 		return name;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof EmployeeModel)) {
+			return false;
+		}
+		System.out.println("test");
+		return (username.equals(((EmployeeModel)obj).username));
+	}
 	
+	public int hashCode() {
+		return username.hashCode();
+	}
 }
