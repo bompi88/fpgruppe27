@@ -37,14 +37,13 @@ public class MessageModel extends Model {
 	protected String changeOfTimeMessage = meeting.getMeetingName() + "Har blitt endret. Ny tid er: " + meeting.getStartTimeAsString() + meeting.getStartDateAsString() + "til" + meeting.getEndTimeAsString() + meeting.getEndDateAsString() ; 
 	protected String changeOfPlaceMessage = meeting.getMeetingName() + "har blitt flyttet til" + meeting.getPlaceOrRoom();  
 	protected String meetingCancledMessage = meeting.getMeetingName() + "har blitt avlyst"; 
-	protected String userHasConfirmedMessage = "Har bekreftet mÃ¸teinkallingen til" + meeting.getMeetingName();   
+	protected String userHasConfirmedMessage = "Har bekreftet møteinkallingen til" + meeting.getMeetingName();   
 	protected String userHasDeclinedMessage = "Har medlt avbud til" + meeting.getMeetingName();
 	
 	
 	public MessageModel(String type, ParticipantModel messageOwner, ParticipantModel userInQestion) throws ClassNotFoundException, SQLException{
 		this.type = type; 	
 		this.userInQestion = userInQestion; 
-		this.messageOwner = messageOwner; 
 		setMessage(); 
 	}
 	
@@ -66,8 +65,9 @@ public class MessageModel extends Model {
 			message = userInQestion.getName() + userHasConfirmedMessage; 
 		}
 		if ((type.equals("partDeclined"))){ 
-			message = userInQestion.getName() + userHasDeclinedMessage; 
+			message = userInQestion.getName() + userHasDeclinedMessage;  
 		}
+	
 	}
 	
 	public Date getDate() {
@@ -111,7 +111,7 @@ public class MessageModel extends Model {
 	@Override
 	public void create() throws ClassNotFoundException, SQLException {
 		Timestamp timeNow = new Timestamp(System.currentTimeMillis()); 
-		this.time = timeNow;
+		time = timeNow; 
 		String query=String.format("insert into message " + "(message, time, owner, isSeen) values ('%s','%s','%s','%s', '%s')", message, timeNow, messageOwner.getUsername()); 
 		
 		db.initialize();
@@ -178,10 +178,10 @@ public class MessageModel extends Model {
 	
 	
 	
-	// unÃ¸dvendig dritt
+	// unødvendig dritt
 	@Override
 	public void save() throws ClassNotFoundException, SQLException {
-		// UnÃ¸dvendig
+		// Unødvendig
 		
 	}
 	
