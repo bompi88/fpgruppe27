@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.EmployeeModel;
+import model.ParticipantModel;
 
 public class DatabaseSearch {
 	
@@ -59,16 +60,16 @@ public class DatabaseSearch {
 		return results;
 	}
 	
-	public static List<EmployeeModel> getAllEmployees() throws ClassNotFoundException, SQLException {
+	public static List<ParticipantModel> getAllEmployees() throws ClassNotFoundException, SQLException {
 		String query = "SELECT username, name FROM employee";
 		DBConnection.db.initialize();
 		ResultSet rs = DBConnection.db.makeSingleQuery(query);
 		
-		List<EmployeeModel> results = new ArrayList<EmployeeModel>();
+		List<ParticipantModel> results = new ArrayList<ParticipantModel>();
 		
 		while(rs.next())
 		{
-			EmployeeModel e = new EmployeeModel();
+			ParticipantModel e = new ParticipantModel();
 			
 			e.setUsername(rs.getString(1));
 			e.setName(rs.getString(2));
