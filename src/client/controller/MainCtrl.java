@@ -1,6 +1,9 @@
 package controller;
 
 import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -9,8 +12,10 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -65,6 +70,19 @@ public class MainCtrl extends Controller {
 	 * Initializes the user interface.
 	 */
 	public void initUI() {
+		
+		// load app icon
+		BufferedImage resizedImage;
+		BufferedImage image;
+		
+		try {
+			image = ImageIO.read(getClass().getResource("/resources/deer.png"));
+			resizedImage = resizeImage(image,120,90);
+			setAppIcon(new ImageIcon(resizedImage));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		// Create a layout fro mainFrame
 		RelativeLayout rl = new RelativeLayout(RelativeLayout.X_AXIS, 0);
@@ -214,6 +232,15 @@ public class MainCtrl extends Controller {
 	
 	public ImageIcon getAppIcon() {
 		return appIcon;
+	}
+	
+	public static BufferedImage resizeImage(BufferedImage image, int width, int height) {
+	    BufferedImage bi = new BufferedImage(width, height, BufferedImage.TRANSLUCENT);
+	    Graphics2D g2d = (Graphics2D) bi.createGraphics();
+	    g2d.addRenderingHints(new RenderingHints(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY));
+	    g2d.drawImage(image, 0, 0, width, height, null);
+	    g2d.dispose();
+	    return bi;
 	}
 	
 	@Override

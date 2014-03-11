@@ -45,15 +45,6 @@ public class LoginPanel extends JPanel implements PropertyChangeListener {
 	private JButton loginButton = new JButton();
 	private Color backgroundColor = AppConstants.LOGIN_BG_COLOR;
 	
-	public static BufferedImage resize(BufferedImage image, int width, int height) {
-	    BufferedImage bi = new BufferedImage(width, height, BufferedImage.TRANSLUCENT);
-	    Graphics2D g2d = (Graphics2D) bi.createGraphics();
-	    g2d.addRenderingHints(new RenderingHints(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY));
-	    g2d.drawImage(image, 0, 0, width, height, null);
-	    g2d.dispose();
-	    return bi;
-	}
-	
 	public LoginPanel(Controller ctrl) {
 		
 		this.ctrl = ctrl;
@@ -64,21 +55,9 @@ public class LoginPanel extends JPanel implements PropertyChangeListener {
 		wrapper.setPreferredSize(new Dimension(300, 220));
 		setBackground(backgroundColor);
 		wrapper.setBackground(backgroundColor);
-		
-		BufferedImage resizedImage;
-		JLabel picLabel = null;
-		ImageIcon myPicture = null;
-		try {
-			BufferedImage image = ImageIO.read(getClass().getResource("/resources/deer.png"));
-			resizedImage = resize(image,120,90);
-			myPicture = new ImageIcon(resizedImage);
-			picLabel = new JLabel(myPicture);
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		((MainCtrl) ctrl.getMainCtrl()).setAppIcon(myPicture);
+	
+		ImageIcon myPicture = ((MainCtrl) ctrl.getMainCtrl()).getAppIcon();
+		JLabel picLabel = new JLabel(myPicture);
 		
 		usernameField.setPreferredSize(new Dimension(300,30));
 		passwordField.setPreferredSize(new Dimension(300,30));
