@@ -61,4 +61,11 @@ public class ParticipantModel extends EmployeeModel {
 	public void setAlarm(AlarmModel alarm) {
 		this.alarm = alarm;
 	}
+
+	@Override
+	public String toString() {
+		return name;
+	}
+	
+	
 }
