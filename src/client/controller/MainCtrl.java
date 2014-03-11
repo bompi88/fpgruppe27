@@ -15,7 +15,6 @@ import java.sql.SQLException;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -80,7 +79,6 @@ public class MainCtrl extends Controller {
 			resizedImage = resizeImage(image,120,90);
 			setAppIcon(new ImageIcon(resizedImage));
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
@@ -103,6 +101,10 @@ public class MainCtrl extends Controller {
 		
 	}
 	
+	/**
+	 * Creates the respective controllers and views, and and then
+	 * starts the application.
+	 */
 	public void startApp() {
 		SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -114,32 +116,39 @@ public class MainCtrl extends Controller {
         		inboxCtrl = new InboxCtrl(getMainCtrl());
         		appointmentCtrl = new AppointmentCtrl(getMainCtrl());
             	
+        		// if cookie: login
         		if(isRemembered()) {
         			
         			EmployeeModel m = new EmployeeModel();
         			
+        			// get user based on username and login
         			try {
         				m.fetch(((EmployeeModel)model).getUsername());
         			} catch (ClassNotFoundException | SQLException e) {
-        				// TODO Auto-generated catch block
         				e.printStackTrace();
         			}
         			currentEmployee = m;
         			
         			login();
         		} else {
+        			// set login state
         			setState(LoginCtrl.class);
         		}
             }
         });
 	}
 	
+	/**
+	 * Is there  a ckoookie?!? nam.. nam..
+	 */
 	public boolean isRemembered() {
 		
 		BufferedReader br = null;
 		String hash = "";
-		String username = "sr";
+		
+		// create a model
 		model = new EmployeeModel();
+		
 		try {
 			br = new BufferedReader(new FileReader(cookieFileName));
 	        hash = br.readLine();
@@ -160,12 +169,21 @@ public class MainCtrl extends Controller {
 		return hash.equals("logged in");
 	}
 	
+	/**
+	 * Logs out current user.
+	 */
 	public void logout() {
 		
+		// hide all views
 		mainWrapperPanel.setVisible(false);
+		
+		// reset password
 		currentEmployee.setPassword("");
+		
+		// set Login state
 		setState(LoginCtrl.class);
 		
+		// eat cookie! yummy!
 		PrintWriter writer = null;
 		
 		try {
@@ -182,11 +200,22 @@ public class MainCtrl extends Controller {
 		System.out.println("logged out");
 	}
 	
+	/**
+	 * Handles login event after authentification done by Employee model
+	 * against the database.
+	 */
 	public void login() {
-		currentEmployee.setPassword("");
+		
+		// go to calendar
 		setState(CalendarCtrl.class);
+		
+		// have to initialize our sidebar
 		sidebarPanel.init();
+		
+		// finally show the contents of our app.
 		mainWrapperPanel.setVisible(true);
+		
+		// bake a cookie! 
 		PrintWriter writer = null;
 		
 		try {
@@ -210,11 +239,14 @@ public class MainCtrl extends Controller {
 	
 	@Override
 	public void setState(Class<? extends State> c) {
+		
+		// hide all states
 		calendarCtrl.hide();
 		inboxCtrl.hide();
 		appointmentCtrl.hide();
 		loginCtrl.hide();
 		
+		// show a new state
 		if(c.equals(loginCtrl.getClass())) {
 			loginCtrl.show();
 		} else if (c.equals(calendarCtrl.getClass())) {
@@ -226,14 +258,30 @@ public class MainCtrl extends Controller {
 		}
 	}
 	
+	/**
+	 * Sets the applications' icon.
+	 * @param ImageIcon
+	 */
 	public void setAppIcon(ImageIcon icon) {
 		appIcon = icon;
 	}
 	
+	/**
+	 * Gets the applications' icon.
+	 * @return ImageIcon
+	 */
 	public ImageIcon getAppIcon() {
 		return appIcon;
 	}
 	
+	/**
+	 * Resizes an image to given width and height. 
+	 * 
+	 * @param image
+	 * @param width
+	 * @param height
+	 * @return
+	 */
 	public static BufferedImage resizeImage(BufferedImage image, int width, int height) {
 	    BufferedImage bi = new BufferedImage(width, height, BufferedImage.TRANSLUCENT);
 	    Graphics2D g2d = (Graphics2D) bi.createGraphics();

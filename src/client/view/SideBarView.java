@@ -41,6 +41,7 @@ public class SideBarView extends JPanel {
 	public SideBarView (Controller ctrl) {
 		this.ctrl = ctrl;
 		
+		appIcon.setIcon(((MainCtrl)ctrl.getMainCtrl()).getAppIcon());
 		loggedInUser.setPreferredSize(new Dimension(120,90));
 		loggedInUser.setFont(new Font("Ariel", Font.PLAIN, 12));
 
@@ -104,7 +105,6 @@ public class SideBarView extends JPanel {
 	}
 
 	public void init() {
-		appIcon.setIcon(((MainCtrl)ctrl.getMainCtrl()).getAppIcon());
 		loggedInUser.setText("<html><b>user:</b> " + ((EmployeeModel)((MainCtrl)ctrl.getMainCtrl()).getModel()).getUsername() + "</html>");
 	}
 }
