@@ -8,12 +8,15 @@ CREATE TABLE User (
 
 CREATE TABLE Meeting (
 	meetid INT NOT NULL AUTO_INCREMENT,
+    name = VARCHAR(50),
 	description VARCHAR(255),
-	meetDate DATE,
-	start TIME,
-	end TIME,
+	startDate DATE,
+    endDate DATE,
+	startTime TIME,
+	endTime TIME,
 	place VARCHAR(50),
 	roomid INT REFERENCES Room(roomid),
+    isAppointment BOOLEAN,
 	username VARCHAR(15) REFERENCES User(username)
 	PRIMARY KEY(meetid)
 
@@ -22,6 +25,7 @@ CREATE TABLE Meeting (
 CREATE TABLE Room (
 	roomid INT NOT NULL, AUTO_INCREMENT,
 	name VARCHAR(50),
+    capacity INT,
 	PRIMARY KEY(roomid)
 	);
 

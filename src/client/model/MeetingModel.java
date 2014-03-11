@@ -1,5 +1,6 @@
 package model;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ public class MeetingModel extends Model {
 	
 	protected int meetID;
 	protected Date startDate;
-	protected Date endDate;
+	protected Date endDate;	
 	protected String description;
 	protected Time startTime;
 	protected Time endTime;
@@ -20,19 +21,18 @@ public class MeetingModel extends Model {
 	protected String place;
 	protected EmployeeModel responsible;
 	protected ArrayList<ParticipantModel> participants;
-	protected boolean isAppiontment;
+	protected boolean isAppointment;
 	protected String name;
 	
 	public MeetingModel() {
 
 	}
 
-	@Override
 	public void create() throws ClassNotFoundException, SQLException {
 		// add to DB meetID, date description starttime, endtime, roomid or place, responsible(as username TABLE Meeting),      
 		// add to DB  meetID, participants, StatusModel to TABLE MeetingParticipants
 		
-		String query1=String.format( "insert into Meeting" +"(meetid, description, startDate, endDate, START, END, place, roomid, username,) values ('%d','%d')",meetID, description, startDate, endDate, startTime, endTime, place, room.getRoomID(), responsible.getUsername()); 
+		String query1=String.format( "insert into Meeting" +"(meetid, name, description, startDate, endDate, startTime, endTime, place, roomid, username, isAppointment) values ('%d','%d')",meetID, name, description, startDate, endDate, startTime, endTime, place, room.getRoomID(), responsible.getUsername(), this.isAppiontmentString()); 
 		
 		ArrayList<String> peopleList  = new ArrayList<String>();
 		peopleList.add(query1); 
@@ -49,24 +49,64 @@ public class MeetingModel extends Model {
 		db.close();
 	}
 
-	@Override
 	public void save() throws ClassNotFoundException, SQLException {
-		// write to DB meetID, date description starttime, endtime, roomid or place, responsible(as username TABLE Meeting),      
-		// write to DB meetID, participants, StatusModel to TABLE MeetingParticipants
+		// overwrite to DB date, description starttime, endtime, roomid or place, responsible(as username TABLE Meeting),  
+		// remove all old entries in TABLE MeetingParticipants associated with this meeting (meetid = meetID)
+		// add to DB meetID, participants, StatusModel to TABLE MeetingParticipants
+		
+		String query1 = "update Meeting set name = " + name + " , description = " + description + " , startDate = " + startDate + " , endDate = " + endDate + " , startTime = " + startTime + " , endTime = " + endTime + " , place = " + place + " , roomid = " + room.getRoomID() + " , username = " + responsible.getUsername() + " , isAppointment = " + this.isAppiontmentString() + " where meetid = " + meetID;
+		
+		String query2 = "delete from MeetingParticipants where meetid = " + meetID;
+		
+		ArrayList<String> queryList = new ArrayList<String>();
+		queryList.add(query1);
+		queryList.add(query2);
+		
+		for (int i = 0; i < participants.size(); i++){
+			String tempQuery = String.format("insert into MeetingParticipants" + "(meetid, username, status) values ('%d','%d,'%d')",meetID, participants.get(i).getUsername(), participants.get(i).getStatusAsString()); 
+			queryList.add(tempQuery); 		
+		}
+		
+		db.initialize();
+		for (int i = 0; i < queryList.size(); i++) {
+			db.makeSingleUpdate(queryList.get(i));
+		}
+		db.close();
 		
 	}
 
-	@Override
 	public void delete() throws ClassNotFoundException, SQLException {
-		// remove from DB meetID, date description starttime, endtime, roomid or place, responsible(as username TABLE Meeting),      
-		// remove from DB meetID, participants, StatusModel to TABLE MeetingParticipants
+		// remove entry with meetid = meetID in TABLE Meeting      
+		// associated entries in TABLE MeetingParticipants will be removed auotomaticly by database
+		
+		String query1 = "delete from Meeting where meetid = " + meetID;
+		
+		db.initialize();
+		db.makeSingleUpdate(query1);
+		db.close();
 		
 	}
 
-	@Override
 	public void fetch(String meetId) throws ClassNotFoundException, SQLException {
 		// fetch and overwrite meetID, date description starttime, endtime, roomid or place, responsible(as username TABLE Meeting),      
 		// fetch and overwrite meetID, participants, StatusModel to TABLE MeetingParticipants
+		
+		String query1 = "select name, description, startDate, endDate, startTime, endTime, place, roomid, username, isAppointment from Meeting where meetid =" + meetId;
+		
+		db.initialize();
+		ResultSet rs = db.makeSingleQuery(query1);
+		db.close();
+		
+		rs.next();
+		name = rs.getString("name");
+		description = rs.getString("description");
+		startDate = rs.getDate("startDate");
+		endDate = rs.getDate("endDate");
+		startTime = rs.getTime("getTime");
+		endTime = rs.getTime("endTime");
+		place = rs.getString("place");
+		//room og responsible venter paa spesielle metoder
+		isAppointment = rs.getBoolean("isAppointment");
 	}
 	
 	// TODO: functionality for adding people 
@@ -143,12 +183,16 @@ public class MeetingModel extends Model {
 		this.participants = participants;
 	}
 
-	public boolean isAppiontment() {
-		return isAppiontment;
+	public String isAppiontmentString() {
+		if (isAppointment) {
+			return "true";
+		} else {
+			return "false";
+		}
 	}
 
 	public void setAppiontment(boolean isAppiontment) {
-		this.isAppiontment = isAppiontment;
+		this.isAppointment = isAppiontment;
 	}
 
 	public String getMeetingName() {
