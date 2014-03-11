@@ -11,9 +11,12 @@ public final class AppConstants {
 	public static final int SIDEBAR_WIDTH = 150;
 	public static final int HEADER_PANEL_HEIGHT = 100;
 
+	public static final int LOG_IN_DIALOG_WIDTH = 400;
+	public static final int LOG_IN_DIALOG_HEIGHT = 300;
 	public static final String LOG_IN_BUTTON_TEXT = "Logg inn";
-
 	public static final String LOG_IN_ERROR_TEXT = "Brukernavn/passord stemmer ikke overens.";
+	public static final Color LOG_IN_ERROR_TEXT_COLOR = Color.red;
+	
 	
 	public static final String SIDE_BAR_INBOX_TEXT = "Innboks";
 	public static final String SIDE_BAR_CREATE_EVENT_TEXT = "Opprett avtale";

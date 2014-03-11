@@ -49,19 +49,19 @@ public class LoginPanel extends JPanel implements PropertyChangeListener {
 		
 		this.ctrl = ctrl;
 		
-		this.setPreferredSize(new Dimension(500, 300));
-		
-		JPanel wrapper = new JPanel();
-		wrapper.setPreferredSize(new Dimension(300, 220));
-		setBackground(backgroundColor);
-		wrapper.setBackground(backgroundColor);
-	
+		setPreferredSize(new Dimension(500, 300));
+
 		ImageIcon myPicture = ((MainCtrl) ctrl.getMainCtrl()).getAppIcon();
 		JLabel picLabel = new JLabel(myPicture);
 		
 		usernameField.setPreferredSize(new Dimension(300,30));
 		passwordField.setPreferredSize(new Dimension(300,30));
 		loginButton.setText(AppConstants.LOG_IN_BUTTON_TEXT);
+		
+		JPanel wrapper = new JPanel();
+		wrapper.setPreferredSize(new Dimension(300, 220));
+		setBackground(backgroundColor);
+		wrapper.setBackground(backgroundColor);
 		
 		wrapper.add(picLabel);
 		wrapper.add(usernameField);
@@ -70,17 +70,17 @@ public class LoginPanel extends JPanel implements PropertyChangeListener {
 	
 		add(wrapper);
 		
+		// Adds actions listeners 
+		
 		usernameField.addKeyListener(new KeyListener() {
 			
 			@Override
 			public void keyTyped(KeyEvent e) {
-				// TODO Auto-generated method stub
 				
 			}
 			
 			@Override
 			public void keyReleased(KeyEvent e) {
-				// TODO Auto-generated method stub
 				
 			}
 			
@@ -91,17 +91,16 @@ public class LoginPanel extends JPanel implements PropertyChangeListener {
 				}
 			}
 		});
+		
 		passwordField.addKeyListener(new KeyListener() {
 			
 			@Override
 			public void keyTyped(KeyEvent e) {
-				// TODO Auto-generated method stub
 				
 			}
 			
 			@Override
 			public void keyReleased(KeyEvent e) {
-				// TODO Auto-generated method stub
 				
 			}
 			
