@@ -19,7 +19,7 @@ brukernavn = []
 handlers = []  # List containing all instances of CLientHandlers
 rooms = {} # key is room name, value is list of usernames of users currently in the room.
 
-class CLientHandler(SocketServer.BaseRequestHandler):
+class ClientHandler(SocketServer.BaseRequestHandler):
     
     
     
@@ -186,7 +186,7 @@ if __name__ == "__main__":
     print 'Server ip: ' + HOST
     
     # Create the server, binding to localhost on port 9999
-    server = ThreadedTCPServer((HOST, PORT), CLientHandler)
+    server = ThreadedTCPServer((HOST, PORT), ClientHandler)
 
     # Activate the server; this will keep running until you
     # interrupt the program with Ctrl-C
