@@ -44,7 +44,6 @@ public class MessageModel extends Model {
 	public MessageModel(String type, ParticipantModel messageOwner, ParticipantModel userInQestion) throws ClassNotFoundException, SQLException{
 		this.type = type; 	
 		this.userInQestion = userInQestion; 
-		this.messageOwner = messageOwner; 
 		setMessage(); 
 	}
 	
@@ -66,8 +65,9 @@ public class MessageModel extends Model {
 			message = userInQestion.getName() + userHasConfirmedMessage; 
 		}
 		if ((type.equals("partDeclined"))){ 
-			message = userInQestion.getName() + userHasDeclinedMessage; 
+			message = userInQestion.getName() + userHasDeclinedMessage;  
 		}
+	
 	}
 	
 	public Date getDate() {
@@ -111,7 +111,7 @@ public class MessageModel extends Model {
 	@Override
 	public void create() throws ClassNotFoundException, SQLException {
 		Timestamp timeNow = new Timestamp(System.currentTimeMillis()); 
-		this.time = timeNow; 
+		time = timeNow; 
 		String query=String.format("insert into message " + "(message, time, owner, isSeen) values ('%s','%s','%s','%s', '%s')", message, timeNow, messageOwner.getUsername()); 
 		
 		db.initialize();
@@ -181,7 +181,7 @@ public class MessageModel extends Model {
 	// unødvendig dritt
 	@Override
 	public void save() throws ClassNotFoundException, SQLException {
-		// Unï¿½dvendig
+		// Unødvendig
 		
 	}
 	

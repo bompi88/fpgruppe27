@@ -37,14 +37,13 @@ public class MessageModel extends Model {
 	protected String changeOfTimeMessage = meeting.getMeetingName() + "Har blitt endret. Ny tid er: " + meeting.getStartTimeAsString() + meeting.getStartDateAsString() + "til" + meeting.getEndTimeAsString() + meeting.getEndDateAsString() ; 
 	protected String changeOfPlaceMessage = meeting.getMeetingName() + "har blitt flyttet til" + meeting.getPlaceOrRoom();  
 	protected String meetingCancledMessage = meeting.getMeetingName() + "har blitt avlyst"; 
-	protected String userHasConfirmedMessage = "Har bekreftet møteinkallingen til" + meeting.getMeetingName();   
+	protected String userHasConfirmedMessage = "Har bekreftet mï¿½teinkallingen til" + meeting.getMeetingName();   
 	protected String userHasDeclinedMessage = "Har medlt avbud til" + meeting.getMeetingName();
 	
 	
 	public MessageModel(String type, ParticipantModel messageOwner, ParticipantModel userInQestion) throws ClassNotFoundException, SQLException{
 		this.type = type; 	
 		this.userInQestion = userInQestion; 
-		this.messageOwner = messageOwner; 
 		setMessage(); 
 	}
 	
@@ -68,6 +67,10 @@ public class MessageModel extends Model {
 		if ((type.equals("partDeclined"))){ 
 			message = userInQestion.getName() + userHasDeclinedMessage; 
 		}
+<<<<<<< HEAD
+	
+=======
+>>>>>>> a946f8a05c64054808fdea52efe86756f0e255ca
 	}
 	
 	public Date getDate() {
@@ -111,7 +114,7 @@ public class MessageModel extends Model {
 	@Override
 	public void create() throws ClassNotFoundException, SQLException {
 		Timestamp timeNow = new Timestamp(System.currentTimeMillis()); 
-		this.time = timeNow; 
+		time = timeNow; 
 		String query=String.format("insert into message " + "(message, time, owner, isSeen) values ('%s','%s','%s','%s', '%s')", message, timeNow, messageOwner.getUsername()); 
 		
 		db.initialize();
@@ -187,10 +190,14 @@ public class MessageModel extends Model {
 	
 	@Override
 	public void delete() throws ClassNotFoundException, SQLException {
+<<<<<<< HEAD
 	}
 	
 	@Override
 	public void fetch(String userOwner) throws ClassNotFoundException, SQLException { 
+=======
+		//skal skje automatisk nï¿½r lest og etter 5 dager(ish)
+>>>>>>> a946f8a05c64054808fdea52efe86756f0e255ca
 		
 	}
 

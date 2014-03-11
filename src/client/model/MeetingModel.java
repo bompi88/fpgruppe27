@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.sql.Date;
 
 
+
+
 import framework.Model;
 
 public class MeetingModel extends Model {
@@ -27,6 +29,24 @@ public class MeetingModel extends Model {
 	public MeetingModel() {
 
 	}
+	
+	
+	public void sendAdminMessage(String typeOfMessage, ParticipantModel personOfInterest) throws ClassNotFoundException, SQLException{  
+		MessageModel message = new MessageModel(typeOfMessage, (ParticipantModel) responsible, personOfInterest);  
+		message.setMeeting(this);  
+		message.create(); 
+	}
+		
+	public void sendUserMessages(String typeOfMessage) throws ClassNotFoundException, SQLException{
+		for(int i = 0; i < participants.size(); i++){
+			if(!(participants.get(i).getUsername().equals(responsible.getUsername()))){			// sjekker at responsible ikke er i participants 
+				MessageModel message = new MessageModel(typeOfMessage, (ParticipantModel) responsible, participants.get(i));  
+				message.setMeeting(this); 
+				message.create(); 
+			}
+		}
+	}
+	
 
 	public void create() throws ClassNotFoundException, SQLException {
 		// add to DB meetID, date description starttime, endtime, roomid or place, responsible(as username TABLE Meeting),      
@@ -92,7 +112,7 @@ public class MeetingModel extends Model {
 		
 		db.initialize();
 		db.makeSingleUpdate(query1);
-		db.close();
+		db.close(); 
 		
 	}
 
