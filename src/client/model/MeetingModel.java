@@ -32,13 +32,20 @@ public class MeetingModel extends Model {
 		// add to DB meetID, date description starttime, endtime, roomid or place, responsible(as username TABLE Meeting),      
 		// add to DB  meetID, participants, StatusModel to TABLE MeetingParticipants
 		
-		String query1=String.format( "insert into Meeting" +"(meetid, name, description, startDate, endDate, startTime, endTime, place, roomid, username, isAppointment) values ('%d','%d')",meetID, name, description, startDate, endDate, startTime, endTime, place, room.getRoomID(), responsible.getUsername(), this.isAppiontmentString()); 
+		String query1=String.format( "insert into Meeting" +"(name, description, startDate, endDate, startTime, endTime, place, roomid, username, isAppointment) values ('%d','%d','%d','%d','%d','%d','%d','%d','%d','%d');", name, description, startDate, endDate, startTime, endTime, place, room.getRoomID(), responsible.getUsername(), this.isAppiontmentString()); 
+		
+		db.initialize();
+		db.makeSingleUpdate(query1);
+		ResultSet rs = db.makeSingleQuery("select last_insert();");
+		db.close();
+		
+		rs.next();
+		meetID = rs.getInt(0);
 		
 		ArrayList<String> peopleList  = new ArrayList<String>();
-		peopleList.add(query1); 
 		
 		for (int i = 0; i < participants.size(); i++){
-			String tempQuery = String.format("insert into MeetingParticipants" + "(meetid, username, status) values ('%d','%d,'%d')",meetID, participants.get(i).getUsername(), "INVITED"); 
+			String tempQuery = String.format("insert into MeetingParticipants" + "(meetid, username, status) values ('%d','%d,'%d');",meetID, participants.get(i).getUsername(), "INVITED"); 
 			peopleList.add(tempQuery); 		
 		}
 		
@@ -56,16 +63,16 @@ public class MeetingModel extends Model {
 		// remove all old entries in TABLE MeetingParticipants associated with this meeting (meetid = meetID)
 		// add to DB meetID, participants, StatusModel to TABLE MeetingParticipants
 		
-		String query1 = "update Meeting set name = " + name + " , description = " + description + " , startDate = " + startDate + " , endDate = " + endDate + " , startTime = " + startTime + " , endTime = " + endTime + " , place = " + place + " , roomid = " + room.getRoomID() + " , username = " + responsible.getUsername() + " , isAppointment = " + this.isAppiontmentString() + " where meetid = " + meetID;
+		String query1 = "update Meeting set name = " + name + " , description = " + description + " , startDate = " + startDate + " , endDate = " + endDate + " , startTime = " + startTime + " , endTime = " + endTime + " , place = " + place + " , roomid = " + room.getRoomID() + " , username = " + responsible.getUsername() + " , isAppointment = " + this.isAppiontmentString() + " where meetid = " + meetID + ";";
 		
-		String query2 = "delete from MeetingParticipants where meetid = " + meetID;
+		String query2 = "delete from MeetingParticipants where meetid = " + meetID + ";";
 		
 		ArrayList<String> queryList = new ArrayList<String>();
 		queryList.add(query1);
 		queryList.add(query2);
 		
 		for (int i = 0; i < participants.size(); i++){
-			String tempQuery = String.format("insert into MeetingParticipants" + "(meetid, username, status) values ('%d','%d,'%d')",meetID, participants.get(i).getUsername(), participants.get(i).getStatusAsString()); 
+			String tempQuery = String.format("insert into MeetingParticipants" + "(meetid, username, status) values ('%d','%d,'%d');",meetID, participants.get(i).getUsername(), participants.get(i).getStatusAsString()); 
 			queryList.add(tempQuery); 		
 		}
 		
@@ -81,7 +88,7 @@ public class MeetingModel extends Model {
 		// remove entry with meetid = meetID in TABLE Meeting      
 		// associated entries in TABLE MeetingParticipants will be removed auotomaticly by database
 		
-		String query1 = "delete from Meeting where meetid = " + meetID;
+		String query1 = "delete from Meeting where meetid = " + meetID + ";";
 		
 		db.initialize();
 		db.makeSingleUpdate(query1);
@@ -93,7 +100,7 @@ public class MeetingModel extends Model {
 		// fetch and overwrite meetID, date description starttime, endtime, roomid or place, responsible(as username TABLE Meeting),      
 		// fetch and overwrite meetID, participants, StatusModel to TABLE MeetingParticipants
 		
-		String query1 = "select name, description, startDate, endDate, startTime, endTime, place, roomid, username, isAppointment from Meeting where meetid =" + meetId;
+		String query1 = "select name, description, startDate, endDate, startTime, endTime, place, roomid, username, isAppointment from Meeting where meetid = " + meetId + ";";
 		
 		db.initialize();
 		ResultSet rs = db.makeSingleQuery(query1);
