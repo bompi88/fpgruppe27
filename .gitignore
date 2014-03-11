@@ -9,3 +9,6 @@ cookie.txt
 bin/*
 .classpath
 .project
+.metadata/*
+ktn/.idea/*
+ktn/MessageWorker.pyc
