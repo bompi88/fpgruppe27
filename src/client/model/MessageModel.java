@@ -37,7 +37,7 @@ public class MessageModel extends Model {
 	protected String changeOfTimeMessage = meeting.getMeetingName() + "Har blitt endret. Ny tid er: " + meeting.getStartTimeAsString() + meeting.getStartDateAsString() + "til" + meeting.getEndTimeAsString() + meeting.getEndDateAsString() ; 
 	protected String changeOfPlaceMessage = meeting.getMeetingName() + "har blitt flyttet til" + meeting.getPlaceOrRoom();  
 	protected String meetingCancledMessage = meeting.getMeetingName() + "har blitt avlyst"; 
-	protected String userHasConfirmedMessage = "Har bekreftet møteinkallingen til" + meeting.getMeetingName();   
+	protected String userHasConfirmedMessage = "Har bekreftet mï¿½teinkallingen til" + meeting.getMeetingName();   
 	protected String userHasDeclinedMessage = "Har medlt avbud til" + meeting.getMeetingName();
 	
 	
@@ -65,9 +65,9 @@ public class MessageModel extends Model {
 			message = userInQestion.getName() + userHasConfirmedMessage; 
 		}
 		if ((type.equals("partDeclined"))){ 
-			message = userInQestion.getName() + userHasDeclinedMessage;  
+			message = userInQestion.getName() + userHasDeclinedMessage; 
 		}
-	
+	}
 	}
 	
 	public Date getDate() {
@@ -181,7 +181,7 @@ public class MessageModel extends Model {
 	// unødvendig dritt
 	@Override
 	public void save() throws ClassNotFoundException, SQLException {
-		// Unødvendig
+		// Unï¿½dvendig
 		
 	}
 	

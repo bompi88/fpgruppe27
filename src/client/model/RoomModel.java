@@ -1,5 +1,6 @@
 package model;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -44,28 +45,54 @@ public class RoomModel extends Model {
 		this.bookingList = bookingList;
 	}
 
-	@Override
 	public void create() throws ClassNotFoundException, SQLException {
-		// TODO Auto-generated method stub
+		// creates an entry in Room with capacity and name
+		// get roomID from database
+		
+		String query = String.format("insert into Room ( name, capacity) values ('%d','%d');", name, capacity); 
+		
+		db.initialize();
+		db.makeSingleUpdate(query);
+		ResultSet rs = db.makeSingleQuery("select last_insert_ID();");
+		db.close();
+		
+		rs.next();
+		roomID = rs.getInt(0);
 		
 	}
 
-	@Override
 	public void save() throws ClassNotFoundException, SQLException {
-		// TODO Auto-generated method stub
+		// updates entry in Room with this roomid
 		
+		String query = String.format("update Room set name = '%d', capacity = '%d' where roomid = '%d';", name, capacity, roomID);
+		
+		db.initialize();
+		db.makeSingleUpdate(query);
+		db.close();
 	}
 
-	@Override
 	public void delete() throws ClassNotFoundException, SQLException {
-		// TODO Auto-generated method stub
+		// remove entry in Room with this roomid
 		
+		String query = String.format("delete from Room where roomid = '%d';", roomID);
+		
+		db.initialize();
+		db.makeSingleUpdate(query);
+		db.close();
 	}
 
-	@Override
 	public void fetch(String o) throws ClassNotFoundException, SQLException {
-		// TODO Auto-generated method stub
+		// updates name and capacity in model according to database;
 		
+		String query = String.format("select name, capacity form Room where roomid = '%d';", roomID);
+		
+		db.initialize();
+		ResultSet rs = db.makeSingleQuery(query);
+		db.close();
+		
+		rs.next();
+		name = rs.getString("name");
+		capacity = rs.getInt("capacity");
 	}
 
 }

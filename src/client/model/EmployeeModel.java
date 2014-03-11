@@ -44,13 +44,14 @@ public class EmployeeModel extends Model {
 	@Override
 	public void fetch(String id) throws ClassNotFoundException, SQLException {
 		
-		String query = String.format("Select username from employee where id=%s",id);
+		String query = String.format("Select username, password from employee where username='%s'",id);
 		db.initialize();
 		ResultSet rs = db.makeSingleQuery(query);
 
 		while(rs.next())
 		{
 			this.username = rs.getString(1);
+			this.password = rs.getString(2);
 		}
 		
 		db.initialize();

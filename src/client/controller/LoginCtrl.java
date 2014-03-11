@@ -30,8 +30,12 @@ public class LoginCtrl extends Controller implements State {
 	}
 	
 	public void login() {
+		
+		EmployeeModel model = (EmployeeModel) getModel();
+		
 		try {
-			if(((EmployeeModel) getModel()).authenticate()) {
+			if(model.authenticate()) {
+				model.fetch(model.getUsername());
 				((MainCtrl)getParentCtrl()).login();
 			} else {
 				loginDialog.showErrorMessage();
