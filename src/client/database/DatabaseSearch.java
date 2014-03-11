@@ -58,4 +58,27 @@ public class DatabaseSearch {
 		
 		return results;
 	}
+	
+	public static List<EmployeeModel> getAllEmployees() throws ClassNotFoundException, SQLException {
+		String query = "SELECT username, name FROM employee";
+		DBConnection.db.initialize();
+		ResultSet rs = DBConnection.db.makeSingleQuery(query);
+		
+		List<EmployeeModel> results = new ArrayList<EmployeeModel>();
+		
+		while(rs.next())
+		{
+			EmployeeModel e = new EmployeeModel();
+			
+			e.setUsername(rs.getString(1));
+			e.setName(rs.getString(2));
+			results.add(e);
+		}
+		
+		rs.close();
+		DBConnection.db.close();
+		
+		return results;
+
+	}
 }

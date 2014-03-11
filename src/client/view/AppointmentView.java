@@ -45,6 +45,7 @@ public class AppointmentView extends JPanel {
 	private ButtonGroup radioGroup;
 	private JSpinner timePickerFrom, timePickerTo;	
 	private boolean isEditable;
+	private ParticipantPanel participantPanel;
 
 	
 	public AppointmentView(Controller ctrl) {
@@ -75,6 +76,7 @@ public class AppointmentView extends JPanel {
 		datePickerTo = new JDatePickerImpl(datePanelTo);
 		meetingSizeBox = new JComboBox();
 		roomPickerBox = new JComboBox();
+		participantPanel = new ParticipantPanel();
 		
 		radioGroup.add(placeRadio); radioGroup.add(roomRadio);
 		
@@ -166,6 +168,8 @@ public class AppointmentView extends JPanel {
 		
 		add(saveButton, new GridBagConstraints(1,6,1,1,1,1,anc,0,in,0,0));
 		add(cancelButton, new GridBagConstraints(2,6,1,1,1,1,anc,0,in,0,0));
+		
+		add(participantPanel);
 
 		
 	}
