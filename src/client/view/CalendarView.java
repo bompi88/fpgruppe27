@@ -27,6 +27,9 @@ import javax.swing.JPanel;
 import resources.AppConstants;
 import utils.RelativeLayout;
 
+/**
+ * CalendarView class shows weekly calendars which the user has subscribed to.
+ */
 @SuppressWarnings("serial")
 public class CalendarView extends JPanel{
 	
@@ -38,6 +41,7 @@ public class CalendarView extends JPanel{
 	private JPanel weeklyCalendarWrapper = new JPanel();
 	
 	public CalendarView() {
+		
 		
 		RelativeLayout rl1 = new RelativeLayout(RelativeLayout.Y_AXIS, 0);
 		rl1.setAlignment(RelativeLayout.LEADING);
@@ -59,7 +63,6 @@ public class CalendarView extends JPanel{
 		add(weeklyCalendarWrapper);
 		
 		// construct top bar panel
-		
 		AddCalendarPanel addCalendarPanel = new AddCalendarPanel();
 		CalendarCtrlPanel calendarCtrlPanel = new CalendarCtrlPanel();
 		CalendarTitlePanel calendarTitlePanel = new CalendarTitlePanel();
@@ -78,22 +81,6 @@ public class CalendarView extends JPanel{
 		
 	}
 	
-	public class AddCalendarPanel extends JPanel {
-		
-		public AddCalendarPanel() {
-			
-		}
-		
-		@Override
-		public Container getParent() {
-			// TODO Auto-generated method stub
-			return super.getParent();
-		}
-		
-		public void fillSizeOfParent() {
-			setPreferredSize(new Dimension((int)(getParent().getPreferredSize().width * (1 - titleBarScaleWidth)/2)+1, getParent().getPreferredSize().height));
-		}
-	}
 	
 	public class CalendarTitlePanel extends JPanel {
 		

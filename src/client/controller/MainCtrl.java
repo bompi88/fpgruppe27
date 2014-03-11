@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import resources.AppConstants;
+import resources.ImageManager;
 
 import framework.Controller;
 import framework.Model;
@@ -71,17 +72,20 @@ public class MainCtrl extends Controller {
 	public void initUI() {
 		
 		// load app icon
-		BufferedImage resizedImage;
-		BufferedImage image;
+//		BufferedImage resizedImage;
+//		BufferedImage image;
+//		
+//		try {
+//			image = ImageIO.read(getClass().getResource("/resources/deer.png"));
+//			resizedImage = Utility.resizeImage(image,120,90);
+//			setAppIcon(new ImageIcon(resizedImage));
+//		} catch (IOException e1) {
+//			e1.printStackTrace();
+//		}
 		
-		try {
-			image = ImageIO.read(getClass().getResource("/resources/deer.png"));
-			resizedImage = resizeImage(image,120,90);
-			setAppIcon(new ImageIcon(resizedImage));
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		
+		ImageManager.getInstance();
+		setAppIcon(new ImageIcon(ImageManager.getImage("delete_icon")));
+//		
 		// Create a layout fro mainFrame
 		RelativeLayout rl = new RelativeLayout(RelativeLayout.X_AXIS, 0);
 		rl.setAlignment(RelativeLayout.LEADING);
@@ -272,23 +276,6 @@ public class MainCtrl extends Controller {
 	 */
 	public ImageIcon getAppIcon() {
 		return appIcon;
-	}
-	
-	/**
-	 * Resizes an image to given width and height. 
-	 * 
-	 * @param image
-	 * @param width
-	 * @param height
-	 * @return
-	 */
-	public static BufferedImage resizeImage(BufferedImage image, int width, int height) {
-	    BufferedImage bi = new BufferedImage(width, height, BufferedImage.TRANSLUCENT);
-	    Graphics2D g2d = (Graphics2D) bi.createGraphics();
-	    g2d.addRenderingHints(new RenderingHints(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY));
-	    g2d.drawImage(image, 0, 0, width, height, null);
-	    g2d.dispose();
-	    return bi;
 	}
 	
 	@Override
