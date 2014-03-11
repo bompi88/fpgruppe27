@@ -29,6 +29,7 @@ public final class AppConstants {
 	public static final String INBOX_HEADER_TEXT = "Din innboks";
 	public static final String APPOINTMENT_HEADER_TEXT = "Opprett en avtale";
 	public static final String SHOW_CALENDAR_LABEL_TEXT = "Vis kalender til:";
+	public static final String SHOW_OTHER_CALENDARS_BUTTON_TEXT = "Vis";
 	
 	public static final Color LOGIN_BG_COLOR = Color.lightGray;
 	public static final Color SIDE_BAR_BG_COLOR = Color.lightGray;

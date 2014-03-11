@@ -88,6 +88,7 @@ public class CalendarView extends JPanel{
 			setBorder(BorderFactory.createEmptyBorder(30, -2, 0, 0));
 			JLabel title = new JLabel(AppConstants.CALENDAR_HEADER_TEXT);
 			title.setFont(new Font("Arial", Font.PLAIN, 28));
+			setBackground(AppConstants.HEADER_BG_COLOR);
 			add(title);
 		}
 		
@@ -122,7 +123,7 @@ public class CalendarView extends JPanel{
 			Week[] arrWeeks = new Week[weeks.size()];
 			weeks.toArray(arrWeeks);
 			weekComboBox.setModel(new DefaultComboBoxModel<Week>(arrWeeks));
-			
+			setBackground(AppConstants.HEADER_BG_COLOR);
 			selectedWeek = arrWeeks[0];
 			
 			l = new JLabel(Integer.toString(selectedWeek.getWeekNumber()));

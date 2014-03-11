@@ -68,7 +68,7 @@ public class MessageModel extends Model {
 			message = userInQestion.getName() + userHasDeclinedMessage; 
 		}
 	}
-	}
+
 	
 	public Date getDate() {
 		Date date = new Date(time.getTime());
@@ -178,7 +178,7 @@ public class MessageModel extends Model {
 	
 	
 	
-	// unødvendig dritt
+	// unï¿½dvendig dritt
 	@Override
 	public void save() throws ClassNotFoundException, SQLException {
 		// Unï¿½dvendig

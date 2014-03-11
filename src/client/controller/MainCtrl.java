@@ -69,23 +69,10 @@ public class MainCtrl extends Controller {
 	/**
 	 * Initializes the user interface.
 	 */
+	@SuppressWarnings("static-access")
 	public void initUI() {
 		
-		// load app icon
-//		BufferedImage resizedImage;
-//		BufferedImage image;
-//		
-//		try {
-//			image = ImageIO.read(getClass().getResource("/resources/deer.png"));
-//			resizedImage = Utility.resizeImage(image,120,90);
-//			setAppIcon(new ImageIcon(resizedImage));
-//		} catch (IOException e1) {
-//			e1.printStackTrace();
-//		}
-		
-		ImageManager.getInstance();
-		setAppIcon(new ImageIcon(ImageManager.getImage("delete_icon")));
-//		
+		setAppIcon(new ImageIcon(ImageManager.getInstance().resizeImage(ImageManager.getInstance().getImage("app_icon"), 120, 90)));	
 		// Create a layout fro mainFrame
 		RelativeLayout rl = new RelativeLayout(RelativeLayout.X_AXIS, 0);
 		rl.setAlignment(RelativeLayout.LEADING);
