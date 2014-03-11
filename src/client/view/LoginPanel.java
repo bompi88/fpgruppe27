@@ -2,20 +2,12 @@ package view;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -32,7 +24,7 @@ import controller.MainCtrl;
 import framework.Controller;
 
 /**
- *
+ * LoginPanel is basically a login form, which fire login events on user request.
  */
 public class LoginPanel extends JPanel implements PropertyChangeListener {
 
@@ -44,23 +36,29 @@ public class LoginPanel extends JPanel implements PropertyChangeListener {
 	private JTextField passwordField = new JPasswordField();
 	private JButton loginButton = new JButton();
 	private Color backgroundColor = AppConstants.LOGIN_BG_COLOR;
+	private JLabel picLabel;
 	
 	public LoginPanel(Controller ctrl) {
 		
 		this.ctrl = ctrl;
 		
-		setPreferredSize(new Dimension(500, 300));
-
-		ImageIcon myPicture = ((MainCtrl) ctrl.getMainCtrl()).getAppIcon();
-		JLabel picLabel = new JLabel(myPicture);
+		// panel setup
+		setPreferredSize(new Dimension(AppConstants.LOG_IN_DIALOG_WIDTH, AppConstants.LOG_IN_DIALOG_HEIGHT));
+		setBackground(backgroundColor);
 		
-		usernameField.setPreferredSize(new Dimension(300,30));
-		passwordField.setPreferredSize(new Dimension(300,30));
+		// set the app icon
+		ImageIcon myPicture = ((MainCtrl) ctrl.getMainCtrl()).getAppIcon();
+		picLabel = new JLabel(myPicture);
+		
+		// initialize fields
+		usernameField.setPreferredSize(new Dimension((AppConstants.LOG_IN_DIALOG_WIDTH / 4) * 3, 30));
+		passwordField.setPreferredSize(new Dimension((AppConstants.LOG_IN_DIALOG_WIDTH / 4) * 3, 30));
 		loginButton.setText(AppConstants.LOG_IN_BUTTON_TEXT);
 		
+		// create a wrapper panel and add all elements to it.
 		JPanel wrapper = new JPanel();
-		wrapper.setPreferredSize(new Dimension(300, 220));
-		setBackground(backgroundColor);
+		wrapper.setPreferredSize(new Dimension((AppConstants.LOG_IN_DIALOG_WIDTH / 4) * 3, (AppConstants.LOG_IN_DIALOG_WIDTH / 4) * 2));
+		
 		wrapper.setBackground(backgroundColor);
 		
 		wrapper.add(picLabel);
@@ -70,7 +68,7 @@ public class LoginPanel extends JPanel implements PropertyChangeListener {
 	
 		add(wrapper);
 		
-		// Adds actions listeners 
+		// Adds event listeners 
 		
 		usernameField.addKeyListener(new KeyListener() {
 			
@@ -122,7 +120,10 @@ public class LoginPanel extends JPanel implements PropertyChangeListener {
 		});
 	}
 	
-	public void fireLogin() {
+	/**
+	 * fires login 
+	 */
+	private void fireLogin() {
 		((EmployeeModel)getCtrl().getModel()).setUsername(usernameField.getText());
 		((EmployeeModel)getCtrl().getModel()).setPassword(passwordField.getText());
 		((LoginCtrl)getCtrl()).login();
