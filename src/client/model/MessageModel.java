@@ -1,7 +1,10 @@
 package model;
 
+import java.sql.Array;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -12,17 +15,21 @@ public class MessageModel extends Model {
 	
 	
 	protected String type; // er  
-	protected Date date = new Date(System.currentTimeMillis());
+	protected Timestamp time; 
 	protected String message;
 	protected MeetingModel meeting;
 	protected boolean isSeen;
 	protected ParticipantModel userInQestion; 
 	protected ParticipantModel messageOwner; 
 	protected int messid;  
+
 	
+	
+	/*protected Date todaysDate = new Date(System.currentTimeMillis());
 	DateFormat timeFormat = new SimpleDateFormat("hh:mm:ss"); 
 	Calendar cal = Calendar.getInstance(); 
 	DateFormat dateformat = new SimpleDateFormat("yyyy/MM/dd"); 
+	*/
 	
 	
 	
@@ -38,11 +45,10 @@ public class MessageModel extends Model {
 		this.type = type; 	
 		this.userInQestion = userInQestion; 
 		setMessage(); 
-		create(); 
 	}
 	
 	
-	public String setMessage(){
+	public void setMessage(){
 		if (type.equals("meetingCreated")){
 			message = inviteMessage;  
 		}
@@ -62,15 +68,23 @@ public class MessageModel extends Model {
 			message = userInQestion.getName() + userHasDeclinedMessage;  
 		}
 	
+	}
 	
 	public Date getDate() {
+		Date date = new Date(time.getTime());
 		return date;
 	}
 	
-	public void setDate(Date date) {
-		this.date = date;
-	}
 	
+	public Timestamp getTime() {
+		return time;
+	}
+
+	public void setTime(Timestamp time) {
+		this.time = time;
+	}
+
+
 	public String getMessage() {
 		return message;
 	}
@@ -87,33 +101,104 @@ public class MessageModel extends Model {
 		return isSeen;
 	}
 	
-	public void setSeen(boolean isSeen) {
+	public void setSeen(boolean isSeen) throws ClassNotFoundException, SQLException {
 		this.isSeen = isSeen;
+		changeDBSeen(messageOwner.getUsername(), this.time, isSeen); 	
 	}
 	
 	
 	
 	@Override
 	public void create() throws ClassNotFoundException, SQLException {
-		String query=String.format("insert into message " + "(message, date, timestamp, owner, isSeen) values ('%s','%s','%s','%s', '%s')", message, dateformat.format(cal.getTime()), timeFormat.format(cal.getTime()), messageOwner.getUsername()); 
+		Timestamp timeNow = new Timestamp(System.currentTimeMillis()); 
+		time = timeNow; 
+		String query=String.format("insert into message " + "(message, time, owner, isSeen) values ('%s','%s','%s','%s', '%s')", message, timeNow, messageOwner.getUsername()); 
+		
+		db.initialize();
+		db.makeSingleUpdate(query);
+		db.close();
+		
 	}
+	
+	public void deleteOldMess() throws ClassNotFoundException, SQLException {
+		Timestamp timeNow = new Timestamp(System.currentTimeMillis());  
+		Timestamp time5daysBeforeNow = new Timestamp(0);     
+		long oneWeekinMs = 604800000; 
+		time5daysBeforeNow.setTime(timeNow.getTime() - oneWeekinMs); 
+		
+		String query=String.format("DELETE FROM Message WHERE time<'%d'", time5daysBeforeNow ); 
+		
+		db.initialize();
+		db.makeSingleUpdate(query);
+		db.close();
+	}
+	
+	public void fetchMessData(String userOwner, Timestamp timeAfter) throws ClassNotFoundException, SQLException { // henter ut meldinger til brukeren. 
+		
+		String query=String.format("SELECT message, time, isSeen; FROM Message; WHERE owner='%s' AND time>'%d' AND isSeen='%b'", userOwner, timeAfter, true);    
+		
+		db.initialize();
+		ResultSet rs = db.makeSingleQuery(query);
+		rs.next();
+		
+		Array Messages = rs.getArray("message"); 
+		Array times = rs.getArray("time");
+		Array isSeen = rs.getArray("isSeen");
 
+		db.close();
+		
+		this.time = (Timestamp) times.getArray(0, 1); 
+		this.message = (String) Messages.getArray(0,1); 
+		this.isSeen = (boolean) isSeen.getArray(0,1); 	
+		
+	}	
+	
+	public int countMessages(String userOwner, Timestamp sinceWhen) throws ClassNotFoundException, SQLException { 
+		
+		String query=String.format("SELECT COUNT(*) FROM Message WHERE owner='%s' and time>'%d'", userOwner, sinceWhen); 
+		
+		db.initialize();
+		ResultSet rs = db.makeSingleQuery(query);
+		db.close();
+		
+		rs.next();
+		return rs.getInt(0);
+		
+	}
+	
+	public void changeDBSeen(String userOwner, Timestamp time, boolean isSeen) throws ClassNotFoundException, SQLException{
+		String query=String.format("UPDATE message SET isSeen='%b' WHERE owner ='%s' AND time ='%d'", isSeen, userOwner, time); 
+		
+		db.initialize();
+		db.makeSingleUpdate(query);
+		db.close();
+	}
+	
+	
+	
+	
+	
+	// unødvendig dritt
 	@Override
 	public void save() throws ClassNotFoundException, SQLException {
 		// Unødvendig
 		
 	}
-
+	
 	@Override
 	public void delete() throws ClassNotFoundException, SQLException {
-		//skal skje automatisk når lest og etter 5 dager(ish)
+	}
+	
+	@Override
+	public void fetch(String userOwner) throws ClassNotFoundException, SQLException { 
 		
 	}
 
-	@Override
-	public void fetch(String userOwner) throws ClassNotFoundException, SQLException { // henter ut meldinger til brukeren. 
-		// TODO Auto-generated method stub
-		String query=String.format("SELECT message, date, timestamp, isSeen; FROM Message; WHERE owner = userOwner AND this.date < date");    
+	public boolean isLastMess(String userOwner) throws ClassNotFoundException, SQLException { 
+		
+		String query=String.format("SELECT message, time isSeen FROM Message WHERE owner='%s'", userOwner); 
+		
+		return true; 
 		
 	}
 

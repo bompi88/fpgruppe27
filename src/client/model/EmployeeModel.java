@@ -2,6 +2,7 @@ package model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -15,6 +16,7 @@ public class EmployeeModel extends Model {
 	protected String email;
 	protected Calendar calendar;
 	protected ArrayList<MessageModel> inbox;
+	protected int noOfUnreadMessages; 
 	
 	public EmployeeModel() {}
 
@@ -109,4 +111,62 @@ public class EmployeeModel extends Model {
 		this.name = name;
 		propertyChangeSupport.firePropertyChange("name", tmp, name);
 	}
+	
+	
+	public void fetchMessages() throws ClassNotFoundException, SQLException{  //kjøres ved oppstart av programmet. Opretter første MessageModelobjekt , sletter gamle meldinger, og lager nye objekter til inbox basert på DB.   
+		MessageModel firstMessage = new MessageModel("none", null, null);  
+		Timestamp starttime = new Timestamp(0); 
+		
+		firstMessage.deleteOldMess(); 
+		firstMessage.fetchMessData(username, starttime);
+		inbox.add(firstMessage); 
+		
+		int noOfMessages = firstMessage.countMessages(username, firstMessage.getTime()); 
+		
+		for(int i = 1; i < noOfMessages; i++){
+			MessageModel Message = new MessageModel("none", null, null);
+			Message.fetchMessData(username, inbox.get(0).getTime()); 
+			inbox.add(0, Message); 				
+		}	
+		
+	} 
+	
+	public void updateInbox() throws ClassNotFoundException, SQLException{ // kjører kontinuerlig. Henter TimeStamp fra siste melding, og ser etter nye meldinger å lage objekter av, 
+		MessageModel lastMessage = inbox.get(0); 
+		int noOfNewMessages = lastMessage.countMessages(username, lastMessage.getTime()); 
+		
+		if(noOfNewMessages > 0){
+			for(int i = 0; i < noOfNewMessages; i++){
+				MessageModel newMessage = new MessageModel("none", null, null);
+				newMessage.fetchMessData(username, inbox.get(0).getTime()); 
+				inbox.add(0, newMessage);
+			}
+		}
+		
+	}	
+	
+	public int getNoOfUnseenMess(){ 	
+		int returnvalue = 0; 
+		for (int i = 0; i < inbox.size(); i ++){
+			if (inbox.get(i).isSeen() == false){
+				returnvalue++; 
+			}
+		}
+		return returnvalue; 
+	}
+	
+	
+	public void setAllMessagesSeen() throws ClassNotFoundException, SQLException{
+		for (int i = 0; i < inbox.size(); i ++){
+			inbox.get(i).setSeen(true); 
+		}
+	}
+	
+
+	@Override
+	public String toString() {
+		return name;
+	}
+	
+	
 }

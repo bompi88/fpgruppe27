@@ -36,12 +36,11 @@ CREATE TABLE MeetingParticipants (
 	);
 
 CREATE TABLE Message (
-	messid 	INT 	NOT NULL, 
-	message 	VARCHAR(255);
-	date 	DATE;
-	timestamp TIME;
-	owner 	 VARCHAR(15);
-	isSeen	BOOLEAN 
+	messid 		INT 		NOT NULL, 
+	message 	VARCHAR(255); 
+	time  		TIMESTAMP;
+	owner 	 	VARCHAR(15);
+	isSeen		BOOLEAN 
 	)
 
 	
