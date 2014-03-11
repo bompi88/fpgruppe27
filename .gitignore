@@ -11,3 +11,4 @@ bin/*
 .project
 .metadata/*
 ktn/.idea/*
+ktn/MessageWorker.pyc
