@@ -57,20 +57,21 @@ public class MeetingModel extends Model {
 		// add to DB meetID, date description starttime, endtime, roomid or place, responsible(as username TABLE Meeting),      
 		// add to DB  meetID, participants, StatusModel to TABLE MeetingParticipants
 		
-		String query1=String.format( "insert into meeting" +"(name, description, startDate, endDate, startTime, endTime, place, roomid, username, isAppointment) values ('%d','%d','%d','%d','%d','%d','%d','%d','%d','%d');", name, description, startDate, endDate, startTime, endTime, place, room.getRoomID(), responsible.getUsername(), this.isAppiontmentString()); 
+		String query1=String.format( "insert into meeting" +"(name, description, startDate, endDate, startTime, endTime, place, roomid, username, isAppointment) values ('%s','%s','%s','%s','%s','%s','%s','%d','%s','%d');", name, description, startDate, endDate, startTime, endTime, place, room.getRoomID(), responsible.getUsername(), 0); 
 		
 		db.initialize();
 		db.makeSingleUpdate(query1);
-		ResultSet rs = db.makeSingleQuery("select last_insert();");
-		db.close();
+		//String test = String.format("SELECT meetid FROM meeting WHERE meetid = (SELECT MAX(meetid) FROM meetid)");
+		
+
+		ResultSet rs = db.makeSingleQuery("SELECT meetid FROM meeting WHERE meetid = (SELECT MAX(meetid) FROM meeting)");
 		
 		rs.next();
-		meetID = rs.getInt(0);
+		meetID = rs.getInt("meetid");
 		
 		ArrayList<String> peopleList  = new ArrayList<String>();
-		
 		for (int i = 0; i < participants.size(); i++){
-			String tempQuery = String.format("insert into meeting_participants" + "(meetid, username, status) values ('%d','%d,'%d');",meetID, participants.get(i).getUsername(), "INVITED"); 
+			String tempQuery = String.format("insert into meeting_participants" + "(meetid, username, status) values ('%d','%s','%s');",meetID, participants.get(i).getUsername(), "INVITED"); 
 			peopleList.add(tempQuery); 		
 		}
 		
@@ -80,7 +81,7 @@ public class MeetingModel extends Model {
 		}		
 		db.close();
 		
-		sendUserMessages("meetingCreated"); // sender melding om oprettet møte til alle participants. 
+		sendUserMessages("meetingCreated"); // sender melding om oprettet mote til alle participants. 
 		
 	}
 

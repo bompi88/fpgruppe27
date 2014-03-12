@@ -3,14 +3,18 @@ package view;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.sql.Date;
+import java.sql.Time;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import resources.AppConstants;
 import utils.RelativeLayout;
 
+import model.EmployeeModel;
 import model.MeetingModel;
 
 import framework.Controller;
@@ -61,6 +65,7 @@ public class AppointmentView extends JPanel {
 	private boolean checkInput() {
 		return true;
 	}
+
 	
 	class TitlePanel extends JPanel {
 		public TitlePanel() {
