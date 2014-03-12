@@ -80,6 +80,7 @@ public class MeetingModel extends Model {
 		}		
 		db.close();
 		
+		sendUserMessages("meetingCreated"); // sender melding om oprettet møte til alle participants. 
 		
 	}
 
@@ -107,27 +108,9 @@ public class MeetingModel extends Model {
 		}
 		db.close();
 		
+		
+			
 	}
-
-	public boolean isAppointment() {
-		return isAppointment;
-	}
-
-
-	public void setAppointment(boolean isAppointment) {
-		this.isAppointment = isAppointment;
-	}
-
-
-	public String getName() {
-		return name;
-	}
-
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
 
 	public void delete() throws ClassNotFoundException, SQLException {
 		// remove entry with meetid = meetID in TABLE Meeting      
@@ -139,8 +122,11 @@ public class MeetingModel extends Model {
 		db.makeSingleUpdate(query1);
 		db.close(); 
 		
+		sendUserMessages("meetingCancled"); 
+		
 	}
-
+	
+	
 	public MeetingModel fetch(String meetId) throws ClassNotFoundException, SQLException {
 		// fetch and overwrite meetID, date description starttime, endtime, roomid or place, responsible(as username TABLE Meeting),      
 		// fetch and overwrite meetID, participants, StatusModel to TABLE MeetingParticipants
@@ -159,8 +145,12 @@ public class MeetingModel extends Model {
 		startTime = rs.getTime("getTime");
 		endTime = rs.getTime("endTime");
 		place = rs.getString("place");
-		//room og responsible venter paa spesielle metoder
+		int roomid = rs.getInt("roomid");   //room og responsible venter paa spesielle metoder
+		String resp = rs.getString("username"); 		
 		isAppointment = rs.getBoolean("isAppointment");
+		
+		
+		
 		
 		return null; // fix this
 	}
@@ -204,6 +194,25 @@ public class MeetingModel extends Model {
 	}
 	
 	// TODO: functionality for adding people 
+	
+	
+	public boolean isAppointment() {
+		return isAppointment;
+	}
+
+	public void setAppointment(boolean isAppointment) {
+		this.isAppointment = isAppointment;
+	}
+
+
+	public String getName() {
+		return name;
+	}
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public int getMeetID() {
 		return meetID;
