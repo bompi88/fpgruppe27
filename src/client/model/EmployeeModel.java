@@ -65,7 +65,6 @@ public class EmployeeModel extends Model{
 	public boolean authenticate() throws ClassNotFoundException, SQLException {
 		
 		if (username != null && password != null && !password.equals("") && !username.equals("")) {
-			System.out.println(":" + username + ":");
 			String query = String.format("Select password from employee where username='%s'", username);
 			db.initialize();
 			ResultSet rs = db.makeSingleQuery(query);
@@ -177,7 +176,6 @@ public class EmployeeModel extends Model{
 		if (!(obj instanceof EmployeeModel)) {
 			return false;
 		}
-		System.out.println("test");
 		return (username.equals(((EmployeeModel)obj).username));
 	}
 	
