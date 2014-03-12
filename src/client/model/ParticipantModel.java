@@ -26,8 +26,8 @@ public class ParticipantModel extends EmployeeModel {
 	}
 
 	@Override
-	public void fetch(String id) throws ClassNotFoundException, SQLException {
-		// TODO Auto-generated method stub
+	public EmployeeModel fetch(String id) throws ClassNotFoundException, SQLException {
+		return null;
 		
 	}
 	

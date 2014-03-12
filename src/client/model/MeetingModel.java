@@ -9,6 +9,8 @@ import java.util.List;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 
+import database.DBConnection;
+
 
 
 
@@ -139,7 +141,7 @@ public class MeetingModel extends Model {
 		
 	}
 
-	public void fetch(String meetId) throws ClassNotFoundException, SQLException {
+	public MeetingModel fetch(String meetId) throws ClassNotFoundException, SQLException {
 		// fetch and overwrite meetID, date description starttime, endtime, roomid or place, responsible(as username TABLE Meeting),      
 		// fetch and overwrite meetID, participants, StatusModel to TABLE MeetingParticipants
 		
@@ -159,9 +161,11 @@ public class MeetingModel extends Model {
 		place = rs.getString("place");
 		//room og responsible venter paa spesielle metoder
 		isAppointment = rs.getBoolean("isAppointment");
+		
+		return null; // fix this
 	}
 	
-	public List<MeetingModel> fetchMeetingsByWeek(int weekNumber) throws ClassNotFoundException, SQLException {
+	public static List<MeetingModel> fetchMeetingsByWeek(int weekNumber) throws ClassNotFoundException, SQLException {
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar cal = Calendar.getInstance();
@@ -174,8 +178,8 @@ public class MeetingModel extends Model {
 		
 		String query1 = "SELECT * FROM meeting WHERE startDate BETWEEN '" + startDateQuery + "' AND '" + endDateQuery + "';";
 		
-		db.initialize();
-		ResultSet rs = db.makeSingleQuery(query1);
+		DBConnection.db.initialize();
+		ResultSet rs = DBConnection.db.makeSingleQuery(query1);
 		
 		
 		List<MeetingModel> m = new ArrayList<MeetingModel>();
@@ -195,7 +199,7 @@ public class MeetingModel extends Model {
 			mm.isAppointment = rs.getBoolean("isAppointment");
 			m.add(mm);
 		}
-		db.close();
+		DBConnection.db.close();
 		return m;
 	}
 	

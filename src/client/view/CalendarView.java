@@ -355,9 +355,8 @@ public class CalendarView extends JPanel{
 //			}
 			
 			// For testing
-			MeetingModel dummyModel = new MeetingModel();
 			try {
-				monday = dummyModel.fetchMeetingsByWeek(calendar.get(Calendar.WEEK_OF_YEAR));
+				monday = MeetingModel.fetchMeetingsByWeek(calendar.get(Calendar.WEEK_OF_YEAR));
 				
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block

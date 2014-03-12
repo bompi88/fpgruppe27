@@ -42,21 +42,24 @@ public class EmployeeModel extends Model{
 	}
 
 	@Override
-	public void fetch(String id) throws ClassNotFoundException, SQLException {
+	public EmployeeModel fetch(String id) throws ClassNotFoundException, SQLException {
 		
 		String query = String.format("Select username, password from employee where username='%s'",id);
 		db.initialize();
 		ResultSet rs = db.makeSingleQuery(query);
 
+		EmployeeModel em = new EmployeeModel();
+		
 		while(rs.next())
 		{
-			this.username = rs.getString(1);
-			this.password = rs.getString(2);
+			em.username = rs.getString("username");
+			em.password = rs.getString("password");
 		}
 		
-		db.initialize();
 		rs.close();
 		db.close();
+		
+		return em;
 	}
 	
 	public boolean authenticate() throws ClassNotFoundException, SQLException {

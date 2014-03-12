@@ -15,6 +15,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -24,6 +25,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import model.EmployeeModel;
+import model.MeetingModel;
 
 import framework.Model;
 
@@ -106,14 +108,28 @@ public class AddCalendarPanel extends JPanel {
 	}
 	
 	public void addCalendar() {
-		if(subscribedCalendarsModel.getSize() < 12) {
+		
+		if(subscribedCalendarsModel.getSize() < 12 && !addCalendarTextField.getText().equals("") && addCalendarTextField.getText() != null) {
+			
 			EmployeeModel emp = new EmployeeModel();
-			emp.setUsername(addCalendarTextField.getText());
-			emp.setName(addCalendarTextField.getText());
-			subscribedCalendars.add(emp);
-			subscribedCalendarsModel.removeAllElements();
-			for (EmployeeModel ee : subscribedCalendars) {
-				subscribedCalendarsModel.add(subscribedCalendarsModel.size(), ee);
+			
+			try {
+				if(((EmployeeModel)emp.fetch(addCalendarTextField.getText())).getUsername().equals(addCalendarTextField.getText())) {
+				
+					emp.setUsername(addCalendarTextField.getText());
+					emp.setName(addCalendarTextField.getText());
+					subscribedCalendars.add(emp);
+					subscribedCalendarsModel.removeAllElements();
+					for (EmployeeModel ee : subscribedCalendars) {
+						subscribedCalendarsModel.add(subscribedCalendarsModel.size(), ee);
+					}
+				}
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}

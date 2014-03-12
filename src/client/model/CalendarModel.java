@@ -36,8 +36,8 @@ public class CalendarModel extends Model {
 	}
 
 	@Override
-	public void fetch(String o) throws ClassNotFoundException, SQLException {
-		// TODO Auto-generated method stub
+	public CalendarModel fetch(String o) throws ClassNotFoundException, SQLException {
+		return null;
 		
 	}
 
