@@ -4,7 +4,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 
 
 
@@ -156,6 +159,44 @@ public class MeetingModel extends Model {
 		place = rs.getString("place");
 		//room og responsible venter paa spesielle metoder
 		isAppointment = rs.getBoolean("isAppointment");
+	}
+	
+	public List<MeetingModel> fetchMeetingsByWeek(int weekNumber) throws ClassNotFoundException, SQLException {
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.WEEK_OF_YEAR, weekNumber);        
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+		String startDateQuery = sdf.format(cal.getTime());
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+		String endDateQuery = sdf.format(cal.getTime()); 
+		System.out.println(startDateQuery);
+		
+		String query1 = "SELECT * FROM meeting WHERE startDate BETWEEN '" + startDateQuery + "' AND '" + endDateQuery + "';";
+		
+		db.initialize();
+		ResultSet rs = db.makeSingleQuery(query1);
+		
+		
+		List<MeetingModel> m = new ArrayList<MeetingModel>();
+		
+		while(rs.next()) {
+			
+			MeetingModel mm = new MeetingModel();
+			
+			mm.name = rs.getString("name");
+			mm.description = rs.getString("description");
+			mm.startDate = rs.getDate("startDate");
+			mm.endDate = rs.getDate("endDate");
+			mm.startTime = rs.getTime("startTime");
+			mm.endTime = rs.getTime("endTime");
+			mm.place = rs.getString("place");
+			//room og responsible venter paa spesielle metoder
+			mm.isAppointment = rs.getBoolean("isAppointment");
+			m.add(mm);
+		}
+		db.close();
+		return m;
 	}
 	
 	// TODO: functionality for adding people 

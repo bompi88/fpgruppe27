@@ -17,6 +17,7 @@ import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.sql.SQLException;
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -319,39 +320,53 @@ public class CalendarView extends JPanel{
 		
 		public WeeklyCalendarPanel() {
 			
-			for (int i = 1; i <= 7; i++) {
-				int rand = 1 + (int)(Math.random() * ((10 - 1) + 1));
-				for (int j = 0; j < rand; j++) {
-					MeetingModel m = new MeetingModel();
-					m.setMeetID((i+1)*(i+1)*(j+1));
-					m.setName("meewID" + (i+1)*(i+1)*(j+1));
-					m.setPlace("this is a meeting");
-					
-					switch(i) {
-					case 1:
-						monday.add(monday.size(), m);
-						break;
-					case 2:
-						thuesday.add(thuesday.size(), m);
-						break;
-					case 3:
-						wednesday.add(wednesday.size(), m);
-						break;
-					case 4:
-						thursday.add(thursday.size(), m);
-						break;
-					case 5:
-						friday.add(friday.size(), m);
-						break;
-					case 6:
-						saturday.add(saturday.size(), m);
-						break;
-					case 7:
-						sunday.add(sunday.size(), m);
-						break;
-					}
-				}
+//			for (int i = 1; i <= 7; i++) {
+//				int rand = 1 + (int)(Math.random() * ((10 - 1) + 1));
+//				for (int j = 0; j < rand; j++) {
+//					MeetingModel m = new MeetingModel();
+//					m.setMeetID((i+1)*(i+1)*(j+1));
+//					m.setName("meewID" + (i+1)*(i+1)*(j+1));
+//					m.setPlace("this is a meeting");
+//					
+//					switch(i) {
+//					case 1:
+//						monday.add(monday.size(), m);
+//						break;
+//					case 2:
+//						thuesday.add(thuesday.size(), m);
+//						break;
+//					case 3:
+//						wednesday.add(wednesday.size(), m);
+//						break;
+//					case 4:
+//						thursday.add(thursday.size(), m);
+//						break;
+//					case 5:
+//						friday.add(friday.size(), m);
+//						break;
+//					case 6:
+//						saturday.add(saturday.size(), m);
+//						break;
+//					case 7:
+//						sunday.add(sunday.size(), m);
+//						break;
+//					}
+//				}
+//			}
+			
+			// For testing
+			MeetingModel dummyModel = new MeetingModel();
+			try {
+				monday = dummyModel.fetchMeetingsByWeek(calendar.get(Calendar.WEEK_OF_YEAR));
+				
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
+			
 			
 			mondayView = new CalendarColumn(monday);
 			thuesdayView = new CalendarColumn(thuesday);
