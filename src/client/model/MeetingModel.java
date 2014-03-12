@@ -37,7 +37,7 @@ public class MeetingModel extends Model {
 	
 	
 	public void sendAdminMessage(String typeOfMessage, ParticipantModel personOfInterest) throws ClassNotFoundException, SQLException{  
-		MessageModel message = new MessageModel(typeOfMessage, (ParticipantModel) responsible, personOfInterest);  
+		MessageModel message = new MessageModel(this,typeOfMessage, (ParticipantModel) responsible, personOfInterest);  
 		message.setMeeting(this);  
 		message.create(); 
 	}
@@ -45,7 +45,7 @@ public class MeetingModel extends Model {
 	public void sendUserMessages(String typeOfMessage) throws ClassNotFoundException, SQLException{
 		for(int i = 0; i < participants.size(); i++){
 			if(!(participants.get(i).getUsername().equals(responsible.getUsername()))){			// sjekker at responsible ikke er i participants 
-				MessageModel message = new MessageModel(typeOfMessage, (ParticipantModel) responsible, participants.get(i));  
+				MessageModel message = new MessageModel(this, typeOfMessage, participants.get(i), null) ;  
 				message.setMeeting(this); 
 				message.create(); 
 			}

@@ -147,7 +147,7 @@ public class EmployeeModel extends Model{
 	
 	
 	public void fetchMessages() throws ClassNotFoundException, SQLException{  //kjores ved oppstart av programmet. Opretter f���rste MessageModelobjekt , sletter gamle meldinger, og lager nye objekter til inbox basert p��� DB.   
-		MessageModel firstMessage = new MessageModel("none", null, null);  
+		MessageModel firstMessage = new MessageModel(null, "none", null, null);  
 		Timestamp starttime = new Timestamp(0); 
 		
 		firstMessage.deleteOldMess(); 
@@ -157,7 +157,7 @@ public class EmployeeModel extends Model{
 		int noOfMessages = firstMessage.countMessages(username, firstMessage.getTime()); 
 		
 		for(int i = 1; i < noOfMessages; i++){
-			MessageModel Message = new MessageModel("none", null, null);
+			MessageModel Message = new MessageModel(null,"none", null, null);
 			Message.fetchMessData(username, inbox.get(0).getTime()); 
 			inbox.add(0, Message); 				
 		}	
@@ -170,7 +170,7 @@ public class EmployeeModel extends Model{
 		
 		if(noOfNewMessages > 0){
 			for(int i = 0; i < noOfNewMessages; i++){
-				MessageModel newMessage = new MessageModel("none", null, null);
+				MessageModel newMessage = new MessageModel(null, "none", null, null);
 				newMessage.fetchMessData(username, inbox.get(0).getTime()); 
 				inbox.add(0, newMessage);
 			}
