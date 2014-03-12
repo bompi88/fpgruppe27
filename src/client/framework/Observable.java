@@ -4,5 +4,5 @@ public interface Observable {
 
 	public void addObserver(Observer ob);
 
-	abstract void fireObserverEvent(String event);
+	abstract void fireObserverEvent(String event, Object obj);
 }

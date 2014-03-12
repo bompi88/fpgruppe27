@@ -19,6 +19,15 @@ public class EmployeeModel extends Model{
 	protected int noOfUnreadMessages; 
 	
 	public EmployeeModel() {}
+	
+	public EmployeeModel(EmployeeModel e) {
+		username = e.username;
+		password = e.password;
+		name = e.name;
+		calendar = e.calendar;
+		inbox = e.inbox;
+		noOfUnreadMessages = e.noOfUnreadMessages;
+	}
 
 	@Override
 	public void create() throws ClassNotFoundException, SQLException {

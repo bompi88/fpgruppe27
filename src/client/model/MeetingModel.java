@@ -27,7 +27,7 @@ public class MeetingModel extends Model {
 	protected RoomModel room;
 	protected String place;
 	protected EmployeeModel responsible;
-	protected ArrayList<ParticipantModel> participants;
+	protected ArrayList<ParticipantModel> participants = new ArrayList<ParticipantModel>();
 	protected boolean isAppointment;
 	protected String name;
 	
@@ -320,6 +320,10 @@ public class MeetingModel extends Model {
 
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
+	}
+	
+	public void removeParticipants(ParticipantModel emp) {
+		participants.remove(emp);
 	}
 	
 	public String getPlaceOrRoom() {

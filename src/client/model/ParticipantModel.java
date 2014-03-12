@@ -7,6 +7,14 @@ public class ParticipantModel extends EmployeeModel {
 	private StatusModel status;
 	private AlarmModel alarm;
 
+	public ParticipantModel() {
+		
+	}
+	
+	public ParticipantModel(EmployeeModel employeeModel) {
+		super(employeeModel);
+	}
+	
 	@Override
 	public void create() throws ClassNotFoundException, SQLException {
 		// TODO Auto-generated method stub

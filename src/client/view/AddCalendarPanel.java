@@ -1,8 +1,5 @@
 package view;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.ComponentOrientation;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -12,8 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -23,21 +18,21 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import model.EmployeeModel;
-import framework.Model;
 import framework.Observable;
 import framework.Observer;
 
 import resources.AppConstants;
-import resources.ImageManager;
 import utils.RelativeLayout;
+import utils.WrapLayout;
 
 @SuppressWarnings("serial")
-public class AddCalendarPanel extends JPanel implements Observer {
+public class AddCalendarPanel extends JPanel {
 	
 	private JLabel addCalendarLabel;
 	private JTextField addCalendarTextField;
 	private JList<EmployeeModel> calendarSubscribedList;
 	private JButton addCalendarButton;
+	private CalendarListPanel p;
 	
 	HashSet<EmployeeModel> subscribedCalendars = new HashSet<EmployeeModel>();
 	private DefaultListModel<EmployeeModel> subscribedCalendarsModel = new DefaultListModel<EmployeeModel>();
@@ -57,17 +52,9 @@ public class AddCalendarPanel extends JPanel implements Observer {
 	
 		calendarSubscribedList = new JList<EmployeeModel>();
 		
-		MyCellRenderer cellRenderer = new MyCellRenderer();
-		cellRenderer.addObserver(this);
-		calendarSubscribedList.setCellRenderer(cellRenderer);
-		
-		calendarSubscribedList.setModel(subscribedCalendarsModel);
-		
-		calendarSubscribedList.setFixedCellHeight(15);
-		calendarSubscribedList.setFixedCellWidth(85);
-		calendarSubscribedList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-		calendarSubscribedList.setVisibleRowCount(4);
-		calendarSubscribedList.setPreferredSize(new Dimension(250,70));
+		p = new CalendarListPanel(subscribedCalendars);
+		p.setBackground(AppConstants.HEADER_BG_COLOR);
+		p.setPreferredSize(new Dimension(300,70));
 		
 		JPanel topFormWrapper = new JPanel();
 		topFormWrapper.setLayout(new GridBagLayout());
@@ -75,7 +62,7 @@ public class AddCalendarPanel extends JPanel implements Observer {
 		topFormWrapper.add(addCalendarTextField, new GridBagConstraints(1, 0, 1, 1, 1, 1, anc, 0, new Insets(5, 0, 0, 0), 0, 0));
 		topFormWrapper.add(addCalendarButton, new GridBagConstraints(2, 0, 1, 1, 1, 1, anc, 0, new Insets(5, 0, 0, 0), 0, 0));
 		add(topFormWrapper);
-		add(calendarSubscribedList);
+		add(p);
 		calendarSubscribedList.setBackground(AppConstants.HEADER_BG_COLOR);
 		topFormWrapper.setBackground(AppConstants.HEADER_BG_COLOR);
 		setBackground(AppConstants.HEADER_BG_COLOR);
@@ -108,10 +95,10 @@ public class AddCalendarPanel extends JPanel implements Observer {
 			}
 		});
 	}
-	
+
 	public void addCalendar() {
 		
-		if(subscribedCalendarsModel.getSize() < 12 && !addCalendarTextField.getText().equals("") && addCalendarTextField.getText() != null) {
+		if(((HashSet<EmployeeModel>) p.getModel()).size() < 12 && !addCalendarTextField.getText().equals("") && addCalendarTextField.getText() != null) {
 			
 			EmployeeModel emp = new EmployeeModel();
 			
@@ -120,11 +107,8 @@ public class AddCalendarPanel extends JPanel implements Observer {
 				
 					emp.setUsername(addCalendarTextField.getText());
 					emp.setName(addCalendarTextField.getText());
-					subscribedCalendars.add(emp);
-					subscribedCalendarsModel.removeAllElements();
-					for (EmployeeModel ee : subscribedCalendars) {
-						subscribedCalendarsModel.add(subscribedCalendarsModel.size(), ee);
-					}
+					//p.modelsubscribedCalendars.add(emp);
+					p.changeEvent("add_calendar", emp);
 				}
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
@@ -153,83 +137,71 @@ public class AddCalendarPanel extends JPanel implements Observer {
 		setPreferredSize(new Dimension((int)(getParent().getPreferredSize().width * (1 - AppConstants.HEADER_TITLE_PANEL_SCALE_WIDTH)/2)+1, getParent().getPreferredSize().height));
 	}
 	
-	private static class MyCellRenderer extends JPanel implements ListCellRenderer<Object>, Observable {
-
-		private ImageIcon removeCalendarIcon;
-        private static final long serialVersionUID = 1L;
-        private JLabel calendarOwnerText = new JLabel();
-        private JLabel l = new JLabel("");
-        private List<Observer> observers = new ArrayList<Observer>(); 
-        private EmployeeModel employee;
-        
-        public JLabel getL() {
-			return l;
+	public static class CalendarListPanel extends JPanel implements Observer, Observable {
+		
+		private HashSet<EmployeeModel> model;
+		public HashSet<EmployeeModel> getModel() {
+			return model;
 		}
 
-		public MyCellRenderer() {
-        	removeCalendarIcon = new ImageIcon(ImageManager.getInstance().resizeImage(ImageManager.getInstance().getImage("delete_icon"), 15, 15));
-        }
-        
-        @Override
-        public Component getListCellRendererComponent(JList list, Object value,
-                int index, boolean isSelected, boolean cellHasFocus) {
-            if (value instanceof Model) {
-            	
-            	setLayout(new GridBagLayout());
-            	employee = (EmployeeModel) value;
-            	
-            	calendarOwnerText.setText(employee.getName());
-                
-                l.setIcon(removeCalendarIcon);
-                
-                l.addMouseListener(new MouseListener() {
-					
-					@Override
-					public void mouseReleased(MouseEvent e) {
-						// TODO Auto-generated method stub
-						
-					}
-					
-					@Override
-					public void mousePressed(MouseEvent e) {
-						// TODO Auto-generated method stub
-						
-					}
-					
-					@Override
-					public void mouseExited(MouseEvent e) {
-						// TODO Auto-generated method stub
-						
-					}
-					
-					@Override
-					public void mouseEntered(MouseEvent e) {
-						// TODO Auto-generated method stub
-						
-					}
-					
-					@Override
-					public void mouseClicked(MouseEvent e) {
-						
-						fireObserverEvent("remove_calendar");
-					}
-				});
-                
-                add(l, new GridBagConstraints(1,0,1,1,1,1,GridBagConstraints.NORTHEAST,0,new Insets(0,0,0,5),0,0));
-                add(calendarOwnerText, new GridBagConstraints(0,0,1,1,1,1,GridBagConstraints.NORTHWEST,0,new Insets(0,0,0,0),0,0));
-                setForeground(Color.black);
-                setBackground(AppConstants.HEADER_BG_COLOR);
-                setBorder(new EmptyBorder(0, 0, 0, 0));
-                
-                calendarOwnerText.setHorizontalAlignment(SwingConstants.LEFT);
-                //setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+		public void setModel(HashSet<EmployeeModel> model) {
+			this.model = model;
+		}
 
-                setFont(list.getFont());
-                
-                setOpaque(true);
-            }
-            return this;
-        }
+		private List<AddCalendarPanelElement> elements = new ArrayList<AddCalendarPanelElement>();
+		private List<Observer> observers = new ArrayList<Observer>();
+		
+		public CalendarListPanel(HashSet<EmployeeModel> model) {
+			this.model = model;
+			
+			EmployeeModel em = new EmployeeModel();
+			em.setUsername("test");
+			em.setName("test");
+			model.add(em);
+			setVisible(true);
+			setBorder(new EmptyBorder(0, 0, 0, 0));
+			WrapLayout wl = new WrapLayout(WrapLayout.LEFT,0,0);
+			setLayout(wl);
+			
+			for(EmployeeModel e : model) {
+				if(e != null)
+					addCalendar(e);
+			}
+		}
+		
+		@Override
+		public void changeEvent(String event, Object obj) {
+			if(event.equals("remove_calendar")) {
+				if(model.remove(((AddCalendarPanelElement)obj).getModel())) {
+					//fireObserverEvent(event, obj);
+					//removeCalendar((EmployeeModel)obj);
+					System.out.println((((AddCalendarPanelElement)obj).getModel()).getName() + " deleted.");
+					remove((AddCalendarPanelElement)obj);
+					updateView();
+				}
+				
+			} else if(event.equals("add_calendar")) {
+				EmployeeModel e = (EmployeeModel)obj;
+				if (model.add(e)) {
+					addCalendar(e);
+					updateView();
+					//removeCalendar((EmployeeModel)obj);
+					System.out.println(((EmployeeModel)obj).getName() + " added.");
+				}
+			}
+		}
+		
+		public void addCalendar(EmployeeModel e) {
+			AddCalendarPanelElement d = new AddCalendarPanelElement(e);
+			d.addObserver(this);
+			elements.add(d);
+			add(d);
+		}
+		
+		public void updateView() {
+			repaint();
+			revalidate();
+		}
 
 		@Override
 		public void addObserver(Observer ob) {
@@ -237,18 +209,13 @@ public class AddCalendarPanel extends JPanel implements Observer {
 		}
 
 		@Override
-		public void fireObserverEvent(String event) {
+		public void fireObserverEvent(String event, Object obj) {
 
 			for (Observer o : observers) {
-				o.changeEvent(event, employee);
+				o.changeEvent(event, obj);
 			}
 		}
-    }
-
-	@Override
-	public void changeEvent(String event, Object obj) {
-		if(event.equals("remove_calendar")) {
-			removeCalendar((EmployeeModel)obj);
-		}
 	}
+	
+	
 }

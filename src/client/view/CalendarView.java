@@ -1,9 +1,6 @@
 package view;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.ComponentOrientation;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -16,26 +13,18 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.sql.SQLException;
-import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Random;
-
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.ListCellRenderer;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
@@ -43,13 +32,14 @@ import controller.AppointmentCtrl;
 import controller.CalendarCtrl;
 import controller.MainCtrl;
 
-import framework.Model;
 import framework.Observable;
 import framework.Observer;
 import framework.Controller;
 
 import model.EmployeeModel;
 import model.MeetingModel;
+import model.ParticipantModel;
+import model.StatusModel;
 
 import resources.AppConstants;
 import resources.ImageManager;
@@ -146,7 +136,7 @@ public class CalendarView extends JPanel{
 
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					fireObserverEvent("delete");
+					fireObserverEvent("delete",this);
 					
 				}
 
@@ -204,7 +194,7 @@ public class CalendarView extends JPanel{
 				
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					fireObserverEvent("edit");
+					fireObserverEvent("edit", this);
 				}
 			});
 		}
@@ -232,7 +222,7 @@ public class CalendarView extends JPanel{
 		}
 
 		@Override
-		public void fireObserverEvent(String event) {
+		public void fireObserverEvent(String event, Object obj) {
 			for (Observer ob : observers) {
 				ob.changeEvent(event, this);
 			}
@@ -288,6 +278,13 @@ public class CalendarView extends JPanel{
 		public void changeEvent(String event, Object obj) {
 			
 			if(event.equals("delete")) {
+				
+				ParticipantModel p = new ParticipantModel((EmployeeModel) ((MainCtrl)ctrl.getMainCtrl()).getModel());
+				
+				p.setStatus(StatusModel.DECLINED);
+				p.setAlarm(null);
+				
+				((CalendarElement)obj).model.removeParticipants(p);
 				model.remove(((CalendarElement)obj).model);
 				remove((CalendarElement)obj);
 				revalidate();
