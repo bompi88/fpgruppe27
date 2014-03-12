@@ -72,7 +72,7 @@ public class Database {
 		 */
 		
 		info.setProperty("user", properties.getProperty("user"));
-		info.setProperty("password", properties.getProperty("user"));
+		info.setProperty("password", properties.getProperty("password"));
 		conn = DriverManager.getConnection(url, info);
 	}
 

@@ -12,7 +12,7 @@ public class CalendarCtrl extends Controller implements State {
 	public CalendarCtrl(Controller ctrl) {
 		super(ctrl);
 		
-		calendarPanel = new CalendarView();
+		calendarPanel = new CalendarView((Controller)this);
 
 		ctrl.getMainFrame().getContentPane().add(calendarPanel);
 	}

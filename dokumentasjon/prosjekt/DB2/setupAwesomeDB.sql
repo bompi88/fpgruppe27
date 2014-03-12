@@ -1,4 +1,4 @@
-CREATE TABLE User (
+CREATE TABLE IF NOT EXISTS employee (
 	username VARCHAR(15) NOT NULL,
 	name VARCHAR(50),
 	email VARCHAR(50),
@@ -6,44 +6,45 @@ CREATE TABLE User (
 	PRIMARY KEY(username)
 	);
 
-CREATE TABLE Meeting (
+CREATE TABLE IF NOT EXISTS meeting (
 	meetid INT NOT NULL AUTO_INCREMENT,
-    name = VARCHAR(50),
+    name VARCHAR(50),
 	description VARCHAR(255),
 	startDate DATE,
     endDate DATE,
 	startTime TIME,
 	endTime TIME,
 	place VARCHAR(50),
-	roomid INT REFERENCES Room(roomid),
+	roomid INT REFERENCES room(roomid),
     isAppointment BOOLEAN,
-	username VARCHAR(15) REFERENCES User(username)
+	username VARCHAR(15) REFERENCES employee(username),
 	PRIMARY KEY(meetid)
 
 	);
 
-CREATE TABLE Room (
-	roomid INT NOT NULL, AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS room (
+	roomid INT NOT NULL AUTO_INCREMENT,
 	name VARCHAR(50),
     capacity INT,
 	PRIMARY KEY(roomid)
 	);
 
-CREATE TABLE MeetingParticipants (
+CREATE TABLE IF NOT EXISTS meeting_participants (
 	meetid INT,
 	username VARCHAR(15),
 	status VARCHAR(10),
 	PRIMARY KEY(meetid, username),
-	FOREIGN KEY(meetid) REFERENCES Meeting(meetid) ON DELETE CASCADE,
-	FOREIGN KEY(username) REFERENCES User(username) ON DELETE CASCADE
+	FOREIGN KEY(meetid) REFERENCES meeting(meetid) ON DELETE CASCADE,
+	FOREIGN KEY(username) REFERENCES employee(username) ON DELETE CASCADE
 	);
 
-CREATE TABLE Message (
-	messid 		INT 		NOT NULL, 
-	message 	VARCHAR(255); 
-	time  		TIMESTAMP;
-	owner 	 	VARCHAR(15);
-	isSeen		BOOLEAN 
+CREATE TABLE IF NOT EXISTS message (
+	messid INT NOT NULL AUTO_INCREMENT, 
+	message VARCHAR(255),
+	time TIMESTAMP,
+	owner VARCHAR(15),
+	isSeen BOOLEAN,
+	PRIMARY KEY(messid)
 	)
 
 	

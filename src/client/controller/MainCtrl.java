@@ -30,6 +30,7 @@ import view.MainView;
 import view.SideBarView;
 
 import model.EmployeeModel;
+import model.MeetingModel;
 
 /**
  * This Controller takes care of bottom layer function calls, like login() and logout() etc.
@@ -274,5 +275,9 @@ public class MainCtrl extends Controller {
 	@Override
 	public <T extends Model> void setModel(T model) {
 		currentEmployee = (EmployeeModel) model;
+	}
+	
+	public void setMeetingModel(MeetingModel model) {
+		appointmentCtrl.setModel(model);
 	}
 }

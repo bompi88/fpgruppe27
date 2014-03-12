@@ -38,9 +38,14 @@ import javax.swing.ListCellRenderer;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import controller.AppointmentCtrl;
+import controller.CalendarCtrl;
+import controller.MainCtrl;
+
 import framework.Model;
 import framework.Observable;
 import framework.Observer;
+import framework.Controller;
 
 import model.EmployeeModel;
 import model.MeetingModel;
@@ -63,8 +68,10 @@ public class CalendarView extends JPanel{
 	private JPanel topPanelWrapper = new JPanel();
 	private JPanel weeklyCalendarWrapper = new JPanel();
 	
-	public CalendarView() {
-		
+	Controller ctrl;
+	
+	public CalendarView(Controller ctrl) {
+		this.ctrl = ctrl;
 		
 		RelativeLayout rl1 = new RelativeLayout(RelativeLayout.Y_AXIS, 0);
 		rl1.setAlignment(RelativeLayout.LEADING);
@@ -102,7 +109,7 @@ public class CalendarView extends JPanel{
 		calendarTitlePanel.fillSizeOfParent();
 		
 	}
-	
+
 	public class CalendarElement extends RoundedPanel implements PropertyChangeListener, Observable {
 		
 		private List<Observer> observers = new ArrayList<Observer>();
@@ -196,8 +203,7 @@ public class CalendarView extends JPanel{
 				
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					System.out.println(meetingTitle.getText());
-					
+					fireObserverEvent("edit");
 				}
 			});
 		}
@@ -227,7 +233,7 @@ public class CalendarView extends JPanel{
 		@Override
 		public void fireObserverEvent(String event) {
 			for (Observer ob : observers) {
-				ob.changeEvent("delete", this);
+				ob.changeEvent(event, this);
 			}
 		}
 	}
@@ -285,6 +291,10 @@ public class CalendarView extends JPanel{
 				remove((CalendarElement)obj);
 				revalidate();
 				repaint();
+			} else if(event.equals("edit")) {
+				MainCtrl mainCtrl = (MainCtrl)((CalendarCtrl)((CalendarView)((JPanel)((WeeklyCalendarPanel)getParent()).getParent()).getParent()).getCtrl()).getMainCtrl();
+				mainCtrl.setMeetingModel(((CalendarElement)obj).model);
+				mainCtrl.setState(AppointmentCtrl.class);
 			}
 		}
 	}
@@ -579,5 +589,10 @@ public class CalendarView extends JPanel{
 			}
 			
 		}
+	}
+
+
+	public Controller getCtrl() {
+		return ctrl;
 	}
 }
