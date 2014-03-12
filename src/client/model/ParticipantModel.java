@@ -26,8 +26,7 @@ public class ParticipantModel extends EmployeeModel {
 	}
 
 	@Override
-	public EmployeeModel fetch(String id) throws ClassNotFoundException, SQLException {
-		return null;
+	public void fetch() throws ClassNotFoundException, SQLException {
 		
 	}
 	

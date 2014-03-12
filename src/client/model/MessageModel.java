@@ -126,7 +126,7 @@ public class MessageModel extends Model {
 		long oneWeekinMs = 604800000; 
 		time5daysBeforeNow.setTime(timeNow.getTime() - oneWeekinMs); 
 		
-		String query=String.format("DELETE FROM Message WHERE time<'%d'", time5daysBeforeNow ); 
+		String query=String.format("DELETE FROM message WHERE time<'%d'", time5daysBeforeNow ); 
 		
 		db.initialize();
 		db.makeSingleUpdate(query);
@@ -135,7 +135,7 @@ public class MessageModel extends Model {
 	
 	public void fetchMessData(String userOwner, Timestamp timeAfter) throws ClassNotFoundException, SQLException { // henter ut meldinger til brukeren. 
 		
-		String query=String.format("SELECT message, time, isSeen; FROM Message; WHERE owner='%s' AND time>'%d' AND isSeen='%b'", userOwner, timeAfter, true);    
+		String query=String.format("SELECT message, time, isSeen; FROM message; WHERE owner='%s' AND time>'%d' AND isSeen='%b'", userOwner, timeAfter, true);    
 		
 		db.initialize();
 		ResultSet rs = db.makeSingleQuery(query);
@@ -155,7 +155,7 @@ public class MessageModel extends Model {
 	
 	public int countMessages(String userOwner, Timestamp sinceWhen) throws ClassNotFoundException, SQLException { 
 		
-		String query=String.format("SELECT COUNT(*) FROM Message WHERE owner='%s' and time>'%d'", userOwner, sinceWhen); 
+		String query=String.format("SELECT COUNT(*) FROM message WHERE owner='%s' and time>'%d'", userOwner, sinceWhen); 
 		
 		db.initialize();
 		ResultSet rs = db.makeSingleQuery(query);
@@ -190,8 +190,7 @@ public class MessageModel extends Model {
 	}
 	
 	@Override
-	public MessageModel fetch(String userOwner) throws ClassNotFoundException, SQLException {
-		return null; 
+	public void fetch() throws ClassNotFoundException, SQLException {
 		
 	}
 

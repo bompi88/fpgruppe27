@@ -49,7 +49,7 @@ public abstract class Model {
 	 * @param id
 	 * @return Model
 	 */	
-	public abstract <T extends Model> T fetch(String o) throws ClassNotFoundException, SQLException;
+	public abstract void fetch() throws ClassNotFoundException, SQLException;
 	
 	
 	public void setDB(Database db) {
