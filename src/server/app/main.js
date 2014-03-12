@@ -19,6 +19,7 @@ connection.connect();
 // sets default headers and maps GET,PUT,POST
 server.use(restify.fullResponse())
 	.use(restify.bodyParser());
+	server.use(restify.queryParser());
 server.pre(restify.pre.userAgentConnection());
 
 //------------------------------------------------------------------------------------------------
@@ -36,10 +37,18 @@ server.pre(restify.pre.userAgentConnection());
 //------------------------------------------------------------------------------------------------
 
 server.get('/employee', function(req, res, next) {
-	connection.query('SELECT * FROM employee', function(err, rows, fields) {
-		if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
-		res.send(rows)
-	});
+	
+	if(typeof req.params.username !== "undefined") {
+		connection.query("SELECT * FROM employee WHERE username='" + req.params.username + "'", function(err, rows, fields) {
+			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+			res.send(rows)
+		});
+	} else {
+		connection.query('SELECT * FROM employee', function(err, rows, fields) {
+			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+			res.send(rows)
+		});
+	}
 })
 
 //------------------------------------------------------------------------------------------------
