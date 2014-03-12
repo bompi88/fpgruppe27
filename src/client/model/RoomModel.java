@@ -13,6 +13,16 @@ public class RoomModel extends Model {
 	protected String name;
 	protected ArrayList<MeetingModel> bookingList;
 
+	
+	public RoomModel getRoom(int roomId){ 
+		if(roomId == this.roomID){
+			return this; 
+		}
+		else{
+			return null;
+		}
+	}
+	
 	public int getRoomID() {
 		return roomID;
 	}
@@ -95,6 +105,21 @@ public class RoomModel extends Model {
 		capacity = rs.getInt("capacity");
 		
 		return null;
+	}
+	
+	public void fetchByID(int ID) throws ClassNotFoundException, SQLException {
+		// updates name and capacity in model according to database;
+		
+		String query = String.format("select name, capacity form Room where roomid = '%d';", ID);
+		
+		db.initialize();
+		ResultSet rs = db.makeSingleQuery(query);
+		db.close();
+		
+		rs.next();
+		name = rs.getString("name");
+		capacity = rs.getInt("capacity");
+		roomID = ID; 
 	}
 
 }

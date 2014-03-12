@@ -62,6 +62,22 @@ public class EmployeeModel extends Model{
 		return em;
 	}
 	
+	public void fetchByUserName(String id) throws ClassNotFoundException, SQLException {
+		
+		String query = String.format("Select username, password from employee where username='%s'",id);
+		db.initialize();
+		ResultSet rs = db.makeSingleQuery(query);
+		
+		while(rs.next())
+		{
+			this.username = rs.getString("username");
+			this.password = rs.getString("password");
+		}
+		
+		rs.close();
+		db.close();
+	}	
+	
 	public boolean authenticate() throws ClassNotFoundException, SQLException {
 		
 		if (username != null && password != null && !password.equals("") && !username.equals("")) {

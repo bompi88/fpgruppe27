@@ -108,8 +108,7 @@ public class MeetingModel extends Model {
 		}
 		db.close();
 		
-		
-			
+		sendUserMessages("time or place changed"); // not complete	
 	}
 
 	public void delete() throws ClassNotFoundException, SQLException {
@@ -127,11 +126,11 @@ public class MeetingModel extends Model {
 	}
 	
 	
-	public MeetingModel fetch(String meetId) throws ClassNotFoundException, SQLException {
+	public void fetch() throws ClassNotFoundException, SQLException {
 		// fetch and overwrite meetID, date description starttime, endtime, roomid or place, responsible(as username TABLE Meeting),      
 		// fetch and overwrite meetID, participants, StatusModel to TABLE MeetingParticipants
 		
-		String query1 = "select name, description, startDate, endDate, startTime, endTime, place, roomid, username, isAppointment from meeting where meetid = " + meetId + ";";
+		String query1 = "select name, description, startDate, endDate, startTime, endTime, place, roomid, username, isAppointment from meeting where meetid = " + meetID + ";";
 		
 		db.initialize();
 		ResultSet rs = db.makeSingleQuery(query1);
@@ -149,10 +148,13 @@ public class MeetingModel extends Model {
 		String resp = rs.getString("username"); 		
 		isAppointment = rs.getBoolean("isAppointment");
 		
+		RoomModel room = new RoomModel(); 
+		room.fetchByID(roomid); 
+		this.room = room; 
 		
-		
-		
-		return null; // fix this
+		EmployeeModel user = new EmployeeModel(); 
+		user.fetchByUserName(resp); 
+		this.responsible = user; 
 	}
 	
 	public static List<MeetingModel> fetchMeetingsByWeek(int weekNumber) throws ClassNotFoundException, SQLException {
