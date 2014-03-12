@@ -190,8 +190,7 @@ public class MessageModel extends Model {
 	}
 	
 	@Override
-	public MessageModel fetch(String userOwner) throws ClassNotFoundException, SQLException {
-		return null; 
+	public void fetch() throws ClassNotFoundException, SQLException {
 		
 	}
 

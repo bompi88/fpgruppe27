@@ -91,7 +91,7 @@ public class RoomModel extends Model {
 		db.close();
 	}
 
-	public RoomModel fetch(String o) throws ClassNotFoundException, SQLException {
+	public RoomModel fetchByModel() throws ClassNotFoundException, SQLException {
 		// updates name and capacity in model according to database;
 		
 		String query = String.format("select name, capacity form Room where roomid = '%d';", roomID);
@@ -120,6 +120,20 @@ public class RoomModel extends Model {
 		name = rs.getString("name");
 		capacity = rs.getInt("capacity");
 		roomID = ID; 
+	}
+	
+	public void fetch() throws ClassNotFoundException, SQLException {
+		// updates name and capacity in model according to database;
+		
+		String query = String.format("select name, capacity form Room where roomid = '%d';", roomID);
+		
+		db.initialize();
+		ResultSet rs = db.makeSingleQuery(query);
+		db.close();
+		
+		rs.next();
+		name = rs.getString("name");
+		capacity = rs.getInt("capacity"); 
 	}
 
 }
