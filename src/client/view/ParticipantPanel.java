@@ -36,7 +36,8 @@ public class ParticipantPanel extends JPanel {
 	private JComboBox participantPicker;
 	private JList participants;
 	private JButton addParticipant;
-	private DefaultListModel participantsModel; 
+	protected static DefaultListModel<EmployeeModel> participantsModel; 
+
 
 	public ParticipantPanel() {
 		//setPreferredSize(new Dimension(250, 421));
@@ -85,6 +86,15 @@ public class ParticipantPanel extends JPanel {
 		add(addParticipant, new GridBagConstraints(1,0,1,1,1,1,anc,0,in, 0,0));
 	}
 	
+
+	public DefaultListModel getParticipantsModel() {
+		return participantsModel;
+	}
+
+	public void setParticipantsModel(DefaultListModel participantsModel) {
+		this.participantsModel = participantsModel;
+	}
+	
 	class IconListRenderer implements ListCellRenderer<ParticipantModel> {
 	
 			@Override
@@ -117,6 +127,8 @@ public class ParticipantPanel extends JPanel {
 				
 				return label;
 			}
+			
+			
 
 			
 			

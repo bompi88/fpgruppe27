@@ -33,15 +33,16 @@ public class MessageModel extends Model {
 	
 	
 	
-	protected String inviteMessage = "Du har blitt invitert til" + meeting.getMeetingName() + "kl" + meeting.getStartDateAsString() + meeting.getStartDateAsString();
-	protected String changeOfTimeMessage = meeting.getMeetingName() + "Har blitt endret. Ny tid er: " + meeting.getStartTimeAsString() + meeting.getStartDateAsString() + "til" + meeting.getEndTimeAsString() + meeting.getEndDateAsString() ; 
-	protected String changeOfPlaceMessage = meeting.getMeetingName() + "har blitt flyttet til" + meeting.getPlaceOrRoom();  
-	protected String meetingCancledMessage = meeting.getMeetingName() + "har blitt avlyst"; 
-	protected String userHasConfirmedMessage = "Har bekreftet møteinkallingen til" + meeting.getMeetingName();   
-	protected String userHasDeclinedMessage = "Har medlt avbud til" + meeting.getMeetingName();
+//	protected String inviteMessage = "Du har blitt invitert til" + meeting.getMeetingName() + "kl" + meeting.getStartDateAsString() + meeting.getStartDateAsString();
+//	protected String changeOfTimeMessage = meeting.getMeetingName() + "Har blitt endret. Ny tid er: " + meeting.getStartTimeAsString() + meeting.getStartDateAsString() + "til" + meeting.getEndTimeAsString() + meeting.getEndDateAsString() ; 
+//	protected String changeOfPlaceMessage = meeting.getMeetingName() + "har blitt flyttet til" + meeting.getPlaceOrRoom();  
+//	protected String meetingCancledMessage = meeting.getMeetingName() + "har blitt avlyst"; 
+//	protected String userHasConfirmedMessage = "Har bekreftet m��teinkallingen til" + meeting.getMeetingName();   
+//	protected String userHasDeclinedMessage = "Har medlt avbud til" + meeting.getMeetingName();
 	
 	
-	public MessageModel(String type, ParticipantModel messageOwner, ParticipantModel userInQestion) throws ClassNotFoundException, SQLException{
+	public MessageModel(MeetingModel meetingModel, String type, ParticipantModel messageOwner, ParticipantModel userInQestion) throws ClassNotFoundException, SQLException{
+		this.meeting = meetingModel;
 		this.type = type; 	
 		this.userInQestion = userInQestion; 
 		this.messageOwner = messageOwner; 
@@ -51,23 +52,23 @@ public class MessageModel extends Model {
 	
 	public void setMessage(){
 		if (type.equals("meetingCreated")){
-			message = inviteMessage;  
+			message = "Du har blitt invitert til" + meeting.getMeetingName() + "kl" + meeting.getStartDateAsString() + meeting.getStartDateAsString();  
 		}
-		if (type.equals("meetingTimeChanged")){
-			message = changeOfTimeMessage;  
-		}
-		if ((type.equals("placeChanged"))){
-			message = changeOfPlaceMessage; 
-		}
-		if ((type.equals("meetingCancled"))){
-			message = meetingCancledMessage; 
-		}
-		if ((type.equals("partConfrimed"))){ 
-			message = userInQestion.getName() + userHasConfirmedMessage; 
-		}
-		if ((type.equals("partDeclined"))){ 
-			message = userInQestion.getName() + userHasDeclinedMessage; 
-		}
+//		if (type.equals("meetingTimeChanged")){
+//			message = changeOfTimeMessage;  
+//		}
+//		if ((type.equals("placeChanged"))){
+//			message = changeOfPlaceMessage; 
+//		}
+//		if ((type.equals("meetingCancled"))){
+//			message = meetingCancledMessage; 
+//		}
+//		if ((type.equals("partConfrimed"))){ 
+//			message = userInQestion.getName() + userHasConfirmedMessage; 
+//		}
+//		if ((type.equals("partDeclined"))){ 
+//			message = userInQestion.getName() + userHasDeclinedMessage; 
+//		}
 	}
 	
 	public Date getDate() {
@@ -112,7 +113,7 @@ public class MessageModel extends Model {
 	public void create() throws ClassNotFoundException, SQLException {
 		Timestamp timeNow = new Timestamp(System.currentTimeMillis()); 
 		this.time = timeNow;
-		String query=String.format("insert into message " + "(message, time, owner, isSeen) values ('%s','%s','%s','%s', '%s')", message, timeNow, messageOwner.getUsername()); 
+		String query=String.format("insert into message " + "(message, time, owner, isSeen) values ('%s','%s','%s', '%d')", message, timeNow, messageOwner.getUsername(), 0); 
 		
 		db.initialize();
 		db.makeSingleUpdate(query);
@@ -126,7 +127,7 @@ public class MessageModel extends Model {
 		long oneWeekinMs = 604800000; 
 		time5daysBeforeNow.setTime(timeNow.getTime() - oneWeekinMs); 
 		
-		String query=String.format("DELETE FROM Message WHERE time<'%d'", time5daysBeforeNow ); 
+		String query=String.format("DELETE FROM message WHERE time<'%d'", time5daysBeforeNow ); 
 		
 		db.initialize();
 		db.makeSingleUpdate(query);
@@ -135,7 +136,7 @@ public class MessageModel extends Model {
 	
 	public void fetchMessData(String userOwner, Timestamp timeAfter) throws ClassNotFoundException, SQLException { // henter ut meldinger til brukeren. 
 		
-		String query=String.format("SELECT message, time, isSeen; FROM Message; WHERE owner='%s' AND time>'%d' AND isSeen='%b'", userOwner, timeAfter, true);    
+		String query=String.format("SELECT message, time, isSeen; FROM message; WHERE owner='%s' AND time>'%d' AND isSeen='%b'", userOwner, timeAfter, true);    
 		
 		db.initialize();
 		ResultSet rs = db.makeSingleQuery(query);
@@ -155,7 +156,7 @@ public class MessageModel extends Model {
 	
 	public int countMessages(String userOwner, Timestamp sinceWhen) throws ClassNotFoundException, SQLException { 
 		
-		String query=String.format("SELECT COUNT(*) FROM Message WHERE owner='%s' and time>'%d'", userOwner, sinceWhen); 
+		String query=String.format("SELECT COUNT(*) FROM message WHERE owner='%s' and time>'%d'", userOwner, sinceWhen); 
 		
 		db.initialize();
 		ResultSet rs = db.makeSingleQuery(query);
@@ -178,10 +179,10 @@ public class MessageModel extends Model {
 	
 	
 	
-	// unødvendig dritt
+	// un��dvendig dritt
 	@Override
 	public void save() throws ClassNotFoundException, SQLException {
-		// Unødvendig
+		// Un��dvendig
 		
 	}
 	
@@ -190,8 +191,7 @@ public class MessageModel extends Model {
 	}
 	
 	@Override
-	public MessageModel fetch(String userOwner) throws ClassNotFoundException, SQLException {
-		return null; 
+	public void fetch() throws ClassNotFoundException, SQLException {
 		
 	}
 

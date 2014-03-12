@@ -7,9 +7,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.sql.SQLException;
+import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.List;
+import java.sql.Date;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -23,17 +28,22 @@ import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ListModel;
 import javax.swing.SpinnerDateModel;
 import framework.Controller;
+import model.EmployeeModel;
 import model.MeetingModel;
+import model.ParticipantModel;
+import model.RoomModel;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
+import net.sourceforge.jdatepicker.impl.SqlDateModel;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
 import resources.AppConstants;
 
 public class AppointmentPanel extends JPanel {
 	
-	private UtilDateModel dateModelFrom, dateModelTo;
+	private SqlDateModel dateModelFrom, dateModelTo;
 	private JDatePanelImpl datePanelFrom, datePanelTo;
 	private JDatePickerImpl datePickerFrom, datePickerTo;
 	private JTextField meetingNameField, placeField, errorField;
@@ -56,12 +66,12 @@ public class AppointmentPanel extends JPanel {
 		roomRadio = new JRadioButton();
 		radioGroup = new ButtonGroup();
 		//for var denne Calendar.HOUR_OF_DAY?
-		timePickerFrom = new JSpinner(new SpinnerDateModel(new Date(), null, null, Calendar.MINUTE)); 
-		timePickerTo = new JSpinner(new SpinnerDateModel(new Date(), null, null, Calendar.MINUTE));
+		timePickerFrom = new JSpinner(new SpinnerDateModel(new java.util.Date(), null, null, Calendar.MINUTE)); 
+		timePickerTo = new JSpinner(new SpinnerDateModel(new java.util.Date(), null, null, Calendar.MINUTE));
 		saveButton = new JButton("Lagre");
 		cancelButton = new JButton("Avbryt");
-		dateModelFrom = new UtilDateModel();
-		dateModelTo = new UtilDateModel();
+		dateModelFrom = new SqlDateModel();
+		dateModelTo = new SqlDateModel();
 		datePanelFrom = new JDatePanelImpl(dateModelFrom);
 		datePanelTo = new JDatePanelImpl(dateModelTo);
 		meetingNameField = new JTextField(50);
@@ -86,8 +96,13 @@ public class AppointmentPanel extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				if (checkInput()) {
 					MeetingModel model = ((MeetingModel)getCtrl().getModel());
-					model.setDescription(descArea.getText());
-					System.out.println(model.getDescription());
+					model = setAppointment(model);
+					try {
+						model.create();
+					} catch (ClassNotFoundException | SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					
 				}
 				else {
@@ -176,10 +191,10 @@ public class AppointmentPanel extends JPanel {
 	private boolean checkInput() {
 		Date selectedFrom = (Date) datePickerFrom.getModel().getValue();
 		Date selectedTo = (Date) datePickerTo.getModel().getValue();
-		Date ye = (Date) timePickerFrom.getValue();
-		Date ye2 = (Date) timePickerTo.getValue();
-		Date from = new Date(selectedFrom.getYear(), selectedFrom.getMonth(), selectedFrom.getDate(), ye.getHours(), ye.getMinutes());
-		Date to = new Date(selectedTo.getYear(), selectedTo.getMonth(), selectedTo.getDate(), ye2.getHours(), ye2.getMinutes());
+		java.util.Date ye = (java.util.Date) timePickerFrom.getValue();
+		java.util.Date ye2 = (java.util.Date) timePickerTo.getValue();
+		java.util.Date from = (java.util.Date) new java.util.Date(selectedFrom.getYear(), selectedFrom.getMonth(), selectedFrom.getDate(), ye.getHours(), ye.getMinutes());
+		java.util.Date to = (java.util.Date) new java.util.Date(selectedTo.getYear(), selectedTo.getMonth(), selectedTo.getDate(), ye2.getHours(), ye2.getMinutes());
 
 		
 		if(descArea.getText() != "" && placeField.getText() != "") {
@@ -194,6 +209,36 @@ public class AppointmentPanel extends JPanel {
 			
 		}
 		return false;
+	}
+	
+	private MeetingModel setAppointment(MeetingModel m) {
+		m.setName("testmote");
+		m.setAppiontment(false);
+		m.setRoom(new RoomModel());
+		m.setPlace(placeField.getText());
+		m.setDescription(descArea.getText());
+		m.setStartDate((Date) datePickerFrom.getModel().getValue());
+		m.setEndDate((Date) datePickerTo.getModel().getValue());
+		m.setStartTime(new Time(((java.util.Date) timePickerFrom.getValue()).getTime()));
+		m.setEndTime(new Time(((java.util.Date) timePickerTo.getValue()).getTime()));
+		EmployeeModel user = getCtrl().getMainCtrl().getModel();
+		System.out.println("asdasdasdasddsadasdasds" + user);
+		m.setResponsible(user);
+		ArrayList<ParticipantModel> participants = new ArrayList<ParticipantModel>();
+		ListModel model = view.ParticipantPanel.participantsModel;
+
+		for(int i=0; i < model.getSize(); i++){
+		     ParticipantModel o =  (ParticipantModel) model.getElementAt(i); 
+		     System.out.println(o.toString());
+		     participants.add(o);
+		}
+
+		m.setParticipants(participants);
+		System.out.println(m.getDescription() + m.getEndDateAsString() + m.getEndTimeAsString() + m.getParticipants());
+		
+		
+		return m;
+		
 	}
 	
 	public Controller getCtrl() {

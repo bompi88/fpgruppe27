@@ -51,25 +51,55 @@ public class EmployeeModel extends Model{
 	}
 
 	@Override
-	public EmployeeModel fetch(String id) throws ClassNotFoundException, SQLException {
+	public void fetch() throws ClassNotFoundException, SQLException {
 		
-		String query = String.format("Select username, password from employee where username='%s'",id);
+		String query = String.format("Select username, password from employee where username='%s'", username);
 		db.initialize();
 		ResultSet rs = db.makeSingleQuery(query);
 
-		EmployeeModel em = new EmployeeModel();
-		
 		while(rs.next())
 		{
-			em.username = rs.getString("username");
-			em.password = rs.getString("password");
+			this.username = rs.getString("username");
+			this.password = rs.getString("password");
 		}
 		
 		rs.close();
 		db.close();
 		
-		return em;
 	}
+	
+	public EmployeeModel fetch(String id) throws ClassNotFoundException, SQLException {
+		
+		String query = String.format("Select username, password from employee where username='%s'", id);
+		db.initialize();
+		ResultSet rs = db.makeSingleQuery(query);
+
+		while(rs.next())
+		{
+			this.username = rs.getString("username");
+			this.password = rs.getString("password");
+		}
+		
+		rs.close();
+		db.close();
+		return this;
+	}
+	
+	public void fetchByUserName(String id) throws ClassNotFoundException, SQLException {
+		
+		String query = String.format("Select username, password from employee where username='%s'",id);
+		db.initialize();
+		ResultSet rs = db.makeSingleQuery(query);
+		
+		while(rs.next())
+		{
+			this.username = rs.getString("username");
+			this.password = rs.getString("password");
+		}
+		
+		rs.close();
+		db.close();
+	}	
 	
 	public boolean authenticate() throws ClassNotFoundException, SQLException {
 		
@@ -125,8 +155,8 @@ public class EmployeeModel extends Model{
 	}
 	
 	
-	public void fetchMessages() throws ClassNotFoundException, SQLException{  //kj�res ved oppstart av programmet. Opretter f�rste MessageModelobjekt , sletter gamle meldinger, og lager nye objekter til inbox basert p� DB.   
-		MessageModel firstMessage = new MessageModel("none", null, null);  
+	public void fetchMessages() throws ClassNotFoundException, SQLException{  //kjores ved oppstart av programmet. Opretter f���rste MessageModelobjekt , sletter gamle meldinger, og lager nye objekter til inbox basert p��� DB.   
+		MessageModel firstMessage = new MessageModel(null, "none", null, null);  
 		Timestamp starttime = new Timestamp(0); 
 		
 		firstMessage.deleteOldMess(); 
@@ -136,20 +166,20 @@ public class EmployeeModel extends Model{
 		int noOfMessages = firstMessage.countMessages(username, firstMessage.getTime()); 
 		
 		for(int i = 1; i < noOfMessages; i++){
-			MessageModel Message = new MessageModel("none", null, null);
+			MessageModel Message = new MessageModel(null,"none", null, null);
 			Message.fetchMessData(username, inbox.get(0).getTime()); 
 			inbox.add(0, Message); 				
 		}	
 		
 	} 
 	
-	public void updateInbox() throws ClassNotFoundException, SQLException{ // kj�rer kontinuerlig. Henter TimeStamp fra siste melding, og ser etter nye meldinger � lage objekter av, 
+	public void updateInbox() throws ClassNotFoundException, SQLException{ // kj���rer kontinuerlig. Henter TimeStamp fra siste melding, og ser etter nye meldinger ��� lage objekter av, 
 		MessageModel lastMessage = inbox.get(0); 
 		int noOfNewMessages = lastMessage.countMessages(username, lastMessage.getTime()); 
 		
 		if(noOfNewMessages > 0){
 			for(int i = 0; i < noOfNewMessages; i++){
-				MessageModel newMessage = new MessageModel("none", null, null);
+				MessageModel newMessage = new MessageModel(null, "none", null, null);
 				newMessage.fetchMessData(username, inbox.get(0).getTime()); 
 				inbox.add(0, newMessage);
 			}
