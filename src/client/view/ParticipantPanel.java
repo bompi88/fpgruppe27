@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.Component;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
@@ -10,6 +11,9 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -36,6 +40,7 @@ public class ParticipantPanel extends JPanel {
 	private JComboBox participantPicker;
 	private JList participants;
 	private JButton addParticipant;
+	private JButton addExternals;
 	protected static DefaultListModel<EmployeeModel> participantsModel; 
 
 
@@ -44,6 +49,7 @@ public class ParticipantPanel extends JPanel {
 		setLayout(new GridBagLayout());
 		participantsModel = new DefaultListModel();
 		addParticipant = new JButton("Legg til");
+		addExternals = new JButton("Legg til eksterne deltakere");
 		participants = new JList();
 		participants.setModel(participantsModel);
 		//participantPicker = new JComboBox();
@@ -72,6 +78,34 @@ public class ParticipantPanel extends JPanel {
 			}
 			
 		});
+		
+		addExternals.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Desktop desktop;
+				if (Desktop.isDesktopSupported() 
+				    && (desktop = Desktop.getDesktop()).isSupported(Desktop.Action.MAIL)) {
+				
+						URI mailto;
+						try {
+							mailto = new URI("mailto:ola@nordmann.no?subject=Moteinvitasjon&body=Du%20er%20invitert%20til%20mote");
+							desktop.mail(mailto);
+
+						} catch (URISyntaxException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+				
+
+				
+				}
+			}
+		});
+		
 		addUIElements();
 		participants.setCellRenderer(new IconListRenderer());
 		
@@ -84,6 +118,7 @@ public class ParticipantPanel extends JPanel {
 		add(participantPicker, new GridBagConstraints(0,0,1,1,1,1,anc,0,in, 0,0));
 		add(new JScrollPane(participants), new GridBagConstraints(0,1,1,1,1,1,anc,0,in, 0,0));
 		add(addParticipant, new GridBagConstraints(1,0,1,1,1,1,anc,0,in, 0,0));
+		add(addExternals, new GridBagConstraints(0,2,1,1,1,1,anc,0,in, 0,0));
 	}
 	
 
