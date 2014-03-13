@@ -12,3 +12,4 @@ bin/*
 .metadata/*
 ktn/.idea/*
 ktn/MessageWorker.pyc
+DELTA-app.zip
