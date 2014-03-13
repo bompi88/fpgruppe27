@@ -21,12 +21,12 @@ public class Meeting {
 	protected String name;
 	
 	
-	public Meeting(int meetID, Date startDate, Date endDate,
+	public Meeting(Date startDate, Date endDate,
 			String description, Time startTime, Time endTime, String place,
 			Employee responsible, ArrayList<Employee> participants,
 			boolean isAppointment, String name) {
 		super();
-		this.meetID = meetID;
+		
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.description = description;
@@ -57,6 +57,38 @@ public class Meeting {
 		this.participants = participants;
 		this.isAppointment = isAppointment;
 		this.name = name;
+	}
+
+
+	
+	
+	
+	public Meeting(int meetID, Date startDate, Date endDate,
+			String description, Time startTime, Time endTime, Room room,
+			String place, Employee responsible,
+			ArrayList<Employee> participants, boolean isAppointment, String name) {
+		super();
+		this.meetID = meetID;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.description = description;
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.room = room;
+		this.place = place;
+		this.responsible = responsible;
+		this.participants = participants;
+		this.isAppointment = isAppointment;
+		this.name = name;
+	}
+
+
+
+	public Meeting(String name, Employee responsible, Room room) {
+		this.name = name;
+		this.responsible = responsible;
+		this.room = room;
+		// TODO Auto-generated constructor stub
 	}
 
 

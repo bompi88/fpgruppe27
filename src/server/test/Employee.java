@@ -16,6 +16,14 @@ public class Employee {
 		this.password = password;
 		}
 
+	
+	public Employee(String username, String password) {
+		super();
+		this.username = username;
+		this.password = password;
+	}
+
+
 	public String getName() {
 		return name;
 	}
