@@ -4,7 +4,6 @@ public class Participant extends Employee {
 	
 	private Status status;
 	
-	
 
 	public Participant(String name, String username, String email,
 			String password, Status status) {
@@ -22,7 +21,7 @@ public class Participant extends Employee {
 
 	@Override
 	public String toString() {
-		return "Participant [status=" + status + "]";
+		return "Participant [username=" + getUsername() + ", name=" + getName() + ", email=" + getEmail() + ", password=" + getPassword() + ", status=" + status + "]";
 	}
 	
 	

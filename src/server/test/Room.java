@@ -36,7 +36,10 @@ public class Room {
 		this.bookingList = bookingList;
 	}
 	
-	
+	public String toString() {
+		return "Room [roomID=" + roomID + ", capacity=" + capacity + ", name="
+				+ name + "]";
+	}
 	
 
 }
