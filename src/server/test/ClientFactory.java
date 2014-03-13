@@ -70,6 +70,7 @@ public class ClientFactory {
 		}
 		
 		System.out.println(ClientFactory.getMeetingByID(13));
+		//ClientFactory.addEmployee(new Employee("Andreas Drivenes", "andydbb1", "adr@no", "abc12343445"));
 		//ClientFactory.deleteMeeting(1);
 		//ClientFactory.addMeeting(new Meeting( "testnavn", new Employee("andreasdrivenes", "passord"), new Room()));
 		//ClientFactory.addMeeting(new Meeting(0, new Date(10000000000000l), new Date(9999999999999l), "kaffe", new Time(0), new Time(0), null, "ntnu",
@@ -171,6 +172,15 @@ public class ClientFactory {
 		Room[] roomsPrim = builder.fromJson(roomsString, Room[].class);
 		ArrayList<Room> rooms = new ArrayList<Room>(Arrays.asList(roomsPrim));
 		return rooms;
+	}
+	
+	public static ArrayList<Participant> getChoosableParticipants() {
+		request = new HttpGet(API + "participant");
+		String participantsString = getRequest(request);
+		Gson builder = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+		Participant[] participantsPrim = builder.fromJson(participantsString, Participant[].class);
+		ArrayList<Participant> participants = new ArrayList<Participant>(Arrays.asList(participantsPrim));
+		return participants;
 	}
 	
 	private static String getRequest(HttpGet requestType) {

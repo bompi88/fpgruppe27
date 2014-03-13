@@ -19,6 +19,12 @@ public class Participant extends Employee {
 	public void setStatus(Status status) {
 		this.status = status;
 	}
+
+	@Override
+	public String toString() {
+		return "Participant [status=" + status + "]";
+	}
+	
 	
 
 }
