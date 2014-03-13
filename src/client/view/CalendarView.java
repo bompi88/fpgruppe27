@@ -274,6 +274,7 @@ public class CalendarView extends JPanel{
 			dayLabel.setText(week);
 		}
 
+		
 		@Override
 		public void changeEvent(String event, Object obj) {
 			

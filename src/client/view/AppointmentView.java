@@ -68,7 +68,6 @@ public class AppointmentView extends JPanel {
 	private boolean checkInput() {
 		return true;
 	}
-
 	
 	class TitlePanel extends JPanel {
 		protected JTextField title;
