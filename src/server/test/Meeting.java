@@ -2,75 +2,35 @@ package test;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 
 public class Meeting {
 	
-	protected int meetID;
-	protected Date startDate;
-	protected Date endDate;	
+	protected int meetid;
 	protected String description;
-	protected Time startTime;
-	protected Time endTime;
+	protected Timestamp startTime;
+	protected Timestamp endTime;
 	protected Room room;
 	protected String place;
 	protected Employee responsible;
-	protected ArrayList<Employee> participants = new ArrayList<Employee>();
+	protected ArrayList<Participant> participants = new ArrayList<Participant>();
 	protected boolean isAppointment;
 	protected String name;
 	
 	
-	public Meeting(Date startDate, Date endDate,
-			String description, Time startTime, Time endTime, String place,
-			Employee responsible, ArrayList<Employee> participants,
-			boolean isAppointment, String name) {
-		super();
+	public Meeting() {
 		
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.description = description;
-		this.startTime = startTime;
-		this.endTime = endTime;
-		this.place = place;
-		this.responsible = responsible;
-		this.participants = participants;
-		this.isAppointment = isAppointment;
-		this.name = name;
 	}
 	
 	
-	
-	public Meeting(int meetID, Date startDate, Date endDate,
-			String description, Time startTime, Time endTime, Room room,
-			Employee responsible, ArrayList<Employee> participants,
-			boolean isAppointment, String name) {
+	public Meeting(int meetid, String description, Timestamp startTime,
+			Timestamp endTime, Room room, String place, Employee responsible,
+			ArrayList<Participant> participants, boolean isAppointment,
+			String name) {
 		super();
-		this.meetID = meetID;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.description = description;
-		this.startTime = startTime;
-		this.endTime = endTime;
-		this.room = room;
-		this.responsible = responsible;
-		this.participants = participants;
-		this.isAppointment = isAppointment;
-		this.name = name;
-	}
-
-
-	
-	
-	
-	public Meeting(int meetID, Date startDate, Date endDate,
-			String description, Time startTime, Time endTime, Room room,
-			String place, Employee responsible,
-			ArrayList<Employee> participants, boolean isAppointment, String name) {
-		super();
-		this.meetID = meetID;
-		this.startDate = startDate;
-		this.endDate = endDate;
+		this.meetid = meetid;
 		this.description = description;
 		this.startTime = startTime;
 		this.endTime = endTime;
@@ -81,35 +41,11 @@ public class Meeting {
 		this.isAppointment = isAppointment;
 		this.name = name;
 	}
-
-
-
-	public Meeting(String name, Employee responsible, Room room) {
-		this.name = name;
-		this.responsible = responsible;
-		this.room = room;
-		// TODO Auto-generated constructor stub
+	public int getMeetid() {
+		return meetid;
 	}
-
-
-
-	public int getMeetID() {
-		return meetID;
-	}
-	public void setMeetID(int meetID) {
-		this.meetID = meetID;
-	}
-	public Date getStartDate() {
-		return startDate;
-	}
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-	public Date getEndDate() {
-		return endDate;
-	}
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
+	public void setMeetid(int meetid) {
+		this.meetid = meetid;
 	}
 	public String getDescription() {
 		return description;
@@ -117,16 +53,16 @@ public class Meeting {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public Time getStartTime() {
+	public Timestamp getStartTime() {
 		return startTime;
 	}
-	public void setStartTime(Time startTime) {
+	public void setStartTime(Timestamp startTime) {
 		this.startTime = startTime;
 	}
-	public Time getEndTime() {
+	public Timestamp getEndTime() {
 		return endTime;
 	}
-	public void setEndTime(Time endTime) {
+	public void setEndTime(Timestamp endTime) {
 		this.endTime = endTime;
 	}
 	public Room getRoom() {
@@ -147,10 +83,10 @@ public class Meeting {
 	public void setResponsible(Employee responsible) {
 		this.responsible = responsible;
 	}
-	public ArrayList<Employee> getParticipants() {
+	public ArrayList<Participant> getParticipants() {
 		return participants;
 	}
-	public void setParticipants(ArrayList<Employee> participants) {
+	public void setParticipants(ArrayList<Participant> participants) {
 		this.participants = participants;
 	}
 	public boolean isAppointment() {
@@ -165,6 +101,25 @@ public class Meeting {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+
+	@Override
+	public String toString() {
+		return "Meeting [meetID=" + meetid + ", description=" + description
+				+ ", startTime=" + startTime + ", endTime=" + endTime
+				+ ", room=" + room + ", place=" + place + ", responsible="
+				+ responsible + ", participants=" + participants
+				+ ", isAppointment=" + isAppointment + ", name=" + name + "]";
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+
 	
 	
 	
