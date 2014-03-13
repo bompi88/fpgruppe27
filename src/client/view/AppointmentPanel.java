@@ -30,16 +30,22 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
 import javax.swing.SpinnerDateModel;
+
+import controller.AppointmentCtrl;
+import controller.CalendarCtrl;
+import controller.MainCtrl;
 import framework.Controller;
 import model.EmployeeModel;
 import model.MeetingModel;
 import model.ParticipantModel;
 import model.RoomModel;
+import net.sourceforge.jdatepicker.DateModel;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.SqlDateModel;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
 import resources.AppConstants;
+import view.CalendarView.WeeklyCalendarPanel;
 
 public class AppointmentPanel extends JPanel {
 	
@@ -115,7 +121,12 @@ public class AppointmentPanel extends JPanel {
 		cancelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//do something, aka go back to main calendar window
+				
+				descArea.setText("");
+				placeField.setText("");
+				ParticipantPanel.participantsModel.clear();
+				
+				((MainCtrl)((Controller)getCtrl()).getMainCtrl()).setState(CalendarCtrl.class);
 				
 			}
 			
@@ -160,7 +171,7 @@ public class AppointmentPanel extends JPanel {
         timePickerFrom.setEditor(new JSpinner.DateEditor(timePickerFrom, "HH:mm"));
         timePickerTo.setEditor(new JSpinner.DateEditor(timePickerTo, "HH:mm"));
 
-		//adding the labels in the left coloumn
+		//adding the labels in the left column
 		add(startTimeLabel, new GridBagConstraints(0,0,1,1,1,1,anc,0,in,0,0));
 		add(endTimeLabel, new GridBagConstraints(0,1,1,1,1,1,anc,0,in,0,0));
 		add(placeLabel, new GridBagConstraints(0,2,1,1,1,1,anc,0,in,0,0));
