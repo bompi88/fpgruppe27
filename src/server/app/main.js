@@ -197,10 +197,35 @@ server.get('/meeting', function(req, res, next) {
 			}); 
 		});
 	} else if(typeof req.params.username !== "undefined") {
-		connection.query("SELECT * FROM meeting, employee WHERE meeting.username=employee.username AND employee.username='" + req.params.username + "'", function(err, rows, fields) {
+		connection.query("SELECT * FROM meeting WHERE username='" + req.params.username + "'", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 			
-			meetings =rows[0];
+			meetings = rows;
+
+			async.forEach(Object.keys(meetings), function (item, callback){ 
+			    connection.query("SELECT * FROM meeting_participants WHERE meetid='" + meetings[item].meetid + "'", function(err, rows, fields) {
+					if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+								
+					meetings[item].participants = rows;
+					
+
+					connection.query("SELECT * FROM employee WHERE username='" + meetings[item].username + "'", function(err, rows, fields) {
+							if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+							
+							meetings[item].responsible = rows[0];
+
+							connection.query("SELECT * FROM room WHERE roomid='" + meetings[item].roomid + "'", function(err, rows, fields) {
+								if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+								
+								meetings[item].room = rows[0];
+								callback(null);
+						})	
+					})
+				});
+
+			}, function(err) {
+			    res.send(meetings)
+			}); 
 		});
 	} else {
 		connection.query('SELECT * FROM meeting', function(err, rows, fields) {
@@ -355,15 +380,49 @@ server.del('/meeting', function(req, res, next) {
 
 server.get('/meeting_participants', function(req, res, next) {
 	
+	var meeting_participants = undefined;
+
 	if(typeof req.params.meetid !== "undefined") {
 		connection.query("SELECT * FROM meeting_participants WHERE meetid='" + req.params.meetid + "'", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
-			res.send(rows[0])
+
+			meeting_participants = rows;
+
+			async.forEach(Object.keys(meeting_participants), function (item, callback){ 
+			    connection.query("SELECT * FROM employee WHERE username='" + meeting_participants[item].username + "'", function(err, rows, fields) {
+					if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+								
+					rows[0].status = meeting_participants[item].status;
+					rows[0].alarm = meeting_participants[item].alarm;
+					meeting_participants[item] = rows[0];
+
+					callback(null);
+				});
+
+			}, function(err) {
+			    res.send(meeting_participants)
+			});
 		});
 	} else {
-		connection.query('SELECT * FROM meeting_participants', function(err, rows, fields) {
+		connection.query("SELECT * FROM meeting_participants", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
-			res.send(rows)
+
+			meeting_participants = rows;
+
+			async.forEach(Object.keys(meeting_participants), function (item, callback){ 
+			    connection.query("SELECT * FROM employee WHERE username='" + meeting_participants[item].username + "'", function(err, rows, fields) {
+					if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+								
+					rows[0].status = meeting_participants[item].status;
+					rows[0].alarm = meeting_participants[item].alarm;
+					meeting_participants[item] = rows[0];
+
+					callback(null);
+				});
+
+			}, function(err) {
+			    res.send(meeting_participants)
+			});
 		});
 	}
 })

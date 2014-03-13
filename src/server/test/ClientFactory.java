@@ -65,9 +65,9 @@ public class ClientFactory {
 		String testdatestring = fmt.format(testdate);
 		
 		
-		for(int i = 0; i<5; i++) {
-			test.add(new Employee("AndyDDDs Drivenes", "andsybbbbb" +i, "adr@d.noss", "abc12343445"));
-		}
+//		for(int i = 0; i<5; i++) {
+//			test.add(new Employee("AndyDDDs Drivenes", "andsybbbbb" +i, "adr@d.noss", "abc12343445"));
+//		}
 		
 		System.out.println(ClientFactory.getMeetingByID(13));
 		//ClientFactory.addEmployee(new Employee("Andreas Drivenes", "andydbb1", "adr@no", "abc12343445"));
