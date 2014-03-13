@@ -10,6 +10,7 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import resources.AppConstants;
 import utils.RelativeLayout;
@@ -28,6 +29,7 @@ public class AppointmentView extends JPanel {
 	private ParticipantPanel part;
 	private TitlePanel titlePanel;
 	private JPanel mainWrapper;
+	private MeetingModel model;
 	
 	public AppointmentView(Controller ctrl) {
 		
@@ -40,6 +42,7 @@ public class AppointmentView extends JPanel {
 		mainWrapper.setLayout(new RelativeLayout(RelativeLayout.X_AXIS, 0));
 		mainWrapper.add(app);
 		mainWrapper.add(part);
+				
 		addUIElements();
 		
 		
@@ -68,9 +71,10 @@ public class AppointmentView extends JPanel {
 
 	
 	class TitlePanel extends JPanel {
+		protected JTextField title;
 		public TitlePanel() {
 			setBorder(BorderFactory.createEmptyBorder(30, -2, 0, 0));
-			JLabel title = new JLabel("MOTENAVN");
+			title = new JTextField("MØTENAVN");
 			title.setFont(new Font("Arial", Font.PLAIN, 28));
 			add(title);
 			setBackground(AppConstants.HEADER_BG_COLOR);
