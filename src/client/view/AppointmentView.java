@@ -1,22 +1,15 @@
 package view;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.sql.Date;
-import java.sql.Time;
-
 import javax.swing.BorderFactory;
-import javax.swing.DefaultListModel;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import resources.AppConstants;
 import utils.RelativeLayout;
 
-import model.EmployeeModel;
-import model.MeetingModel;
+import model.Meeting;
 
 import framework.Controller;
 
@@ -29,12 +22,12 @@ public class AppointmentView extends JPanel {
 	private ParticipantPanel part;
 	private TitlePanel titlePanel;
 	private JPanel mainWrapper;
-	private MeetingModel model;
+	private Meeting model;
 	
 	public AppointmentView(Controller ctrl) {
 		
 		this.ctrl = ctrl;
-		ctrl.setModel(new MeetingModel());
+		ctrl.setModel(new Meeting());
 		app = new AppointmentPanel(ctrl);
 		part = new ParticipantPanel();
 		titlePanel = new TitlePanel();

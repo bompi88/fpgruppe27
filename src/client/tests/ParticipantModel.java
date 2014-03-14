@@ -1,11 +1,11 @@
-package model;
+package tests;
 
 import java.sql.SQLException;
 
 public class ParticipantModel extends EmployeeModel {
 	
 	private StatusModel status;
-	private AlarmModel alarm;
+	private Alarm alarm;
 
 	public ParticipantModel() {
 		
@@ -14,29 +14,32 @@ public class ParticipantModel extends EmployeeModel {
 	public ParticipantModel(EmployeeModel employeeModel) {
 		super(employeeModel);
 	}
-	
-	@Override
-	public void create() throws ClassNotFoundException, SQLException {
-		// TODO Auto-generated method stub
-		
+	public ParticipantModel(String name, String username, String email, String password) {
+		super(name,username,email,email);
 	}
 	
-	@Override
-	public void save() throws ClassNotFoundException, SQLException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void delete() throws ClassNotFoundException, SQLException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void fetch() throws ClassNotFoundException, SQLException {
-		
-	}
+//	@Override
+//	public void create() throws ClassNotFoundException, SQLException {
+//		// TODO Auto-generated method stub
+//		
+//	}
+//	
+//	@Override
+//	public void save() throws ClassNotFoundException, SQLException {
+//		// TODO Auto-generated method stub
+//		
+//	}
+//
+//	@Override
+//	public void delete() throws ClassNotFoundException, SQLException {
+//		// TODO Auto-generated method stub
+//		
+//	}
+//
+//	@Override
+//	public void fetch() throws ClassNotFoundException, SQLException {
+//		
+//	}
 	
 	public StatusModel getStatus() {
 		return status;
@@ -61,11 +64,11 @@ public class ParticipantModel extends EmployeeModel {
 		this.status = status;
 	}
 
-	public AlarmModel getAlarm() {
+	public Alarm getAlarm() {
 		return alarm;
 	}
 
-	public void setAlarm(AlarmModel alarm) {
+	public void setAlarm(Alarm alarm) {
 		this.alarm = alarm;
 	}
 

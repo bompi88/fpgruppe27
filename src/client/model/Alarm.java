@@ -2,9 +2,11 @@ package model;
 
 import java.sql.Date;
 
-public class AlarmModel {
+import com.google.gson.annotations.Expose;
+
+public class Alarm {
 	
-	protected Date date;
+	private Date date;
 
 	public Date getDate() {
 		return date;

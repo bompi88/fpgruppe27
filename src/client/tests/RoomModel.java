@@ -1,10 +1,9 @@
-package model;
+package tests;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import framework.Model;
 
 public class RoomModel extends Model {
 	

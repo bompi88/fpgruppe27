@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -17,7 +16,9 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-import model.EmployeeModel;
+import database.ClientObjectFactory;
+
+import model.Employee;
 import framework.Observable;
 import framework.Observer;
 
@@ -30,12 +31,12 @@ public class AddCalendarPanel extends JPanel {
 	
 	private JLabel addCalendarLabel;
 	private JTextField addCalendarTextField;
-	private JList<EmployeeModel> calendarSubscribedList;
+	private JList<Employee> calendarSubscribedList;
 	private JButton addCalendarButton;
 	private CalendarListPanel p;
 	
-	HashSet<EmployeeModel> subscribedCalendars = new HashSet<EmployeeModel>();
-	private DefaultListModel<EmployeeModel> subscribedCalendarsModel = new DefaultListModel<EmployeeModel>();
+	HashSet<Employee> subscribedCalendars = new HashSet<Employee>();
+	private DefaultListModel<Employee> subscribedCalendarsModel = new DefaultListModel<Employee>();
 	
 	public AddCalendarPanel() {
 		
@@ -50,7 +51,7 @@ public class AddCalendarPanel extends JPanel {
 		
 		addCalendarButton = new JButton(AppConstants.SHOW_OTHER_CALENDARS_BUTTON_TEXT);
 	
-		calendarSubscribedList = new JList<EmployeeModel>();
+		calendarSubscribedList = new JList<Employee>();
 		
 		p = new CalendarListPanel(subscribedCalendars);
 		p.setBackground(AppConstants.HEADER_BG_COLOR);
@@ -98,24 +99,16 @@ public class AddCalendarPanel extends JPanel {
 
 	public void addCalendar() {
 		
-		if(((HashSet<EmployeeModel>) p.getModel()).size() < 12 && !addCalendarTextField.getText().equals("") && addCalendarTextField.getText() != null) {
+		if(((HashSet<Employee>) p.getModel()).size() < 12 && !addCalendarTextField.getText().equals("") && addCalendarTextField.getText() != null) {
 			
-			EmployeeModel emp = new EmployeeModel();
+			Employee emp = (Employee)ClientObjectFactory.getEmployeeByUsername(addCalendarTextField.getText());
 			
-			try {
-				if(((EmployeeModel)emp.fetch(addCalendarTextField.getText())).getUsername().equals(addCalendarTextField.getText())) {
-				
-					emp.setUsername(addCalendarTextField.getText());
-					emp.setName(addCalendarTextField.getText());
-					//p.modelsubscribedCalendars.add(emp);
-					p.changeEvent("add_calendar", emp);
-				}
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if(emp.getUsername().equals(addCalendarTextField.getText())) {
+			
+				emp.setUsername(addCalendarTextField.getText());
+				emp.setName(addCalendarTextField.getText());
+				//p.modelsubscribedCalendars.add(emp);
+				p.changeEvent("add_calendar", emp);
 			}
 		}
 	}
@@ -124,7 +117,7 @@ public class AddCalendarPanel extends JPanel {
 		subscribedCalendarsModel.remove(index);
 	}
 	
-	public void removeCalendar(EmployeeModel obj) {
+	public void removeCalendar(Employee obj) {
 		subscribedCalendars.remove(obj);
 	}
 	
@@ -139,22 +132,22 @@ public class AddCalendarPanel extends JPanel {
 	
 	public static class CalendarListPanel extends JPanel implements Observer, Observable {
 		
-		private HashSet<EmployeeModel> model;
-		public HashSet<EmployeeModel> getModel() {
+		private HashSet<Employee> model;
+		public HashSet<Employee> getModel() {
 			return model;
 		}
 
-		public void setModel(HashSet<EmployeeModel> model) {
+		public void setModel(HashSet<Employee> model) {
 			this.model = model;
 		}
 
 		private List<AddCalendarPanelElement> elements = new ArrayList<AddCalendarPanelElement>();
 		private List<Observer> observers = new ArrayList<Observer>();
 		
-		public CalendarListPanel(HashSet<EmployeeModel> model) {
+		public CalendarListPanel(HashSet<Employee> model) {
 			this.model = model;
 			
-			EmployeeModel em = new EmployeeModel();
+			Employee em = new Employee();
 			em.setUsername("test");
 			em.setName("test");
 			model.add(em);
@@ -163,7 +156,7 @@ public class AddCalendarPanel extends JPanel {
 			WrapLayout wl = new WrapLayout(WrapLayout.LEFT,0,0);
 			setLayout(wl);
 			
-			for(EmployeeModel e : model) {
+			for(Employee e : model) {
 				if(e != null)
 					addCalendar(e);
 			}
@@ -174,24 +167,24 @@ public class AddCalendarPanel extends JPanel {
 			if(event.equals("remove_calendar")) {
 				if(model.remove(((AddCalendarPanelElement)obj).getModel())) {
 					//fireObserverEvent(event, obj);
-					//removeCalendar((EmployeeModel)obj);
+					//removeCalendar((Employee)obj);
 					System.out.println((((AddCalendarPanelElement)obj).getModel()).getName() + " deleted.");
 					remove((AddCalendarPanelElement)obj);
 					updateView();
 				}
 				
 			} else if(event.equals("add_calendar")) {
-				EmployeeModel e = (EmployeeModel)obj;
+				Employee e = (Employee)obj;
 				if (model.add(e)) {
 					addCalendar(e);
 					updateView();
-					//removeCalendar((EmployeeModel)obj);
-					System.out.println(((EmployeeModel)obj).getName() + " added.");
+					//removeCalendar((Employee)obj);
+					System.out.println(((Employee)obj).getName() + " added.");
 				}
 			}
 		}
 		
-		public void addCalendar(EmployeeModel e) {
+		public void addCalendar(Employee e) {
 			AddCalendarPanelElement d = new AddCalendarPanelElement(e);
 			d.addObserver(this);
 			elements.add(d);

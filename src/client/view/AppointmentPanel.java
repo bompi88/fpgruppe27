@@ -34,11 +34,12 @@ import javax.swing.SpinnerDateModel;
 import controller.AppointmentCtrl;
 import controller.CalendarCtrl;
 import controller.MainCtrl;
+import database.ClientObjectFactory;
 import framework.Controller;
-import model.EmployeeModel;
-import model.MeetingModel;
-import model.ParticipantModel;
-import model.RoomModel;
+import model.Employee;
+import model.Meeting;
+import model.Participant;
+import model.Room;
 import net.sourceforge.jdatepicker.DateModel;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
@@ -101,14 +102,10 @@ public class AppointmentPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (checkInput()) {
-					MeetingModel model = ((MeetingModel)getCtrl().getModel());
+					Meeting model = ((Meeting)getCtrl().getModel());
 					model = setAppointment(model);
-					try {
-						model.create();
-					} catch (ClassNotFoundException | SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					
+					ClientObjectFactory.addMeeting(model);
 					
 				}
 				else {
@@ -222,30 +219,37 @@ public class AppointmentPanel extends JPanel {
 		return false;
 	}
 	
-	private MeetingModel setAppointment(MeetingModel m) {
+	private Meeting setAppointment(Meeting m) {
 		m.setName("testmote");
-		m.setAppiontment(false);
-		m.setRoom(new RoomModel());
+		m.setAppointment(false);
+		m.setRoom(new Room());
 		m.setPlace(placeField.getText());
 		m.setDescription(descArea.getText());
-		m.setStartDate((Date) datePickerFrom.getModel().getValue());
-		m.setEndDate((Date) datePickerTo.getModel().getValue());
-		m.setStartTime(new Time(((java.util.Date) timePickerFrom.getValue()).getTime()));
-		m.setEndTime(new Time(((java.util.Date) timePickerTo.getValue()).getTime()));
-		EmployeeModel user = getCtrl().getMainCtrl().getModel();
+		
+		java.util.Date fromDate = (Date) datePickerFrom.getModel().getValue();
+		java.util.Date toDate = (Date) datePickerTo.getModel().getValue();
+		
+		java.util.Date fromTime = (java.util.Date) timePickerFrom.getValue();
+		java.util.Date toTime = (java.util.Date) timePickerTo.getValue();
+		
+		m.setStartTime(new Timestamp(fromDate.getYear(),fromDate.getMonth(),fromDate.getDay(),fromTime.getHours(),fromTime.getMinutes(),fromTime.getSeconds(),0));
+		m.setEndTime(new Timestamp(toTime.getYear(),toTime.getMonth(),toTime.getDay(),toTime.getHours(),toTime.getMinutes(),toTime.getSeconds(),0));
+//		m.setStartTime(new Timestamp(((java.util.Date) timePickerFrom.getValue()).getTime()));
+//		m.setEndTime(new Timestamp(((java.util.Date) timePickerTo.getValue()).getTime()));
+		Employee user = getCtrl().getMainCtrl().getModel();
 		System.out.println("asdasdasdasddsadasdasds" + user);
 		m.setResponsible(user);
-		ArrayList<ParticipantModel> participants = new ArrayList<ParticipantModel>();
+		ArrayList<Participant> participants = new ArrayList<Participant>();
 		ListModel model = view.ParticipantPanel.participantsModel;
 
 		for(int i=0; i < model.getSize(); i++){
-		     ParticipantModel o =  (ParticipantModel) model.getElementAt(i); 
+		     Participant o =  (Participant) model.getElementAt(i); 
 		     System.out.println(o.toString());
 		     participants.add(o);
 		}
 
 		m.setParticipants(participants);
-		System.out.println(m.getDescription() + m.getEndDateAsString() + m.getEndTimeAsString() + m.getParticipants());
+		//System.out.println(m.getDescription() + m.getEndDateAsString() + m.getEndTimeAsString() + m.getParticipants());
 		
 		
 		return m;

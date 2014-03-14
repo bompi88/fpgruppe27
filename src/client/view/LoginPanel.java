@@ -17,7 +17,7 @@ import javax.swing.JTextField;
 
 import resources.AppConstants;
 
-import model.EmployeeModel;
+import model.Employee;
 
 import controller.LoginCtrl;
 import controller.MainCtrl;
@@ -124,8 +124,8 @@ public class LoginPanel extends JPanel implements PropertyChangeListener {
 	 * fires login 
 	 */
 	private void fireLogin() {
-		((EmployeeModel)getCtrl().getModel()).setUsername(usernameField.getText());
-		((EmployeeModel)getCtrl().getModel()).setPassword(passwordField.getText());
+		((Employee)getCtrl().getModel()).setUsername(usernameField.getText());
+		((Employee)getCtrl().getModel()).setPassword(passwordField.getText());
 		((LoginCtrl)getCtrl()).login();
 	}
 
@@ -136,7 +136,7 @@ public class LoginPanel extends JPanel implements PropertyChangeListener {
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		String propertyChanged = evt.getPropertyName();
-		EmployeeModel model = (EmployeeModel)ctrl.getModel();
+		Employee model = (Employee)ctrl.getModel();
 		
 		if (propertyChanged.equals("username")) {
 			usernameField.setText(model.getUsername());

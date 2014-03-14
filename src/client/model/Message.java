@@ -1,27 +1,26 @@
 package model;
 
-import java.sql.Array;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+
+import com.google.gson.annotations.Expose;
 
 import framework.Model;
 
-public class MessageModel extends Model {
+import model.Meeting;
+import model.Participant;
+
+public class Message extends Model {
 	
-	
-	protected String type; // er  
-	protected Timestamp time; 
-	protected String message;
-	protected MeetingModel meeting;
-	protected boolean isSeen;
-	protected ParticipantModel userInQestion; 
-	protected ParticipantModel messageOwner; 
-	protected int messid;  
+	private String type; // er  
+	private Timestamp time; 
+	private String message;
+	private Meeting meeting;
+	private boolean isSeen;
+	private Participant userInQestion; 
+	private Participant messageOwner; 
+	private int messid;  
 
 	
 	
@@ -37,12 +36,12 @@ public class MessageModel extends Model {
 //	protected String changeOfTimeMessage = meeting.getMeetingName() + "Har blitt endret. Ny tid er: " + meeting.getStartTimeAsString() + meeting.getStartDateAsString() + "til" + meeting.getEndTimeAsString() + meeting.getEndDateAsString() ; 
 //	protected String changeOfPlaceMessage = meeting.getMeetingName() + "har blitt flyttet til" + meeting.getPlaceOrRoom();  
 //	protected String meetingCancledMessage = meeting.getMeetingName() + "har blitt avlyst"; 
-//	protected String userHasConfirmedMessage = "Har bekreftet m��teinkallingen til" + meeting.getMeetingName();   
+//	protected String userHasConfirmedMessage = "Har bekreftet m??????teinkallingen til" + meeting.getMeetingName();   
 //	protected String userHasDeclinedMessage = "Har medlt avbud til" + meeting.getMeetingName();
 	
 	
-	public MessageModel(MeetingModel meetingModel, String type, ParticipantModel messageOwner, ParticipantModel userInQestion) throws ClassNotFoundException, SQLException{
-		this.meeting = meetingModel;
+	public Message(Meeting meeting, String type, Participant messageOwner, Participant userInQestion) throws ClassNotFoundException, SQLException{
+		this.meeting = meeting;
 		this.type = type; 	
 		this.userInQestion = userInQestion; 
 		this.messageOwner = messageOwner; 
@@ -51,9 +50,9 @@ public class MessageModel extends Model {
 	
 	
 	public void setMessage(){
-		if (type.equals("meetingCreated")){
-			message = "Du har blitt invitert til" + meeting.getMeetingName() + "kl" + meeting.getStartDateAsString() + meeting.getStartDateAsString();  
-		}
+//		if (type.equals("meetingCreated")){
+//			message = "Du har blitt invitert til" + meeting.getName() + "kl" + meeting.getStartDateAsString() + meeting.getStartDateAsString();  
+//		}
 //		if (type.equals("meetingTimeChanged")){
 //			message = changeOfTimeMessage;  
 //		}
@@ -69,6 +68,10 @@ public class MessageModel extends Model {
 //		if ((type.equals("partDeclined"))){ 
 //			message = userInQestion.getName() + userHasDeclinedMessage; 
 //		}
+	}
+	
+	public int getMessID(){
+		return messid; 
 	}
 	
 	public Date getDate() {
@@ -90,11 +93,11 @@ public class MessageModel extends Model {
 		return message;
 	}
 	
-	public MeetingModel getMeeting() {
+	public Meeting getMeeting() {
 		return meeting;
 	}
 	
-	public void setMeeting(MeetingModel meeting) {
+	public void setMeeting(Meeting meeting) {
 		this.meeting = meeting;
 	}
 	
@@ -104,13 +107,13 @@ public class MessageModel extends Model {
 	
 	public void setSeen(boolean isSeen) throws ClassNotFoundException, SQLException {
 		this.isSeen = isSeen;
-		changeDBSeen(messageOwner.getUsername(), this.time, isSeen); 	
+		//changeDBSeen(messageOwner.getUsername(), this.time, isSeen); 	
 	}
 	
 	
 	
-	@Override
-	public void create() throws ClassNotFoundException, SQLException {
+	//@Override
+	/*public void create() throws ClassNotFoundException, SQLException {
 		Timestamp timeNow = new Timestamp(System.currentTimeMillis()); 
 		this.time = timeNow;
 		String query=String.format("insert into message " + "(message, time, owner, isSeen) values ('%s','%s','%s', '%d')", message, timeNow, messageOwner.getUsername(), 0); 
@@ -179,10 +182,10 @@ public class MessageModel extends Model {
 	
 	
 	
-	// un��dvendig dritt
+	// un??????dvendig dritt
 	@Override
 	public void save() throws ClassNotFoundException, SQLException {
-		// Un��dvendig
+		// Un??????dvendig
 		
 	}
 	
@@ -203,4 +206,6 @@ public class MessageModel extends Model {
 		
 	}
 
+}
+*/
 }

@@ -152,11 +152,7 @@ server.get('/meeting', function(req, res, next) {
 			},
 			function(err, results) {
 
-				if (meetings.isAppointment === 0) {
-					meetings.isAppointment = false;
-				} else {
-					meetings.isAppointment = true;
-				}
+				
 
 				meetings.responsible = results.responsible;
 				meetings.room = results.room;
@@ -165,8 +161,22 @@ server.get('/meeting', function(req, res, next) {
 				res.send(meetings)
 			});	
 		});
-	} else if(typeof req.params.startTime !== "undefined" && typeof req.params.endTime !== "undefined") {
-		connection.query("SELECT * FROM meeting WHERE startTime BETWEEN '" + req.params.startTime + "' AND '" + req.params.endTime + "'", function(err, rows, fields) {
+	} else if(typeof req.params.startTime !== "undefined" && typeof req.params.endTime !== "undefined" && typeof req.params.username !== "undefined") {
+
+		var users = '';
+
+		if(req.params.username[1].length > 1) {
+			users += "'" + req.params.username[0] + "'";
+
+			for (var i = 1; i < req.params.username.length; i++) {
+				users += ", '" + req.params.username[i] + "'";
+			}
+		} else {
+			users = "\'" + req.params.username + "\'";
+		}
+		console.log("user:" + users);
+
+		connection.query("SELECT * FROM meeting WHERE username IN (" + users + ") AND startTime BETWEEN '" + req.params.startTime + "' AND '" + req.params.endTime + "'", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 			
 			meetings = rows;
@@ -176,6 +186,12 @@ server.get('/meeting', function(req, res, next) {
 					if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 								
 					meetings[item].participants = rows;
+					
+					if (meetings[item].isAppointment === 0) {
+						meetings[item].isAppointment = false;
+					} else {
+						meetings[item].isAppointment = true;
+					}
 					
 
 					connection.query("SELECT * FROM employee WHERE username='" + meetings[item].username + "'", function(err, rows, fields) {
@@ -193,6 +209,7 @@ server.get('/meeting', function(req, res, next) {
 				});
 
 			}, function(err) {
+				console.log(meetings)
 			    res.send(meetings)
 			}); 
 		});

@@ -1,68 +1,48 @@
-package test;
+package database;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.sql.Date;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.List;
-//import java.util.Date;
-
-import model.Employee;
-import model.EmployeeModel;
-import model.Meeting;
-import model.MeetingModel;
-import model.Participant;
-import model.Room;
-import model.RoomModel;
-import model.Status;
+import model.*;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
-
+import resources.AppConstants;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import database.ClientObjectFactory;
-
-public class ClientFactory {
+/**
+ * ClientObjectFactory generates objects on request. It fetches JSON objects from our REST API
+ * and returns java objects based on the JSON schema in the server response.
+ */
+public class ClientObjectFactory {
 	
-	private static HttpClient httpClient;
+	private static CloseableHttpClient httpClient;
 	private static HttpResponse response;
 	private static HttpGet request;
 	private static HttpPost post;
 	private static HttpEntity httpEntity;
 	private static HttpPut put;
 	private static HttpDelete delete;
-	private static final String API = "http://fpgruppe27.bompi88.eu.cloudbees.net/";
+	private static final String API = AppConstants.REST_API_PATH;
 	private static final String GET_EMPLOYEES = API + "employee";
-	
-
-	public ClientFactory() {
-		httpClient = new DefaultHttpClient();
-	}
 	
 public static void main(String[] args) throws MalformedURLException, IOException {
 		
@@ -71,46 +51,59 @@ public static void main(String[] args) throws MalformedURLException, IOException
 		//Employee employee = new Employee("Andreas Drivenes", "andybb2", "adr@d.nos", "abc12345");
 		//System.out.println(employee);
 		//client.addEmployee(employee);
-		ArrayList<Participant> test = new ArrayList<Participant>();
+//		ArrayList<Participant> test = new ArrayList<Participant>();
+//		
+//		SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+//		Date testdate = new Date(10000000000000l);
+//		String testdatestring = fmt.format(testdate);
+//		
 		
-		SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
-		Date testdate = new Date(10000000000000l);
-		String testdatestring = fmt.format(testdate);
+//		for(int i = 0; i<5; i++) {
+//			test.add(new Participant("AndyDDDs Drivenes", "andybb" +i, "adr@d.noss", "abc12343445", Status.ATTENDING));
+//		}
 		
-		
-		for(int i = 0; i<5; i++) {
-			test.add(new Participant("AndyDDDs Drivenes", "andybb" +i, "adr@d.noss", "abc12343445", Status.ATTENDING));
-		}
-		
-//		System.out.println(ClientObjectFactory.getMeetingByID(21));
+		//System.out.println(ClientObjectFactory.getMeetingByID(24));
 		//ClientFactory.addEmployee(new Employee("Andreas Drivenes", "andydbb1", "adr@no", "abc12343445"));
 		//ClientFactory.deleteMeeting(1);
-		//ClientFactory.addMeeting(new Meeting( "testnavn", new Employee("andreasdrivenes", "passord"), new Room()));
-//		ClientFactory.addMeeting(new Meeting(0, "kaffe", new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), new Room(), "ntnu",
-//				new Employee("andreas", "abc123"), test, false, "testnavvvn"));
+		//ClientObjectFactory.addMeeting(new Meeting( "testnavn", new Employee("andreasdrivenes", "passord"), new Room()));
+		ClientObjectFactory.addMeeting(new Meeting(0, "kaffe", new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), new Room(), "ntnu",
+				null, null, false, "testnavvvn"));
 //		ClientObjectFactory.addMeeting(new Meeting(0, "kaffe", new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), new Room(), "ntnu",
 //				new Employee("andybb2", "abc123"), test, false, "testnavvvn"));
 		
-//		for(int i = 2; i<20; i++) {
-//			ClientFactory.addEmployee(new Employee("Andreas Drivenes"+i, "andybb" +i, "adr@no"+i, "abc12343445"+i));
-//			System.out.println(ClientFactory.getEmployeeByUsername("andybb"+i));
-//		}
+		for(int i = 2; i<10; i++) {
+			//ClientObjectFactory.addEmployee(new Employee());
+			 //System.out.println(ClientObjectFactory.getEmployeeByUsername("andybbsss"+i));
+		}
 		String[] s = {"andybb1","andybb2"};
-		System.out.println("HERE:" + ClientObjectFactory.getMeetingByWeek(Calendar.getInstance().get(Calendar.WEEK_OF_YEAR),s));
+		//System.out.println("HERE:" + ClientObjectFactory.getMeetingByWeek(Calendar.getInstance().get(Calendar.WEEK_OF_YEAR),s));
 		//System.out.println(getMeetingsByUsername("andydbb1"));
 
 	}
 	
+	public ClientObjectFactory() {
+		httpClient = HttpClientBuilder.create().build();
+	}
+	
+	/**
+	 * Get an employee by username.
+	 * @param username
+	 * @return Employee
+	 */
 	public static Employee getEmployeeByUsername(String username)  {
 		
 		request = new HttpGet(API + "employee?username="+username);
 		String employeeString = getRequest(request);
 		EntityUtils.consumeQuietly(response.getEntity());
 		Employee employee = new Gson().fromJson(employeeString, Employee.class);
-		return employee;
 		
+		return employee;
 	}
 	
+	/**
+	 * Get all employees in database.
+	 * @return ArrayList<Employee>
+	 */
 	public static ArrayList<Employee> getEmployees()  {
 		
 		request = new HttpGet(GET_EMPLOYEES);
@@ -118,88 +111,168 @@ public static void main(String[] args) throws MalformedURLException, IOException
 		EntityUtils.consumeQuietly(response.getEntity());
 		Employee[] employeePrim = new Gson().fromJson(employeesString, Employee[].class);
 		ArrayList<Employee> employees = new ArrayList<Employee>(Arrays.asList(employeePrim));
+		
 		return employees;
-
 	}
 	
+	/**
+	 * Get all employees in database as potential participants.
+	 * @return ArrayList<Employee>
+	 */
+	public static ArrayList<Participant> getEmployeesAsParticipants()  {
+		
+		request = new HttpGet(GET_EMPLOYEES);
+		String employeesString = getRequest(request);
+		EntityUtils.consumeQuietly(response.getEntity());
+		Participant[] employeePrim = new Gson().fromJson(employeesString, Participant[].class);
+		ArrayList<Participant> employees = new ArrayList<Participant>(Arrays.asList(employeePrim));
+		
+		return employees;
+	}
+	
+	/**
+	 * Add a new employee to the database.
+	 * @param employee
+	 */
 	public static void addEmployee(Employee employee) {
 		
 		post = new HttpPost(API + "employee");
 		String employeeString = new Gson().toJson(employee);
-	 	String returnStatement = postRequest(post, employeeString);
+	 	postRequest(post, employeeString);
 		EntityUtils.consumeQuietly(response.getEntity());
 	}
 	
+	/**
+	 * Add a new meeting to the database.
+	 * @param meeting
+	 */
 	public static void addMeeting(Meeting meeting) {
 		post = new HttpPost(API + "meeting");
-		Gson test = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+		Gson test = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
 		String meetingString = test.toJson(meeting);
-		System.out.println(meetingString);
-		String returnStatement = postRequest(post, meetingString);
+		postRequest(post, meetingString);
 		EntityUtils.consumeQuietly(response.getEntity());
-		System.out.println(returnStatement);
-
 	}
 	
-	
+	/**
+	 * Get a meeting by id.
+	 * @param id
+	 * @return
+	 */
 	public static Meeting getMeetingByID(int id) {
 		request = new HttpGet(API + "meeting?meetid=" +  id);
 		String meetingString = getRequest(request);
-		System.out.println(meetingString);
-		Gson test = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-
+		Gson test = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
 		Meeting meeting = test.fromJson(meetingString, Meeting.class);
+		
 		return meeting;
-
 	}
 	
-	public static void updateMeeting(Meeting meeting) {
-		put = new HttpPut(API + "meeting");
-		Gson test = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-		String meetingString = test.toJson(meeting);
-		String returnStatement = putRequest(put, meetingString);
-		EntityUtils.consumeQuietly(response.getEntity());
-
-	}
-	
-	public static void deleteMeeting(int id) {
-		delete = new HttpDelete(API + "meeting?meetid=" + id);
-		String returnString = deleteRequest(delete);
-		System.out.println(returnString);
+	/**
+	 * Get all meetings in a particular week for X number of employees.
+	 * @param weekNumber
+	 * @return
+	 */
+	public static ArrayList<Meeting> getMeetingByWeek(int weekNumber, String[] usernames) {
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+		
+		String s = "";
+		
+		for (int i = 0; i < usernames.length; i++) {
+			s += "&username" + "=" + usernames[i];
+		}
+		
+		// get timestamps
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.WEEK_OF_YEAR, weekNumber);        
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+		cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE), 0, 0, 0);
+		String startDateParam = sdf.format(cal.getTime());
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+		cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE), 23, 59, 59);
+		String endDateParam = sdf.format(cal.getTime());
+		
+		request = new HttpGet(API + "meeting?startTime=" + startDateParam + "&endTime=" + endDateParam + s);
+		String meetingString = getRequest(request);
 		EntityUtils.consumeQuietly(response.getEntity());
 		
+		Gson test = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+		Meeting[] meetingsPrim = test.fromJson(meetingString, Meeting[].class);
+		ArrayList<Meeting> meetings = new ArrayList<Meeting>(Arrays.asList(meetingsPrim));
+		
+		return meetings;
 	}
 	
+	/**
+	 * Get all meetings in a particular week for an particular employee.
+	 * @param weekNumber
+	 * @return
+	 */
+	public static ArrayList<Meeting> getMeetingByWeek(int weekNumber, String username) {
+		String[] usernames = {username};
+		return getMeetingByWeek(weekNumber, usernames);
+	}
+	
+	/**
+	 * Update a meeting in database.
+	 * @param meeting
+	 */
+	public static void updateMeeting(Meeting meeting) {
+		put = new HttpPut(API + "meeting");
+		Gson test = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+		String meetingString = test.toJson(meeting);
+		putRequest(put, meetingString);
+		EntityUtils.consumeQuietly(response.getEntity());
+	}
+	
+	/**
+	 * Delete a meeting from database.
+	 * @param id
+	 */
+	public static void deleteMeeting(int id) {
+		delete = new HttpDelete(API + "meeting?meetid=" + id);
+		deleteRequest(delete);
+		EntityUtils.consumeQuietly(response.getEntity());
+	}
+	
+	/**
+	 * Get all meetings which an employee with username X is owner of. 
+	 * @param username
+	 * @return
+	 */
 	public static ArrayList<Meeting> getMeetingsByUsername(String username) {
 		request = new HttpGet(API + "meeting?username=" +  username);
 		String meetingString = getRequest(request);
-		Gson test = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+		Gson test = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
 		Meeting[] meetingsPrim = test.fromJson(meetingString, Meeting[].class);
 		ArrayList<Meeting> meetings = new ArrayList<Meeting>(Arrays.asList(meetingsPrim));
+		
 		return meetings;
 
 	}
 	
+	/**
+	 * Get all rooms in database.
+	 * @return
+	 */
 	public static ArrayList<Room> getRooms() {
 		request = new HttpGet(API + "room");
 		String roomsString = getRequest(request);
-		Gson builder = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+		Gson builder = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
 		Room[] roomsPrim = builder.fromJson(roomsString, Room[].class);
 		ArrayList<Room> rooms = new ArrayList<Room>(Arrays.asList(roomsPrim));
+		
 		return rooms;
 	}
 	
-	public static ArrayList<Participant> getChoosableParticipants() {
-		request = new HttpGet(API + "participant");
-		String participantsString = getRequest(request);
-		Gson builder = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-		Participant[] participantsPrim = builder.fromJson(participantsString, Participant[].class);
-		ArrayList<Participant> participants = new ArrayList<Participant>(Arrays.asList(participantsPrim));
-		return participants;
-	}
-	
+	/**
+	 * Used for creating and executing a GET request.
+	 * @param requestType
+	 * @return
+	 */
 	private static String getRequest(HttpGet requestType) {
-        httpClient = new DefaultHttpClient(); // Creating an instance here
+        httpClient = HttpClientBuilder.create().build(); // Creating an instance here
         try {
             response = httpClient.execute(requestType); 
             if (response != null && response.getStatusLine().getStatusCode() == 200) {
@@ -216,16 +289,24 @@ public static void main(String[] args) throws MalformedURLException, IOException
             e.printStackTrace();
             return null;
         }  finally {
-            httpClient.getConnectionManager().shutdown(); // Close the instance here
+            try {
+				httpClient.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} // Close the instance here
         }
     }
 	
-	
-	
+	/**
+	 * Used for creating and executing a POST request.
+	 * @param requestType
+	 * @param content
+	 * @return
+	 */
 	private static String postRequest(HttpPost requestType, String content) {
       
         try {
-            httpClient = new DefaultHttpClient(); // Creating an instance here
+            httpClient = HttpClientBuilder.create().build(); // Creating an instance here
     		requestType.setHeader("Content-Type", "application/json; charset=utf-8");
 			StringEntity input  = new StringEntity(content);
 			requestType.setEntity(input);
@@ -249,14 +330,24 @@ public static void main(String[] args) throws MalformedURLException, IOException
             return null;
         }
           finally {
-            httpClient.getConnectionManager().shutdown(); // Close the instance here
+            try {
+				httpClient.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} // Close the instance here
         }
     }
 	
+	/**
+	 * Used for creating and executing a PUT request.
+	 * @param requestType
+	 * @param content
+	 * @return
+	 */
 	private static String putRequest(HttpPut requestType, String content) {
 	      
         try {
-            httpClient = new DefaultHttpClient(); // Creating an instance here
+            httpClient = HttpClientBuilder.create().build(); // Creating an instance here
     		requestType.setHeader("Content-Type", "application/json; charset=utf-8");
 			StringEntity input  = new StringEntity(content);
 			requestType.setEntity(input);
@@ -280,12 +371,21 @@ public static void main(String[] args) throws MalformedURLException, IOException
             return null;
         }
           finally {
-            httpClient.getConnectionManager().shutdown(); // Close the instance here
+            try {
+				httpClient.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} // Close the instance here
         }
     }
 	
+	/**
+	 * Used for creating and executing a DELETE request.
+	 * @param requestType
+	 * @return
+	 */
 	private static String deleteRequest(HttpDelete requestType) {
-        httpClient = new DefaultHttpClient(); // Creating an instance here
+        httpClient = HttpClientBuilder.create().build(); // Creating an instance here
         try {
             response = httpClient.execute(requestType); 
             if (response != null && response.getStatusLine().getStatusCode() == 200) {
@@ -302,7 +402,11 @@ public static void main(String[] args) throws MalformedURLException, IOException
             e.printStackTrace();
             return null;
         }  finally {
-            httpClient.getConnectionManager().shutdown(); // Close the instance here
+            try {
+				httpClient.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} // Close the instance here
         }
     }
 	
@@ -313,14 +417,23 @@ public static void main(String[] args) throws MalformedURLException, IOException
 		String line = "";
 		while ((line = rd.readLine()) != null) {
 			returnString += line;
-		} 
-		//is.close();
+		}
 	
 		return returnString;
-
 	}
 	
-	
-	
-
+	public static boolean authenticate(Employee emp) {
+		
+		if (emp.getUsername() != null && emp.getPassword() != null && !emp.getPassword().equals("") && !emp.getUsername().equals("")) {
+			// Not safe :p
+			Employee e = getEmployeeByUsername(emp.getUsername());
+			
+			if( e != null)
+				return emp.getPassword().equals(e.getPassword());
+			else
+				return false;
+		}
+		
+		return false;
+	}
 }

@@ -1,6 +1,5 @@
 package controller;
 
-import model.MeetingModel;
 import view.AppointmentView;
 
 import framework.Controller;

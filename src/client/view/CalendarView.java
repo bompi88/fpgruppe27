@@ -13,7 +13,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -31,15 +30,16 @@ import javax.swing.border.EmptyBorder;
 import controller.AppointmentCtrl;
 import controller.CalendarCtrl;
 import controller.MainCtrl;
+import database.ClientObjectFactory;
 
 import framework.Observable;
 import framework.Observer;
 import framework.Controller;
 
-import model.EmployeeModel;
-import model.MeetingModel;
-import model.ParticipantModel;
-import model.StatusModel;
+import model.Employee;
+import model.Meeting;
+import model.Participant;
+import model.Status;
 
 import resources.AppConstants;
 import resources.ImageManager;
@@ -107,12 +107,12 @@ public class CalendarView extends JPanel{
 		
 		private JLabel meetingTitle;
 		
-		private MeetingModel model;
+		private Meeting model;
 		private JLabel deleteButton;
 		private ImageIcon normalDeleteIcon;
 		private ImageIcon hoverDeleteIcon;
 		
-		public CalendarElement(MeetingModel model) {
+		public CalendarElement(Meeting model) {
 			this.model = model;
 			
 			deleteButton = new JLabel();
@@ -199,11 +199,11 @@ public class CalendarView extends JPanel{
 			});
 		}
 
-		public MeetingModel getModel() {
+		public Meeting getModel() {
 			return model;
 		}
 
-		public void setModel(MeetingModel model) {
+		public void setModel(Meeting model) {
 			this.model = model;
 			model.addPropertyChangeListener(this);
 		}
@@ -233,13 +233,13 @@ public class CalendarView extends JPanel{
 		
 		private JLabel dayLabel;
 		
-		private List<MeetingModel> model;
+		private List<Meeting> model;
 		
 		private int dayViewWidth = ((AppConstants.MAIN_FRAME_WIDTH - AppConstants.SIDEBAR_WIDTH - 30) / 7) + 2;
 		private int dayViewHeight = AppConstants.MAIN_FRAME_HEIGHT - AppConstants.HEADER_PANEL_HEIGHT;
 		private Dimension columnSize = new Dimension(dayViewWidth, dayViewHeight);
 		
-		public CalendarColumn(List<MeetingModel> model) {
+		public CalendarColumn(List<Meeting> model) {
 			this.model = model;
 			
 			RelativeLayout rl = new RelativeLayout(RelativeLayout.Y_AXIS, 0);
@@ -253,7 +253,7 @@ public class CalendarView extends JPanel{
 			
 			add(dayLabel);
 			
-			for(MeetingModel meeting : model) {
+			for(Meeting meeting : model) {
 				CalendarElement e = new CalendarElement(meeting);
 				add(e);
 				e.setPreferredSize(new Dimension(dayViewWidth, 50));
@@ -262,11 +262,11 @@ public class CalendarView extends JPanel{
 			
 		}
 
-		public List<MeetingModel> getModel() {
+		public List<Meeting> getModel() {
 			return model;
 		}
 
-		public void setModel(List<MeetingModel> model) {
+		public void setModel(List<Meeting> model) {
 			this.model = model;
 		}
 		
@@ -280,10 +280,10 @@ public class CalendarView extends JPanel{
 			
 			if(event.equals("delete")) {
 				
-				ParticipantModel p = new ParticipantModel((EmployeeModel) ((MainCtrl)ctrl.getMainCtrl()).getModel());
+				Employee emp = (Employee) ((MainCtrl)ctrl.getMainCtrl()).getModel();
 				
-				p.setStatus(StatusModel.DECLINED);
-				p.setAlarm(null);
+				Participant p = new Participant(emp.getName(), emp.getUsername(), emp.getEmail(), emp.getPassword(), Status.DECLINED);
+				
 				
 				((CalendarElement)obj).model.removeParticipants(p);
 				model.remove(((CalendarElement)obj).model);
@@ -300,13 +300,13 @@ public class CalendarView extends JPanel{
 	
 	public class WeeklyCalendarPanel extends JPanel {
 		
-		private List<MeetingModel> monday = new ArrayList<MeetingModel>();
-		private List<MeetingModel> thuesday = new ArrayList<MeetingModel>();
-		private List<MeetingModel> wednesday = new ArrayList<MeetingModel>();
-		private List<MeetingModel> thursday = new ArrayList<MeetingModel>();
-		private List<MeetingModel> friday = new ArrayList<MeetingModel>();
-		private List<MeetingModel> saturday = new ArrayList<MeetingModel>();
-		private List<MeetingModel> sunday = new ArrayList<MeetingModel>();
+		private List<Meeting> monday = new ArrayList<Meeting>();
+		private List<Meeting> thuesday = new ArrayList<Meeting>();
+		private List<Meeting> wednesday = new ArrayList<Meeting>();
+		private List<Meeting> thursday = new ArrayList<Meeting>();
+		private List<Meeting> friday = new ArrayList<Meeting>();
+		private List<Meeting> saturday = new ArrayList<Meeting>();
+		private List<Meeting> sunday = new ArrayList<Meeting>();
 		
 		private CalendarColumn mondayView;
 		private CalendarColumn thuesdayView;
@@ -321,7 +321,7 @@ public class CalendarView extends JPanel{
 //			for (int i = 1; i <= 7; i++) {
 //				int rand = 1 + (int)(Math.random() * ((10 - 1) + 1));
 //				for (int j = 0; j < rand; j++) {
-//					MeetingModel m = new MeetingModel();
+//					Meeting m = new Meeting();
 //					m.setMeetID((i+1)*(i+1)*(j+1));
 //					m.setName("meewID" + (i+1)*(i+1)*(j+1));
 //					m.setPlace("this is a meeting");
@@ -353,16 +353,7 @@ public class CalendarView extends JPanel{
 //			}
 			
 			// For testing
-			try {
-				monday = MeetingModel.fetchMeetingsByWeek(calendar.get(Calendar.WEEK_OF_YEAR));
-				
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			monday = ClientObjectFactory.getMeetingByWeek(calendar.get(Calendar.WEEK_OF_YEAR), "andybb1");
 			
 			
 			mondayView = new CalendarColumn(monday);

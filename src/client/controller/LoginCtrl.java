@@ -2,11 +2,12 @@ package controller;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.sql.SQLException;
 
+import database.ClientObjectFactory;
+
+import model.Employee;
 import framework.Controller;
 import framework.State;
-import model.EmployeeModel;
 import view.LoginView;
 
 public class LoginCtrl extends Controller implements State {
@@ -31,19 +32,14 @@ public class LoginCtrl extends Controller implements State {
 	
 	public void login() {
 		
-		EmployeeModel model = (EmployeeModel) getModel();
+		Employee model = (Employee) getModel();
 		
-		try {
-			if(model.authenticate()) {
-				model.fetch(model.getUsername());
-				((MainCtrl)getParentCtrl()).login();
-			} else {
-				loginDialog.showErrorMessage();
-			}
-		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
-		}
-		
+		if(ClientObjectFactory.authenticate(model)) {
+			model = ClientObjectFactory.getEmployeeByUsername(model.getUsername());
+			((MainCtrl)getParentCtrl()).login();
+		} else {
+			loginDialog.showErrorMessage();
+		}	
 	}
 
 	@Override

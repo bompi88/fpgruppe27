@@ -1,36 +1,33 @@
 package controller;
 
 import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.sql.SQLException;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import database.ClientObjectFactory;
+
 import resources.AppConstants;
 import resources.ImageManager;
 
 import framework.Controller;
-import framework.Model;
 import framework.State;
 
+import framework.Model;
 import utils.RelativeLayout;
 import view.MainView;
 import view.SideBarView;
 
-import model.EmployeeModel;
-import model.MeetingModel;
+import model.Employee;
+import model.Meeting;
 
 /**
  * This Controller takes care of bottom layer function calls, like login() and logout() etc.
@@ -47,7 +44,7 @@ public class MainCtrl extends Controller {
 	private JPanel mainWrapperPanel = new JPanel();
 	
 	// Our current logged in user
-	private EmployeeModel currentEmployee;
+	private Employee currentEmployee;
 	
 	private ImageIcon appIcon;
 	
@@ -60,7 +57,7 @@ public class MainCtrl extends Controller {
 	public MainCtrl() {
 		
 		// set a new user model.
-		currentEmployee = new EmployeeModel();
+		currentEmployee = new Employee();
 		setModel(currentEmployee);
 		
 		// initialize the GUI
@@ -111,17 +108,16 @@ public class MainCtrl extends Controller {
         		// if cookie: login
         		if(isRemembered()) {
         			
-        			EmployeeModel m = new EmployeeModel();
+        			Employee m = ClientObjectFactory.getEmployeeByUsername(((Employee)model).getUsername());
         			
-        			// get user based on username and login
-        			try {
-        				m.fetch(((EmployeeModel)model).getUsername());
-        			} catch (ClassNotFoundException | SQLException e) {
-        				e.printStackTrace();
-        			}
+        			//get user based on username and login
         			currentEmployee = m;
-        			
-        			login();
+        			if (m != null) {
+        				login();
+        			} else {
+        				currentEmployee = new Employee();
+        				setState(LoginCtrl.class);
+        			}
         		} else {
         			// set login state
         			setState(LoginCtrl.class);
@@ -139,12 +135,12 @@ public class MainCtrl extends Controller {
 		String hash = "";
 		
 		// create a model
-		model = new EmployeeModel();
+		model = new Employee();
 		
 		try {
 			br = new BufferedReader(new FileReader(cookieFileName));
 	        hash = br.readLine();
-	        ((EmployeeModel)model).setUsername(br.readLine());
+	        ((Employee)model).setUsername(br.readLine());
 	        
 		} catch (IOException e) {
 			
@@ -274,10 +270,10 @@ public class MainCtrl extends Controller {
 	
 	@Override
 	public <T extends Model> void setModel(T model) {
-		currentEmployee = (EmployeeModel) model;
+		currentEmployee = (Employee) model;
 	}
 	
-	public void setMeetingModel(MeetingModel model) {
+	public void setMeetingModel(Meeting model) {
 		appointmentCtrl.setModel(model);
 	}
 }

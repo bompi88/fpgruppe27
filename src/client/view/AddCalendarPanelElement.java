@@ -16,7 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import model.EmployeeModel;
+import model.Employee;
 import resources.AppConstants;
 import resources.ImageManager;
 import framework.Observable;
@@ -30,10 +30,10 @@ public class AddCalendarPanelElement extends JPanel implements Observable{
     private List<Observer> observers = new ArrayList<Observer>(); 
 	private JLabel userLabel = new JLabel();
 	
-	private EmployeeModel emp;
+	private Employee emp;
     
 	@SuppressWarnings("static-access")
-	public AddCalendarPanelElement(EmployeeModel emp) {
+	public AddCalendarPanelElement(Employee emp) {
 		setVisible(true);
     	removeCalendarIcon = new ImageIcon(ImageManager.getInstance().resizeImage(ImageManager.getInstance().getImage("delete_icon"), 15, 15));
     	
@@ -89,7 +89,7 @@ public class AddCalendarPanelElement extends JPanel implements Observable{
 		return this;
 	}
 	
-	public EmployeeModel getModel() {
+	public Employee getModel() {
 		return emp;
 	}
 
