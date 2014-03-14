@@ -1,4 +1,4 @@
-package database;
+package recycle;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

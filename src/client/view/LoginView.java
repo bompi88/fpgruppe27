@@ -9,7 +9,7 @@ import javax.swing.border.EmptyBorder;
 
 import resources.AppConstants;
 
-import model.EmployeeModel;
+import model.Employee;
 
 import framework.Controller;
 
@@ -22,7 +22,7 @@ public class LoginView extends JDialog {
 	
 	private LoginPanel loginPanel;
 	private Controller ctrl;
-	private EmployeeModel model;
+	private Employee model;
 	private JPanel errorPanel;
 	
 	private Dimension windowSize = new Dimension(AppConstants.LOG_IN_DIALOG_WIDTH, AppConstants.LOG_IN_DIALOG_HEIGHT);

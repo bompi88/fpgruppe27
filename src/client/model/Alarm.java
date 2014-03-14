@@ -2,9 +2,9 @@ package model;
 
 import java.sql.Date;
 
-public class AlarmModel {
+public class Alarm {
 	
-	protected Date date;
+	private Date date;
 
 	public Date getDate() {
 		return date;
@@ -13,7 +13,4 @@ public class AlarmModel {
 	public void setDate(Date date) {
 		this.date = date;
 	}
-	
-	
-
 }

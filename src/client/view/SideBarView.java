@@ -13,7 +13,7 @@ import javax.swing.border.EmptyBorder;
 import resources.AppConstants;
 import utils.RelativeLayout;
 
-import model.EmployeeModel;
+import model.Employee;
 
 import controller.AppointmentCtrl;
 import controller.CalendarCtrl;
@@ -103,6 +103,6 @@ public class SideBarView extends JPanel {
 	}
 
 	public void init() {
-		loggedInUser.setText("<html><b>user:</b> " + ((EmployeeModel)((MainCtrl)ctrl.getMainCtrl()).getModel()).getUsername() + "</html>");
+		loggedInUser.setText("<html><b>user:</b> " + ((Employee)((MainCtrl)ctrl.getMainCtrl()).getModel()).getUsername() + "</html>");
 	}
 }

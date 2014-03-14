@@ -2,6 +2,8 @@ package framework;
 
 import javax.swing.JFrame;
 
+import framework.Model;
+
 
 /**
  * A template for a controller. The controller is responsible for a
@@ -11,7 +13,7 @@ public abstract class Controller {
 
 	private Controller parentCtrl;
 	protected Model model;
-	
+
 	public Controller(Controller ctrl) {
 		this.parentCtrl = ctrl;
 	}

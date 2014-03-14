@@ -1,27 +1,29 @@
-package test;
+package model;
 
 import java.sql.Date;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.List;
+
+import framework.Model;
 
 
-public class Meeting {
+public class Meeting extends Model {
 	
-	protected int meetid;
-	protected String description;
-	protected Timestamp startTime;
-	protected Timestamp endTime;
-	protected Room room;
-	protected String place;
-	protected Employee responsible;
-	protected ArrayList<Participant> participants = new ArrayList<Participant>();
-	protected boolean isAppointment;
-	protected String name;
+	private int meetid;
+	private String description;
+	private Timestamp startTime;
+	private Timestamp endTime;
+	private Room room;
+	private String place;
+	private Employee responsible;
+	private List<Participant> participants = new ArrayList<Participant>();
+	private boolean isAppointment;
+	private String name;
 	
 	
 	public Meeting() {
-		
+		super();
 	}
 	
 	
@@ -56,14 +58,8 @@ public class Meeting {
 	public Timestamp getStartTime() {
 		return startTime;
 	}
-	public void setStartTime(Timestamp startTime) {
-		this.startTime = startTime;
-	}
 	public Timestamp getEndTime() {
 		return endTime;
-	}
-	public void setEndTime(Timestamp endTime) {
-		this.endTime = endTime;
 	}
 	public Room getRoom() {
 		return room;
@@ -83,10 +79,10 @@ public class Meeting {
 	public void setResponsible(Employee responsible) {
 		this.responsible = responsible;
 	}
-	public ArrayList<Participant> getParticipants() {
+	public List<Participant> getParticipants() {
 		return participants;
 	}
-	public void setParticipants(ArrayList<Participant> participants) {
+	public void setParticipants(List<Participant> participants) {
 		this.participants = participants;
 	}
 	public boolean isAppointment() {
@@ -101,7 +97,34 @@ public class Meeting {
 	public void setName(String name) {
 		this.name = name;
 	}
+	public Date getStartDate() {
+		return new Date (startTime.getTime()); // maybe multiply by 1000?
+	}
+	
+	public String getStartDateAsString() {
+		return new Date (startTime.getTime()).toString();
+	}
 
+	public void setStartTime(Timestamp startTime) {
+		this.startTime = startTime;
+	}
+
+	public Date getEndDate() {
+		return new Date (endTime.getTime());
+	}
+	
+	public String getEndDateAsString() {
+		return new Date (endTime.getTime()).toString();
+	}
+
+
+	public void setEndTime(Timestamp endTime) {
+		this.endTime = endTime;
+	}
+	
+	public void removeParticipants(Participant emp) {
+		participants.remove(emp);
+	}
 
 	@Override
 	public String toString() {
@@ -111,18 +134,5 @@ public class Meeting {
 				+ responsible + ", participants=" + participants
 				+ ", isAppointment=" + isAppointment + ", name=" + name + "]";
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-
-	
-	
-	
-
 
 }

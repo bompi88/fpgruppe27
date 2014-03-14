@@ -2,26 +2,18 @@ package view;
 
 import java.awt.Component;
 import java.awt.Desktop;
-import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.sql.SQLException;
 import java.util.List;
 
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -31,9 +23,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListCellRenderer;
 
-import database.DatabaseSearch;
-import model.EmployeeModel;
-import model.ParticipantModel;
+import database.ClientObjectFactory;
+
+import model.Employee;
+import model.Participant;
 
 public class ParticipantPanel extends JPanel {
 	
@@ -41,7 +34,7 @@ public class ParticipantPanel extends JPanel {
 	private JList participants;
 	private JButton addParticipant;
 	private JButton addExternals;
-	protected static DefaultListModel<EmployeeModel> participantsModel; 
+	protected static DefaultListModel<Employee> participantsModel; 
 
 
 	public ParticipantPanel() {
@@ -53,25 +46,16 @@ public class ParticipantPanel extends JPanel {
 		participants = new JList();
 		participants.setModel(participantsModel);
 		//participantPicker = new JComboBox();
-		try {
-			List<ParticipantModel> employees = DatabaseSearch.getAllEmployees();
-			participantPicker = new JComboBox(employees.toArray());
-			
-			
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+		List<Participant> employees = (List<Participant>)ClientObjectFactory.getEmployeesAsParticipants();
+		participantPicker = new JComboBox(employees.toArray());
 		
 		addParticipant.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(participantPicker.getSelectedIndex() != -1) {
-					ParticipantModel m = (ParticipantModel) participantPicker.getSelectedItem();
+					Participant m = (Participant) participantPicker.getSelectedItem();
 					participantsModel.addElement(m);
 				}
 				
@@ -130,11 +114,11 @@ public class ParticipantPanel extends JPanel {
 		this.participantsModel = participantsModel;
 	}
 	
-	class IconListRenderer implements ListCellRenderer<ParticipantModel> {
+	class IconListRenderer implements ListCellRenderer<Participant> {
 	
 			@Override
 			public Component getListCellRendererComponent(JList list,
-					ParticipantModel value, int index, boolean isSelected,
+					Participant value, int index, boolean isSelected,
 					boolean cellHasFocus) {
 				String name = value.getName();
 				JLabel label = new JLabel(name);
@@ -161,13 +145,7 @@ public class ParticipantPanel extends JPanel {
 				}
 				
 				return label;
-			}
-			
-			
-
-			
-			
-				
+			}	
 	}
 
 }

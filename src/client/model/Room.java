@@ -1,15 +1,25 @@
-package test;
+package model;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import framework.Model;
 
 
-public class Room {
+public class Room extends Model {
 	
-	protected int roomID;
-	protected int capacity;
-	protected String name;
-	protected ArrayList<Meeting> bookingList;
+	private int roomID;
+	private int capacity;
+	private String name;
+	private List<Meeting> bookingList;
 	
+	public Room() {}
+	
+	public Room(int roomID, int capacity, String name) {
+		this.roomID = roomID;
+		this.capacity = capacity;
+		this.name = name;
+	}
 	
 	public int getRoomID() {
 		return roomID;
@@ -29,7 +39,7 @@ public class Room {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public ArrayList<Meeting> getBookingList() {
+	public List<Meeting> getBookingList() {
 		return bookingList;
 	}
 	public void setBookingList(ArrayList<Meeting> bookingList) {
