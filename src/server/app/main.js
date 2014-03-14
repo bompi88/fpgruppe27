@@ -62,11 +62,11 @@ server.get('/employee', function(req, res, next) {
 //------------------------------------------------------------------------------------------------
 
 server.post('/employee', function(req, res, next) {
-	if (req.params.username === undefined || req.params.password === undefined ) {
+	if (req.params.username === undefined || req.params.password === undefined || req.params.name === undefined || req.params.email === undefined) {
 		return next(new restify.InvalidArgumentError('Required fields not supplied.'))
 	}
 
-	connection.query("insert into employee (username, password) values ('" + req.params.username + "','" + req.params.password + "')", function(err, rows, fields) {
+	connection.query("INSERT INTO employee (username, password, name, email) values ('" + req.params.username + "','" + req.params.password + "','" +  req.params.name + "','" + req.params.email + "')", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 			
 			res.send(201, rows)
@@ -152,7 +152,11 @@ server.get('/meeting', function(req, res, next) {
 			},
 			function(err, results) {
 
-				
+				if (meetings.isAppointment === 0) {
+					meetings.isAppointment = false;
+				} else {
+					meetings.isAppointment = true;
+				}
 
 				meetings.responsible = results.responsible;
 				meetings.room = results.room;
@@ -313,11 +317,10 @@ server.post('/meeting', function(req, res, next) {
 							if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 						});
 					}
-			
+				res.send(201, r[0].meetid)
 				});
 			}
 			
-			res.send(201, rows)
 	});
 })
 
