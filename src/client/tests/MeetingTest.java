@@ -23,7 +23,14 @@ public class MeetingTest extends junit.framework.TestCase {
 	
 	
 	public void testAddMeeting() {
+		int id = 0; //denne må settes manuelt
+		Meeting meeting = getTestMeeting();
 		ClientObjectFactory.addMeeting(getTestMeeting());
+		
+		Meeting meetingServer = ClientObjectFactory.getMeetingByID(id);
+		
+		assertEquals(meeting, meetingServer);
+		
 	}
 	
 	
