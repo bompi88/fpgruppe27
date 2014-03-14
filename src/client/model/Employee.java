@@ -1,7 +1,5 @@
 package model;
 
-import com.google.gson.annotations.Expose;
-
 import framework.Model;
 
 public class Employee extends Model {

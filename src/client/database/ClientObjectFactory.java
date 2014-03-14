@@ -25,8 +25,13 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
 import resources.AppConstants;
+
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import framework.Model;
 
 /**
  * ClientObjectFactory generates objects on request. It fetches JSON objects from our REST API
@@ -109,7 +114,8 @@ public static void main(String[] args) throws MalformedURLException, IOException
 		request = new HttpGet(GET_EMPLOYEES);
 		String employeesString = getRequest(request);
 		EntityUtils.consumeQuietly(response.getEntity());
-		Employee[] employeePrim = new Gson().fromJson(employeesString, Employee[].class);
+		Gson test = new GsonBuilder().setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+		Employee[] employeePrim = test.fromJson(employeesString, Employee[].class);
 		ArrayList<Employee> employees = new ArrayList<Employee>(Arrays.asList(employeePrim));
 		
 		return employees;
@@ -124,7 +130,8 @@ public static void main(String[] args) throws MalformedURLException, IOException
 		request = new HttpGet(GET_EMPLOYEES);
 		String employeesString = getRequest(request);
 		EntityUtils.consumeQuietly(response.getEntity());
-		Participant[] employeePrim = new Gson().fromJson(employeesString, Participant[].class);
+		Gson test = new GsonBuilder().setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+		Participant[] employeePrim = test.fromJson(employeesString, Participant[].class);
 		ArrayList<Participant> employees = new ArrayList<Participant>(Arrays.asList(employeePrim));
 		
 		return employees;
@@ -137,8 +144,31 @@ public static void main(String[] args) throws MalformedURLException, IOException
 	public static void addEmployee(Employee employee) {
 		
 		post = new HttpPost(API + "employee");
-		String employeeString = new Gson().toJson(employee);
+		Gson test = new GsonBuilder().setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+		String employeeString = test.toJson(employee);
 	 	postRequest(post, employeeString);
+		EntityUtils.consumeQuietly(response.getEntity());
+	}
+	
+	/**
+	 * Delete an employee from database.
+	 * @param id
+	 */
+	public static void deleteEmployee(String username) {
+		delete = new HttpDelete(API + "employee?username=" + username);
+		deleteRequest(delete);
+		EntityUtils.consumeQuietly(response.getEntity());
+	}
+	
+	/**
+	 * Update a meeting in database.
+	 * @param meeting
+	 */
+	public static void updateEmployee(Employee emp) {
+		put = new HttpPut(API + "employee");
+		Gson test = new GsonBuilder().setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+		String meetingString = test.toJson(emp);
+		putRequest(put, meetingString);
 		EntityUtils.consumeQuietly(response.getEntity());
 	}
 	
@@ -148,7 +178,7 @@ public static void main(String[] args) throws MalformedURLException, IOException
 	 */
 	public static void addMeeting(Meeting meeting) {
 		post = new HttpPost(API + "meeting");
-		Gson test = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+		Gson test = new GsonBuilder().setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
 		String meetingString = test.toJson(meeting);
 		postRequest(post, meetingString);
 		EntityUtils.consumeQuietly(response.getEntity());
@@ -162,7 +192,7 @@ public static void main(String[] args) throws MalformedURLException, IOException
 	public static Meeting getMeetingByID(int id) {
 		request = new HttpGet(API + "meeting?meetid=" +  id);
 		String meetingString = getRequest(request);
-		Gson test = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+		Gson test = new GsonBuilder().setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
 		Meeting meeting = test.fromJson(meetingString, Meeting.class);
 		
 		return meeting;
@@ -197,7 +227,7 @@ public static void main(String[] args) throws MalformedURLException, IOException
 		String meetingString = getRequest(request);
 		EntityUtils.consumeQuietly(response.getEntity());
 		
-		Gson test = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+		Gson test = new GsonBuilder().setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
 		Meeting[] meetingsPrim = test.fromJson(meetingString, Meeting[].class);
 		ArrayList<Meeting> meetings = new ArrayList<Meeting>(Arrays.asList(meetingsPrim));
 		
@@ -220,7 +250,7 @@ public static void main(String[] args) throws MalformedURLException, IOException
 	 */
 	public static void updateMeeting(Meeting meeting) {
 		put = new HttpPut(API + "meeting");
-		Gson test = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+		Gson test = new GsonBuilder().setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
 		String meetingString = test.toJson(meeting);
 		putRequest(put, meetingString);
 		EntityUtils.consumeQuietly(response.getEntity());
@@ -244,7 +274,7 @@ public static void main(String[] args) throws MalformedURLException, IOException
 	public static ArrayList<Meeting> getMeetingsByUsername(String username) {
 		request = new HttpGet(API + "meeting?username=" +  username);
 		String meetingString = getRequest(request);
-		Gson test = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+		Gson test = new GsonBuilder().setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
 		Meeting[] meetingsPrim = test.fromJson(meetingString, Meeting[].class);
 		ArrayList<Meeting> meetings = new ArrayList<Meeting>(Arrays.asList(meetingsPrim));
 		
@@ -259,8 +289,8 @@ public static void main(String[] args) throws MalformedURLException, IOException
 	public static ArrayList<Room> getRooms() {
 		request = new HttpGet(API + "room");
 		String roomsString = getRequest(request);
-		Gson builder = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
-		Room[] roomsPrim = builder.fromJson(roomsString, Room[].class);
+		Gson test = new GsonBuilder().setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+		Room[] roomsPrim = test.fromJson(roomsString, Room[].class);
 		ArrayList<Room> rooms = new ArrayList<Room>(Arrays.asList(roomsPrim));
 		
 		return rooms;
@@ -436,4 +466,18 @@ public static void main(String[] args) throws MalformedURLException, IOException
 		
 		return false;
 	}
+	
+	
+	public static class ModelListenerExclusionStrategy implements ExclusionStrategy {
+
+        public boolean shouldSkipClass(Class<?> arg0) {
+            return false;
+        }
+
+        public boolean shouldSkipField(FieldAttributes f) {
+
+            return (f.getDeclaringClass() == Model.class && f.getName().equals("propertyChangeSupport"));
+        }
+
+    }
 }

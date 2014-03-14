@@ -1,4 +1,4 @@
-package tests;
+package recycle;
 
 import java.sql.Array;
 import java.sql.ResultSet;

@@ -1,8 +1,7 @@
 package model;
 
 import java.util.ArrayList;
-
-import com.google.gson.annotations.Expose;
+import java.util.List;
 
 import framework.Model;
 
@@ -12,7 +11,7 @@ public class Room extends Model {
 	private int roomID;
 	private int capacity;
 	private String name;
-	private ArrayList<Meeting> bookingList;
+	private List<Meeting> bookingList;
 	
 	
 	public int getRoomID() {
@@ -33,7 +32,7 @@ public class Room extends Model {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public ArrayList<Meeting> getBookingList() {
+	public List<Meeting> getBookingList() {
 		return bookingList;
 	}
 	public void setBookingList(ArrayList<Meeting> bookingList) {

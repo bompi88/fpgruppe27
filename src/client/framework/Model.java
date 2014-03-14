@@ -5,9 +5,9 @@ import java.beans.PropertyChangeSupport;
 
 import com.google.gson.annotations.Expose;
 
-public abstract class Model {
+public class Model {
 
-	@Expose(serialize = false) private PropertyChangeSupport propertyChangeSupport;
+	@Expose private PropertyChangeSupport propertyChangeSupport;
 	
 	public Model() {
 		propertyChangeSupport = new PropertyChangeSupport(this);

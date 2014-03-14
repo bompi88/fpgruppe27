@@ -1,4 +1,4 @@
-package tests;
+package recycle;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

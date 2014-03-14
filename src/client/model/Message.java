@@ -4,8 +4,6 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
-import com.google.gson.annotations.Expose;
-
 import framework.Model;
 
 import model.Meeting;
@@ -40,12 +38,13 @@ public class Message extends Model {
 //	protected String userHasDeclinedMessage = "Har medlt avbud til" + meeting.getMeetingName();
 	
 	
-	public Message(Meeting meeting, String type, Participant messageOwner, Participant userInQestion) throws ClassNotFoundException, SQLException{
+	public Message(Meeting meeting, String type, Participant messageOwner, Participant userInQestion) {
+		super();
 		this.meeting = meeting;
 		this.type = type; 	
 		this.userInQestion = userInQestion; 
 		this.messageOwner = messageOwner; 
-		setMessage(); 
+		//setMessage(); 
 	}
 	
 	

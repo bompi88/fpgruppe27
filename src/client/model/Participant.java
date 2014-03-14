@@ -17,6 +17,8 @@ public class Participant extends Employee {
 		
 		this.status = declined;
 	}
+	
+	public Participant() {}
 
 	public Status getStatus() {
 		return status;

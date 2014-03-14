@@ -1,4 +1,4 @@
-package tests;
+package recycle;
 
 import java.io.File;
 import java.io.FileInputStream;

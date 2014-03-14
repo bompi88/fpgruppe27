@@ -3,8 +3,7 @@ package model;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-
-import com.google.gson.annotations.Expose;
+import java.util.List;
 
 import framework.Model;
 
@@ -18,13 +17,13 @@ public class Meeting extends Model {
 	private Room room;
 	private String place;
 	private Employee responsible;
-	private ArrayList<Participant> participants = new ArrayList<Participant>();
+	private List<Participant> participants = new ArrayList<Participant>();
 	private boolean isAppointment;
 	private String name;
 	
 	
 	public Meeting() {
-		
+		super();
 	}
 	
 	
@@ -32,7 +31,7 @@ public class Meeting extends Model {
 			Timestamp endTime, Room room, String place, Employee responsible,
 			ArrayList<Participant> participants, boolean isAppointment,
 			String name) {
-		
+		super();
 		this.meetid = meetid;
 		this.description = description;
 		this.startTime = startTime;
@@ -80,10 +79,10 @@ public class Meeting extends Model {
 	public void setResponsible(Employee responsible) {
 		this.responsible = responsible;
 	}
-	public ArrayList<Participant> getParticipants() {
+	public List<Participant> getParticipants() {
 		return participants;
 	}
-	public void setParticipants(ArrayList<Participant> participants) {
+	public void setParticipants(List<Participant> participants) {
 		this.participants = participants;
 	}
 	public boolean isAppointment() {

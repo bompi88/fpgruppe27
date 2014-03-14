@@ -1,4 +1,4 @@
-package tests;
+package recycle;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
