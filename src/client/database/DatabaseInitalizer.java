@@ -32,11 +32,11 @@ public class DatabaseInitalizer {
 		// init some test users
 		Employee employee = new Employee();
 		
-		for(int i = 1; i < numberOfUsers; i++) {
-			employee.setUsername(username);
-			employee.setName(name);
-			employee.setPassword(password);
-			employee.setEmail(username + "@test.com");
+		for(int i = 0; i < numberOfUsers; i++) {
+			employee.setUsername(username + i);
+			employee.setName(name + i);
+			employee.setPassword(password + i);
+			employee.setEmail(username  + i + "@test.com");
 			
 			ClientObjectFactory.addEmployee(employee);
 		}
@@ -50,11 +50,11 @@ public class DatabaseInitalizer {
 			for(int i = 0; i < numberOfUsers; i++) {
 				if (Math.random() > 0.2) {
 					if (Math.random() < 0.33) {
-						participants.add(new Participant(name + i, username + i, username + "@test.com", password + i, Status.INVITED));
+						participants.add(new Participant(name + i, username + i, username + i + "@test.com", password + i, Status.INVITED));
 					} else if (Math.random() > 0.66) {
-						participants.add(new Participant(name + i, username + i, username + "@test.com", password + i, Status.DECLINED));
+						participants.add(new Participant(name + i, username + i, username + i + "@test.com", password + i, Status.DECLINED));
 					} else {
-						participants.add(new Participant(name + i, username + i, username + "@test.com", password + i, Status.ATTENDING));
+						participants.add(new Participant(name + i, username + i, username + i + "@test.com", password + i, Status.ATTENDING));
 					}
 				}
 			}
@@ -63,7 +63,7 @@ public class DatabaseInitalizer {
 			Timestamp startTime = new Timestamp(System.currentTimeMillis() + (1000 * 60 * 60 * ((int)Math.random() * 10)));
 			Timestamp endTime = new Timestamp(System.currentTimeMillis() + (1000 * 60 * 60 * 2 * ((int)Math.random() * 10)));
 			
-			Room room = new Room((int)(Math.random() * 100),"" + Character.toChars((int)(Math.random() * 20)).toString() + (int)(Math.random() * 400));
+			Room room = new Room(1,(int)(Math.random() * 100),"" + Character.toChars((int)(Math.random() * 20)).toString() + (int)(Math.random() * 400));
 			
 			// create a meeting
 			Meeting meeting = new Meeting();
@@ -72,7 +72,7 @@ public class DatabaseInitalizer {
 			meeting.setStartTime(startTime);
 			meeting.setEndTime(endTime);
 			meeting.setPlace(meetingPlace + j);
-			meeting.setResponsible(new Employee(participants.get(0).getUsername()));
+			meeting.setResponsible((Employee)participants.get(0));
 			meeting.setRoom(room);
 			meeting.setParticipants(participants);
 			meeting.setAppointment(Math.random() > 0.5);

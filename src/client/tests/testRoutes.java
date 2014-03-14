@@ -78,7 +78,7 @@ public class TestRoutes extends JFCTestCase {
 		Timestamp startTime = new Timestamp(System.currentTimeMillis() + (1000 * 60 * 60));
 		Timestamp endTime = new Timestamp(System.currentTimeMillis() + (1000 * 60 * 60 * 2));
 		
-		Room room = new Room(30,"G026");
+		Room room = new Room(1,30,"G026");
 		
 		// create a meeting
 		Meeting meeting = new Meeting();

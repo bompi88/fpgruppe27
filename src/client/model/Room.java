@@ -15,7 +15,8 @@ public class Room extends Model {
 	
 	public Room() {}
 	
-	public Room(int capacity, String name) {
+	public Room(int roomID, int capacity, String name) {
+		this.roomID = roomID;
 		this.capacity = capacity;
 		this.name = name;
 	}

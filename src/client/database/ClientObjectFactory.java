@@ -4,9 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.sql.Date;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,43 +45,6 @@ public class ClientObjectFactory {
 	private static HttpDelete delete;
 	private static final String API = AppConstants.REST_API_PATH;
 	private static final String GET_EMPLOYEES = API + "employee";
-	
-public static void main(String[] args) throws MalformedURLException, IOException {
-		
-		//ClientFactory client = new ClientFactory();ory
-		//System.out.println(client.getEmployees());
-		//Employee employee = new Employee("Andreas Drivenes", "andybb2", "adr@d.nos", "abc12345");
-		//System.out.println(employee);
-		//client.addEmployee(employee);
-//		ArrayList<Participant> test = new ArrayList<Participant>();
-//		
-//		SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
-//		Date testdate = new Date(10000000000000l);
-//		String testdatestring = fmt.format(testdate);
-//		
-		
-//		for(int i = 0; i<5; i++) {
-//			test.add(new Participant("AndyDDDs Drivenes", "andybb" +i, "adr@d.noss", "abc12343445", Status.ATTENDING));
-//		}
-		
-		//System.out.println(ClientObjectFactory.getMeetingByID(24));
-		//ClientFactory.addEmployee(new Employee("Andreas Drivenes", "andydbb1", "adr@no", "abc12343445"));
-		//ClientFactory.deleteMeeting(1);
-		//ClientObjectFactory.addMeeting(new Meeting( "testnavn", new Employee("andreasdrivenes", "passord"), new Room()));
-		ClientObjectFactory.addMeeting(new Meeting(0, "kaffe", new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), new Room(), "ntnu",
-				null, null, false, "testnavvvn"));
-//		ClientObjectFactory.addMeeting(new Meeting(0, "kaffe", new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), new Room(), "ntnu",
-//				new Employee("andybb2", "abc123"), test, false, "testnavvvn"));
-		
-		for(int i = 2; i<10; i++) {
-			//ClientObjectFactory.addEmployee(new Employee());
-			 //System.out.println(ClientObjectFactory.getEmployeeByUsername("andybbsss"+i));
-		}
-		String[] s = {"andybb1","andybb2"};
-		//System.out.println("HERE:" + ClientObjectFactory.getMeetingByWeek(Calendar.getInstance().get(Calendar.WEEK_OF_YEAR),s));
-		//System.out.println(getMeetingsByUsername("andydbb1"));
-
-	}
 	
 	public ClientObjectFactory() {
 		httpClient = HttpClientBuilder.create().build();

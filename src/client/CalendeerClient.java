@@ -12,8 +12,10 @@ public class CalendeerClient {
 	
 	public static void main(String[] args) {
 		
-//		DatabaseInitalizer dbInit = new DatabaseInitalizer();
-//		dbInit.initDatabase();
+		
+		// For initializing of the database
+		// DatabaseInitalizer dbInit = new DatabaseInitalizer();
+		// dbInit.initDatabase();
 		
 		// create our main controller and start our application
 		MainCtrl mainCtrl = new MainCtrl();
