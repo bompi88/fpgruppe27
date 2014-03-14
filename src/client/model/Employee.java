@@ -27,6 +27,11 @@ public class Employee extends Model {
 		this.username = username;
 		this.password = password;
 	}
+	
+	public Employee(String username) {
+		super();
+		this.username = username;
+	}
 
 	public String getName() {
 		return name;

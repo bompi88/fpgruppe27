@@ -1,4 +1,5 @@
 import controller.MainCtrl;
+import database.DatabaseInitalizer;
 
 /**
  * Calendeer Client is an application which displays your personal calendar in an awesome and 
@@ -10,6 +11,9 @@ import controller.MainCtrl;
 public class CalendeerClient {
 	
 	public static void main(String[] args) {
+		
+//		DatabaseInitalizer dbInit = new DatabaseInitalizer();
+//		dbInit.initDatabase();
 		
 		// create our main controller and start our application
 		MainCtrl mainCtrl = new MainCtrl();

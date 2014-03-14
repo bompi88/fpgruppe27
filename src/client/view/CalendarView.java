@@ -282,11 +282,13 @@ public class CalendarView extends JPanel{
 				
 				Employee emp = (Employee) ((MainCtrl)ctrl.getMainCtrl()).getModel();
 				
+				
 				Participant p = new Participant(emp.getName(), emp.getUsername(), emp.getEmail(), emp.getPassword(), Status.DECLINED);
 				
 				
 				((CalendarElement)obj).model.removeParticipants(p);
 				model.remove(((CalendarElement)obj).model);
+				ClientObjectFactory.deleteMeeting(((CalendarElement)obj).model.getMeetid());
 				remove((CalendarElement)obj);
 				revalidate();
 				repaint();

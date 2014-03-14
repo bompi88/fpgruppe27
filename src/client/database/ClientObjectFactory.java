@@ -176,12 +176,14 @@ public static void main(String[] args) throws MalformedURLException, IOException
 	 * Add a new meeting to the database.
 	 * @param meeting
 	 */
-	public static void addMeeting(Meeting meeting) {
+	public static int addMeeting(Meeting meeting) {
 		post = new HttpPost(API + "meeting");
 		Gson test = new GsonBuilder().setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
 		String meetingString = test.toJson(meeting);
-		postRequest(post, meetingString);
+		String meetID = postRequest(post, meetingString);
 		EntityUtils.consumeQuietly(response.getEntity());
+		
+		return Integer.valueOf(meetID);
 	}
 	
 	/**
@@ -342,7 +344,7 @@ public static void main(String[] args) throws MalformedURLException, IOException
 			requestType.setEntity(input);
 
             response = httpClient.execute(requestType); 
-            if (response != null && response.getStatusLine().getStatusCode() == 200) {
+            if (response != null && response.getStatusLine().getStatusCode() == 201) {
                 httpEntity = response.getEntity();
 
                 if (httpEntity != null) {

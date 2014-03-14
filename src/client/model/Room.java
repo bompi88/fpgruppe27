@@ -13,6 +13,12 @@ public class Room extends Model {
 	private String name;
 	private List<Meeting> bookingList;
 	
+	public Room() {}
+	
+	public Room(int capacity, String name) {
+		this.capacity = capacity;
+		this.name = name;
+	}
 	
 	public int getRoomID() {
 		return roomID;
