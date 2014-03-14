@@ -148,8 +148,8 @@ public static void main(String[] args) throws MalformedURLException, IOException
 	 */
 	public static void addMeeting(Meeting meeting) {
 		post = new HttpPost(API + "meeting");
-		Gson test = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
-		String meetingString = test.toJson(meeting);
+		Gson builder = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+		String meetingString = builder.toJson(meeting);
 		postRequest(post, meetingString);
 		EntityUtils.consumeQuietly(response.getEntity());
 	}
@@ -197,8 +197,8 @@ public static void main(String[] args) throws MalformedURLException, IOException
 		String meetingString = getRequest(request);
 		EntityUtils.consumeQuietly(response.getEntity());
 		
-		Gson test = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
-		Meeting[] meetingsPrim = test.fromJson(meetingString, Meeting[].class);
+		Gson builder = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+		Meeting[] meetingsPrim = builder.fromJson(meetingString, Meeting[].class);
 		ArrayList<Meeting> meetings = new ArrayList<Meeting>(Arrays.asList(meetingsPrim));
 		
 		return meetings;
@@ -220,8 +220,8 @@ public static void main(String[] args) throws MalformedURLException, IOException
 	 */
 	public static void updateMeeting(Meeting meeting) {
 		put = new HttpPut(API + "meeting");
-		Gson test = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
-		String meetingString = test.toJson(meeting);
+		Gson builder = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+		String meetingString = builder.toJson(meeting);
 		putRequest(put, meetingString);
 		EntityUtils.consumeQuietly(response.getEntity());
 	}
@@ -244,8 +244,8 @@ public static void main(String[] args) throws MalformedURLException, IOException
 	public static ArrayList<Meeting> getMeetingsByUsername(String username) {
 		request = new HttpGet(API + "meeting?username=" +  username);
 		String meetingString = getRequest(request);
-		Gson test = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
-		Meeting[] meetingsPrim = test.fromJson(meetingString, Meeting[].class);
+		Gson builder = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+		Meeting[] meetingsPrim = builder.fromJson(meetingString, Meeting[].class);
 		ArrayList<Meeting> meetings = new ArrayList<Meeting>(Arrays.asList(meetingsPrim));
 		
 		return meetings;
