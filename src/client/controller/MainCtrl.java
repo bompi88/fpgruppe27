@@ -103,7 +103,7 @@ public class MainCtrl extends Controller {
         		calendarCtrl = new CalendarCtrl(getMainCtrl());
         		loginCtrl = new LoginCtrl(getMainCtrl());
         		
-        		appointmentCtrl = new AppointmentCtrl(getMainCtrl());
+        		
             	
         		// if cookie: login
         		if(isRemembered()) {
@@ -199,6 +199,7 @@ public class MainCtrl extends Controller {
 		
 		// have to initialize our sidebar
 		sidebarPanel.init();
+		appointmentCtrl = new AppointmentCtrl(getMainCtrl());
 		inboxCtrl = new InboxCtrl(getMainCtrl());
 		// finally show the contents of our app.
 		mainWrapperPanel.setVisible(true);
@@ -232,7 +233,8 @@ public class MainCtrl extends Controller {
 		calendarCtrl.hide();
 		if (inboxCtrl != null)
 			inboxCtrl.hide();
-		appointmentCtrl.hide();
+		if (appointmentCtrl != null)
+			appointmentCtrl.hide();
 		loginCtrl.hide();
 		
 		// show a new state
@@ -275,6 +277,6 @@ public class MainCtrl extends Controller {
 	}
 	
 	public void setMeetingModel(Meeting model) {
-		appointmentCtrl.setModel(model);
+		appointmentCtrl.appointmentPanel.setModel(model);
 	}
 }

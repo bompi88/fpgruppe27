@@ -219,9 +219,19 @@ public class AppointmentPanel extends JPanel implements PropertyChangeListener{
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		// TODO Auto-generated method stub
+		Meeting model = ctrl.getModel();
+		if (evt.getPropertyName() == "name") {
+			meetingNameField.setText(model.getName());
+		}
+		else if(evt.getPropertyName() == "place") {
+			placeField.setText(model.getPlace());
+		}
+		
+		//else if(evt.getPropertyName() == "")
+
 		
 	}
+
 
 
 }

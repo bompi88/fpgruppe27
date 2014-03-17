@@ -40,7 +40,7 @@ public class AppointmentView extends JPanel {
 		//ctrl.setModel(new Meeting());
 		app = new AppointmentPanel(ctrl);
 		part = new ParticipantPanel();
-		model = new Meeting();
+		model = ctrl.getModel();
 		titlePanel = new TitlePanel();
 		saveButton = new JButton("Lagre");
 		mainWrapper = new JPanel();
@@ -85,6 +85,10 @@ public class AppointmentView extends JPanel {
 		model.setResponsible(m.getResponsible());
 		model.setRoom(m.getRoom());
 		
+	}
+	
+	public Meeting getModel() {
+		return model;
 	}
 	
 	public Controller getCtrl() {
