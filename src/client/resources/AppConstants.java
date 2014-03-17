@@ -13,7 +13,7 @@ public final class AppConstants {
 	public static final int SIDEBAR_WIDTH = 150;
 	public static final int HEADER_PANEL_HEIGHT = 100;
 
-	public static final float HEADER_TITLE_PANEL_SCALE_WIDTH = 0.33f;
+	public static final float HEADER_TITLE_PANEL_SCALE_WIDTH = 0.28f;
 	
 	public static final int LOG_IN_DIALOG_WIDTH = 400;
 	public static final int LOG_IN_DIALOG_HEIGHT = 300;

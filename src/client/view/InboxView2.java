@@ -37,9 +37,9 @@ import controller.MainCtrl;
 import framework.Controller;
 import framework.State;
 
-import model.MeetingModel;
-import model.MessageModel;
-import model.ParticipantModel;
+import model.Meeting;
+import model.Message;
+import model.Participant;
 
 import resources.AppConstants;
 import utils.RelativeLayout;
@@ -53,7 +53,7 @@ public class InboxView2 extends JPanel {
 	private JPanel topPanelWrapper = new JPanel();
 	private InboxListPanel inbox; 
 	
-	private DefaultListModel<MessageModel> messages;
+	private DefaultListModel<Message> messages;
 	
 	private Controller ctrl;
 	
@@ -85,20 +85,20 @@ public class InboxView2 extends JPanel {
 		add(inbox);
 	}
 	
-	private DefaultListModel<MessageModel> getAllMessages() {
+	private DefaultListModel<Message> getAllMessages() {
 		// Skal hente all beskjeder til denne brukeren
 		
 		// Test messages
-//		MeetingModel meeting1 = new MeetingModel();
+//		Meeting meeting1 = new Meeting();
 //		meeting1.setMeetingName("InboxtestMøte");
 //		meeting1.setStartDate(new Date(1,1,1));
-//		MessageModel message1 = null;
-//		MessageModel message2 = null;
-//		MessageModel message3 = null;
+//		Message message1 = null;
+//		Message message2 = null;
+//		Message message3 = null;
 //		try {
-//			message1 = new MessageModel(meeting1, "meetingCreated", new ParticipantModel(), new ParticipantModel());
-//			message2 = new MessageModel(meeting1, "meetingCreated", new ParticipantModel(), new ParticipantModel());
-//			message3 = new MessageModel(meeting1, "meetingCreated", new ParticipantModel(), new ParticipantModel());
+//			message1 = new Message(meeting1, "meetingCreated", new Participant(), new Participant());
+//			message2 = new Message(meeting1, "meetingCreated", new Participant(), new Participant());
+//			message3 = new Message(meeting1, "meetingCreated", new Participant(), new Participant());
 //		} catch (ClassNotFoundException e) {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
@@ -107,15 +107,15 @@ public class InboxView2 extends JPanel {
 //			e.printStackTrace();
 //		}
 		
-		DefaultListModel<MessageModel> messages = new DefaultListModel<MessageModel>();
+		DefaultListModel<Message> messages = new DefaultListModel<Message>();
 //		messages.add(0,message1);
 //		messages.add(0,message2);
 //		messages.add(0,message3);
 //		
 //		for (int i = 2; i < 40; i++) {
-//			MessageModel message = null;
+//			Message message = null;
 //			try {
-//				message = new MessageModel(meeting1, "meetingCreated", new ParticipantModel(), new ParticipantModel());
+//				message = new Message(meeting1, "meetingCreated", new Participant(), new Participant());
 //			} catch (ClassNotFoundException e) {
 //				// TODO Auto-generated catch block
 //				e.printStackTrace();
@@ -154,31 +154,31 @@ public class InboxView2 extends JPanel {
 		
 		public InboxListPanel() {
 			
-			MeetingModel meeting1 = new MeetingModel();
+			Meeting meeting1 = new Meeting();
 			meeting1.setMeetingName("InboxtestMøte");
 			meeting1.setStartDate(new Date(1,1,1));
 			meeting1.setStartTime(new Time(0,0,0));
 			meeting1.setPlace("hemmelig møtested");
 			
-			MeetingModel meeting2 = new MeetingModel();
+			Meeting meeting2 = new Meeting();
 			meeting2.setName("Et annet møte");
 			meeting2.setStartDate(new Date(2,3,4));
 			meeting2.setStartTime(new Time(4,6,7));
-			MessageModel message1 = null;
-			MessageModel message2 = null;
-			MessageModel message3 = null;
-			MessageModel message4 = null;
-			MessageModel message5 = null;
+			Message message1 = null;
+			Message message2 = null;
+			Message message3 = null;
+			Message message4 = null;
+			Message message5 = null;
 			try {
-				message1 = new MessageModel(meeting1, "meetingCreated", new ParticipantModel(), new ParticipantModel(), new Timestamp(1,2,3,4,5,6,7));
+				message1 = new Message(meeting1, "meetingCreated", new Participant(), new Participant(), new Timestamp(1,2,3,4,5,6,7));
 				message1.setSeen(true);
-				message2 = new MessageModel(meeting2, "meetingCreated", new ParticipantModel(), new ParticipantModel(), new Timestamp(1,2,3,4,5,6,7));
+				message2 = new Message(meeting2, "meetingCreated", new Participant(), new Participant(), new Timestamp(1,2,3,4,5,6,7));
 				message2.setSeen(true);
-				message3 = new MessageModel(meeting2, "meetingTimeChanged", new ParticipantModel(), new ParticipantModel(), new Timestamp(1,2,3,4,5,6,7));
+				message3 = new Message(meeting2, "meetingTimeChanged", new Participant(), new Participant(), new Timestamp(1,2,3,4,5,6,7));
 				message3.setSeen(false);
-				message4 = new MessageModel(meeting2, "meetingCancelled", new ParticipantModel(), new ParticipantModel(), new Timestamp(1,2,3,4,5,6,7));
+				message4 = new Message(meeting2, "meetingCancelled", new Participant(), new Participant(), new Timestamp(1,2,3,4,5,6,7));
 				message4.setSeen(false);
-				message5 = new MessageModel(meeting1, "placeChanged", new ParticipantModel(), new ParticipantModel(), new Timestamp(1,2,3,4,5,6,7));
+				message5 = new Message(meeting1, "placeChanged", new Participant(), new Participant(), new Timestamp(1,2,3,4,5,6,7));
 				message5.setSeen(false);
 				
 			} catch (ClassNotFoundException e) {
@@ -195,7 +195,7 @@ public class InboxView2 extends JPanel {
 //			message4.setTime(new Timestamp(4,2,9,4,5,6,7));
 //			message5.setTime(new Timestamp(5,2,8,4,5,6,7));
 			
-			DefaultListModel<MessageModel> messageses = new DefaultListModel<MessageModel>();
+			DefaultListModel<Message> messageses = new DefaultListModel<Message>();
 			messageses.add(0,message1);
 			messageses.add(1,message2);
 			messageses.add(1,message3);
@@ -203,7 +203,7 @@ public class InboxView2 extends JPanel {
 			messageses.add(1,message5);
 			
 			
-			JList<MessageModel> list = new JList<MessageModel>(messageses);
+			JList<Message> list = new JList<Message>(messageses);
 			//list.setModel(testmessages);		
 			list.setCellRenderer(new InboxListCellRenderer());
 			list.addListSelectionListener(this);
@@ -225,7 +225,7 @@ public class InboxView2 extends JPanel {
 	
 	public class InboxElementPanel extends JPanel {
 		
-		public InboxElementPanel(MessageModel message) {
+		public InboxElementPanel(Message message) {
 			this.setLayout(new GridLayout());
 			
 			JLabel label = new JLabel(message.getMessage());
@@ -250,7 +250,7 @@ public class InboxView2 extends JPanel {
 	            boolean isSelected,
 	            boolean cellHasFocus) {
 			
-			MessageModel message = (MessageModel) value; 
+			Message message = (Message) value; 
 			
 			InboxElementPanel element = new InboxElementPanel(message); 
 			//setText((String) value);

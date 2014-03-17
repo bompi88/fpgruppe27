@@ -104,7 +104,7 @@ public class Message extends Model {
 		return isSeen;
 	}
 	
-	public void setSeen(boolean isSeen) throws ClassNotFoundException, SQLException {
+	public void setSeen(boolean isSeen){
 		this.isSeen = isSeen;
 		//changeDBSeen(messageOwner.getUsername(), this.time, isSeen); 	
 	}

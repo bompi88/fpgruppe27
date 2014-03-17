@@ -4,10 +4,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
+
 import model.*;
 
 import org.apache.http.HttpEntity;
@@ -48,6 +51,35 @@ public class ClientObjectFactory {
 	
 	public ClientObjectFactory() {
 		httpClient = HttpClientBuilder.create().build();
+	}
+	
+	/**
+	 * Get a message by username and timeFrom(time after last retrieved message). 
+	 * @param username
+	 * @param timeFrom
+	 * @return Employee
+	 */
+	public static List<Message> getMessages(String Username, Timestamp timeFrom){
+		
+		request = new HttpGet(API + "message?username="+ Username + "message?time>"+timeFrom);
+		String messageString = getRequest(request);
+		EntityUtils.consumeQuietly(response.getEntity());
+		Message[] messagePrim = new Gson().fromJson(messageString, Message[].class);
+		List<Message> messages = new ArrayList<Message>(Arrays.asList(messagePrim));
+		return messages; 
+	}
+	
+	
+	/**
+	 * Sets a message by messid as seen
+	 * @param Message(messid)
+	 */
+	public static void setMessageAsSeen(Message message){
+		
+		int messid = message.getMessID(); 
+		put = new HttpPut(API + "message?messid="+messid + "message?isSeen=" +true);
+		putRequest(put, null);
+		EntityUtils.consumeQuietly(response.getEntity());
 	}
 	
 	/**

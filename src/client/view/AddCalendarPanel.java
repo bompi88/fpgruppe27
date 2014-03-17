@@ -103,7 +103,7 @@ public class AddCalendarPanel extends JPanel {
 			
 			Employee emp = (Employee)ClientObjectFactory.getEmployeeByUsername(addCalendarTextField.getText());
 			
-			if(emp.getUsername().equals(addCalendarTextField.getText())) {
+			if(emp.getUsername() != null && emp.getUsername().equals(addCalendarTextField.getText())) {
 			
 				emp.setUsername(addCalendarTextField.getText());
 				emp.setName(addCalendarTextField.getText());

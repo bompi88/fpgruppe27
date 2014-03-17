@@ -64,6 +64,18 @@ public class Employee extends Model {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Employee)) {
+			return false;
+		}
+		return (username.equals(((Employee)obj).username));
+	}
+	
+	public int hashCode() {
+		return username.hashCode();
+	}
 
 	@Override
 	public String toString() {
