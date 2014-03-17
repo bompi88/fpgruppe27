@@ -78,7 +78,7 @@ public class ClientObjectFactory {
 	 */
 	public static List<Message> getMessages(String Username, Timestamp timeFrom){
 		
-		request = new HttpGet(API + "message?username="+ Username + "&time="+timeFrom.getTime());
+		request = new HttpGet(API + "message?username="+ Username + "&time=" + timeFrom.getTime());
 		String messageString = getRequest(request);
 		EntityUtils.consumeQuietly(response.getEntity());
 		Gson test = new GsonBuilder().setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();

@@ -343,9 +343,15 @@ server.put('/meeting', function(req, res, next) {
 	if (req.params.name === undefined ) {
 		return next(new restify.InvalidArgumentError('Required fields not supplied.'))
 	}
+
+	var placeOrRoom = undefined;
 	
-	if (req.params.room === 0)
+	if (req.params.room === 0) {
 		req.params.room = 'NULL';
+		placeOrRoom = req.param.place;
+	} else {
+		placeOrRoom = req.param.room.name;
+	}
 
 	var oldMeeting = undefined;
 	var newMeeting = req.params;
@@ -356,9 +362,30 @@ server.put('/meeting', function(req, res, next) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 
 			oldMeeting = rows[0];
+	});
+
+	var newStartTime = moment(req.params.startTime);
+	var newEndTime = moment(req.params.endTime);
+
+	var timeandPlaceChangedText = newMeeting.name + " har blitt endret. Ny tid er: " + newStartTime.hours() + ':' + newStartTime.minutes() + " til: " + newEndTime.hours() + ':' + newEndTime.minutes() + " og nytt sted er: " + placeOrRoom;
+	var timeChangedText = newMeeting.name + " har blitt endret. Ny tid er: " + newStartTime.hours() + ':' + newStartTime.minutes() + " til: " + newEndTime.hours() + ':' + newEndTime.minutes();
+	var placeChangedText = newMeeting.name + "har blitt flyttet til" + placeOrRoom; 
+	var outputMessage;
+
+	if (oldMeeting.startTime !== oldMeeting.startTime || oldMeeting.endTime !== oldMeeting.endTime) {
+		timeChanged = true;
+	} 
+	if (oldMeeting.place != newMeeting.place || oldMeeting.roomid != newMeeting.roomid) {
+		placeChanged = true;
 	}
 
-
+	if (timeChanged && placeChanged) {
+		outputMessage = timeandPlaceChangedText;
+	} else if (timeChanged) {
+		outputMessage = timeChangedText;
+	} else if (placeChanged) {
+		outputMessage = placeChangedText;
+	}
 
 	connection.query("UPDATE meeting SET name='" + req.params.name + "', description='" + req.params.description + "', startDate='" + req.params.startDate
 					+ "', endDate='" + req.params.endDate +"', startTime='" + req.params.startTime +"', endTime='" + req.params.endTime +"', place='" 
@@ -381,6 +408,11 @@ server.put('/meeting', function(req, res, next) {
 						
     					connection.query("INSERT INTO meeting_participants (meetid, username, status) values ('" + r[0].meetid + "','" + participant.username + "','" + participant.status + "')", function(err, rows, fields) {
 							if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+						
+							connection.query("INSERT INTO message (message, time, owner, isSeen) VALUES('" + outputMessage + "',NOW(),'" + participant.username + "','" + 0 + "')", function(err, rows, fields) {
+								if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+							
+							});	
 						});
 					}
 			
@@ -635,6 +667,18 @@ server.put('/message', function(req, res, next) {
 	}
 
 	connection.query("UPDATE message SET isSeen='" + req.params.isSeen + "' WHERE messid='" + req.params.messid + "'", function(err, rows, fields) {
+			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+			
+			res.send()
+	});
+})
+
+//------------------------------------------------------------------------------------------------
+// DELETE 		/meeting_participants/:id 															
+//------------------------------------------------------------------------------------------------
+
+server.del('/message', function(req, res, next) {
+	connection.query("DELETE FROM message WHERE messid='" + req.params.messid + "'", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 			
 			res.send()
