@@ -1,17 +1,11 @@
-//lets load newrelic - if we have it
-if (process.env.license) {
-  require('newrelic');  
-}
-
-var restify = require('restify'), 
-	userSave = require('save')('user'),
+var restify = require('restify'),
 	mysql = require('mysql'),
 	async = require('async'),
 	moment = require('moment');
 
 var app_name = 'calendeer-api';
 
-// create a new server, both http and https
+// create a new http server
 var server = restify.createServer({ 
 	name: app_name,
 	formatters: {
@@ -19,25 +13,26 @@ var server = restify.createServer({
   	}
 });
 
+// create a connection  to the database.
 var connection = mysql.createConnection('mysql://bjorbrat_user:fpgruppe27@ec2-176-34-253-124.eu-west-1.compute.amazonaws.com/bjorbrat_fpgruppe27');
 
 connection.connect();
 
 // sets default headers and maps GET,PUT,POST
+// sets parsers etc.
 server.use(restify.fullResponse())
-	.use(restify.bodyParser());
-	server.use(restify.queryParser());
+server.use(restify.bodyParser());
+server.use(restify.queryParser());
 server.pre(restify.pre.userAgentConnection());
 
 
 //------------------------------------------------------------------------------------------------
 // Employee routes
 //------------------------------------------------------------------------------------------------
-// Routes: 			GET		/employee				params: username 													
-//					POST 	/employee 													
-// 					PUT		/employee/:id 												
-//					GET 	/employee/:id 												
-//					DELETE	/employee/:id  												
+// Routes: 			GET		/employee			params: username 													
+//					POST 	/employee 			params: username,password,name,email										
+// 					PUT		/employee 			params: username,password,name,email																		
+//					DELETE	/employee  			params: username									
 //------------------------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------------------------
@@ -46,11 +41,13 @@ server.pre(restify.pre.userAgentConnection());
 
 server.get('/employee', function(req, res, next) {
 	
+	// if username param is defined, get employee with username
 	if(typeof req.params.username !== "undefined") {
 		connection.query("SELECT * FROM employee WHERE username='" + req.params.username + "'", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 			res.send(rows[0])
 		});
+	// else: get all employees
 	} else {
 		connection.query('SELECT * FROM employee', function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
@@ -64,10 +61,13 @@ server.get('/employee', function(req, res, next) {
 //------------------------------------------------------------------------------------------------
 
 server.post('/employee', function(req, res, next) {
+
+	// check required fields
 	if (req.params.username === undefined || req.params.password === undefined || req.params.name === undefined || req.params.email === undefined) {
 		return next(new restify.InvalidArgumentError('Required fields not supplied.'))
 	}
 
+	// if all fields is defined, insert the employee into the database
 	connection.query("INSERT INTO employee (username, password, name, email) values ('" + req.params.username + "','" + req.params.password + "','" +  req.params.name + "','" + req.params.email + "')", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 			
@@ -76,14 +76,17 @@ server.post('/employee', function(req, res, next) {
 })
 
 //------------------------------------------------------------------------------------------------
-// PUT 		/employee/:id 																
+// PUT 		/employee																
 //------------------------------------------------------------------------------------------------
 
 server.put('/employee', function(req, res, next) {
-	if (req.params.username === undefined) {
+
+	// check required fields
+	if (req.params.username === undefined || req.params.password === undefined || req.params.name === undefined || req.params.email === undefined) {
 		return next(new restify.InvalidArgumentError('Required fields not supplied.'))
 	}
 
+	// update an employee which has username X
 	connection.query("UPDATE employee SET password='" + req.params.password + "', name='" + req.params.name + "', email='" + req.params.email + "' WHERE username='" + req.params.username + "'", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 			
@@ -92,10 +95,17 @@ server.put('/employee', function(req, res, next) {
 })
 
 //------------------------------------------------------------------------------------------------
-// DELETE 		/employee/:id 															
+// DELETE 		/employee 															
 //------------------------------------------------------------------------------------------------
 
 server.del('/employee', function(req, res, next) {
+
+	// must have a username
+	if (req.params.username === undefined) {
+		return next(new restify.InvalidArgumentError('Required fields not supplied.'))
+	}
+
+	// Fire a delete query for employee with username X
 	connection.query("DELETE FROM employee WHERE username='" + req.params.username + "'", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 			
@@ -106,11 +116,10 @@ server.del('/employee', function(req, res, next) {
 //------------------------------------------------------------------------------------------------
 // Meeting routes
 //------------------------------------------------------------------------------------------------
-// Routes: 			GET		/meeting 													
+// Routes: 			GET		/meeting 		params:meetid,startTime,endTime,username												
 //					POST 	/meeting 													
-// 					PUT		/meeting/:id 												
-//					GET 	/meeting/:id 												
-//					DELETE	/meeting/:id  												
+// 					PUT		/meeting 																							
+//					DELETE	/meeting  												
 //------------------------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------------------------
@@ -120,15 +129,20 @@ server.del('/employee', function(req, res, next) {
 server.get('/meeting', function(req, res, next) {
 	
 	var meetings = undefined;
-
+	
+	// if meeting id is given, then get that particular meeting	
 	if(typeof req.params.meetid !== "undefined") {
 
+		// select our meeting 
 		connection.query("SELECT * FROM meeting WHERE meetid='" + req.params.meetid + "'", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 
 			meetings = rows[0];
 
+			// gather information about fields which needs information from other tables.
+			// Do this in an asynchronic fashion.
 			async.series({
+				// get info about our meeting participants
 				participants: function(callback) {
 					connection.query("SELECT * FROM meeting_participants WHERE meetid='" + req.params.meetid + "'", function(err, rows, fields) {
 						if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
@@ -136,6 +150,7 @@ server.get('/meeting', function(req, res, next) {
 						callback(null, rows);
 					})
 				},
+				// get info about the meeting responsible
 			    responsible: function(callback){
 			    	connection.query("SELECT * FROM employee WHERE username='" + meetings.username + "'", function(err, rows, fields) {
 						if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
@@ -144,6 +159,7 @@ server.get('/meeting', function(req, res, next) {
 					})
 			        
 			    },
+			    // get info about the room which the meeting taking place.
 			    room: function(callback){
 					connection.query("SELECT * FROM room WHERE roomid='" + meetings.roomid + "'", function(err, rows, fields) {
 						if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
@@ -152,13 +168,8 @@ server.get('/meeting', function(req, res, next) {
 					})
 			    }
 			},
+			// join all this information together
 			function(err, results) {
-
-				if (meetings.isAppointment === 0) {
-					meetings.isAppointment = false;
-				} else {
-					meetings.isAppointment = true;
-				}
 
 				meetings.responsible = results.responsible;
 				meetings.room = results.room;
@@ -167,10 +178,13 @@ server.get('/meeting', function(req, res, next) {
 				res.send(meetings)
 			});	
 		});
+	// if we want all events in a given start and end time. Fetch from one or many calendars, which is identified with an eployees username.
 	} else if(typeof req.params.startTime !== "undefined" && typeof req.params.endTime !== "undefined" && typeof req.params.username !== "undefined") {
 
 		var users = '';
 
+		// include all username given at http request.
+		// gives: 'username1','username2', ... , 'username3' etc.
 		if(req.params.username[1].length > 1) {
 			users += "'" + req.params.username[0] + "'";
 
@@ -180,63 +194,63 @@ server.get('/meeting', function(req, res, next) {
 		} else {
 			users = "\'" + req.params.username + "\'";
 		}
-		console.log("user:" + users);
 
+		//get all meetings for all defined users in the given timeinterval.
 		connection.query("SELECT * FROM meeting WHERE username IN (" + users + ") AND startTime BETWEEN '" + req.params.startTime + "' AND '" + req.params.endTime + "'", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 			
 			meetings = rows;
 
+			// for each meeting, get all related information to that meeting
 			async.forEach(Object.keys(meetings), function (item, callback){ 
+				// get all meeting participants for each meeting
 			    connection.query("SELECT * FROM meeting_participants WHERE meetid='" + meetings[item].meetid + "'", function(err, rows, fields) {
 					if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 								
 					meetings[item].participants = rows;
 					
-					if (meetings[item].isAppointment === 0) {
-						meetings[item].isAppointment = false;
-					} else {
-						meetings[item].isAppointment = true;
-					}
-					
-
+					// get the responsible for each meeting
 					connection.query("SELECT * FROM employee WHERE username='" + meetings[item].username + "'", function(err, rows, fields) {
+						if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+						
+						meetings[item].responsible = rows[0];
+
+						// get the room for each meeting
+						connection.query("SELECT * FROM room WHERE roomid='" + meetings[item].roomid + "'", function(err, rows, fields) {
 							if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 							
-							meetings[item].responsible = rows[0];
-
-							connection.query("SELECT * FROM room WHERE roomid='" + meetings[item].roomid + "'", function(err, rows, fields) {
-								if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
-								
-								meetings[item].room = rows[0];
-								callback(null);
+							meetings[item].room = rows[0];
+							callback(null);
 						})	
 					})
 				});
-
+			// respond when finished
 			}, function(err) {
-				console.log(meetings)
 			    res.send(meetings)
 			}); 
 		});
+	// If only username is given, then return all meetings where this username is listed as responsible
 	} else if(typeof req.params.username !== "undefined") {
+		// get all meetings where the employee with username X is listed as responsible
 		connection.query("SELECT * FROM meeting WHERE username='" + req.params.username + "'", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 			
 			meetings = rows;
 
+			// for each meeting, get and merge information about meeting participants, 
 			async.forEach(Object.keys(meetings), function (item, callback){ 
 			    connection.query("SELECT * FROM meeting_participants WHERE meetid='" + meetings[item].meetid + "'", function(err, rows, fields) {
 					if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 								
 					meetings[item].participants = rows;
 					
-
+					// get the responsible of meeting
 					connection.query("SELECT * FROM employee WHERE username='" + meetings[item].username + "'", function(err, rows, fields) {
 							if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 							
 							meetings[item].responsible = rows[0];
 
+							// get room
 							connection.query("SELECT * FROM room WHERE roomid='" + meetings[item].roomid + "'", function(err, rows, fields) {
 								if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 								
@@ -256,18 +270,20 @@ server.get('/meeting', function(req, res, next) {
 			
 			meetings = rows;
 
+			// for each meeting, get and merge information about meeting participants, 
 			async.forEach(Object.keys(meetings), function (item, callback){ 
 			    connection.query("SELECT * FROM meeting_participants WHERE meetid='" + meetings[item].meetid + "'", function(err, rows, fields) {
 					if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 								
 					meetings[item].participants = rows;
 					
-
+					// get the responsible of meeting
 					connection.query("SELECT * FROM employee WHERE username='" + meetings[item].username + "'", function(err, rows, fields) {
 							if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 							
 							meetings[item].responsible = rows[0];
 
+							// get room
 							connection.query("SELECT * FROM room WHERE roomid='" + meetings[item].roomid + "'", function(err, rows, fields) {
 								if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 								
@@ -297,41 +313,43 @@ server.post('/meeting', function(req, res, next) {
 	if (req.params.room === undefined)
 		req.params.room = 'NULL';
 
+	// insert a meeting with corresponding values.
 	connection.query("INSERT INTO meeting (name, description, startTime, endTime, place, roomid, isAppointment, username) values ('" 
 						+ req.params.name + "','" + req.params.description + "','" + req.params.startTime + "','" + req.params.endTime 
 						+ "','" + req.params.place + "','" + req.params.room.roomID + "','" 
 						+ req.params.isAppointment + "','" + req.params.responsible.username + "')", function(err, rows, fields) {
-			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
-			
-			
-			if(typeof req.params.participants !== "undefined") {
-				connection.query("SELECT meetid FROM meeting WHERE meetid = (SELECT MAX(meetid) FROM meeting)", function(err, r, fields) {
-					if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
-			
-			
-					for (var i = 0; i < req.params.participants.length; i++) { 
-						var participant = req.params.participants[i];
-						
-						if (participant.status === undefined) 
-							participant.status = 'NULL';
-						
-    					connection.query("INSERT INTO meeting_participants (meetid, username, status) values ('" + r[0].meetid + "','" + participant.username + "','" + participant.status + "')", function(err, rows, fields) {
+		if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+		
+		// if we have participants
+		if(typeof req.params.participants !== "undefined") {
+			// get meeting id from newly inserted meeting
+			connection.query("SELECT meetid FROM meeting WHERE meetid = (SELECT MAX(meetid) FROM meeting)", function(err, r, fields) {
+				if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+		
+				// for all participants
+				for (var i = 0; i < req.params.participants.length; i++) { 
+					var participant = req.params.participants[i];
+					
+					if (participant.status === undefined) 
+						participant.status = 'NULL';
+					
+					// create meeting participants which connects meetings and employees
+					connection.query("INSERT INTO meeting_participants (meetid, username, status) values ('" + r[0].meetid + "','" + participant.username + "','" + participant.status + "')", function(err, rows, fields) {
+						if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+
+						var time = moment(req.params.startTime);
+
+						// create a message which is assigned to each participant.
+						var invitedString = 'Du har blitt invitert til ' + req.params.name + ' den ' + time.date() + '.' + time.month() + '.' + time.year() + ' kl. ' + time.hours() + ':' + time.minutes();
+						connection.query("INSERT INTO message (message, time, owner, isSeen) VALUES('" + invitedString + "',NOW(),'" + participant.username + "','" + 0 + "')", function(err, rows, fields) {
 							if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
-
-							var time = moment(req.params.startTime);
-
-
-							var invitedString = 'Du har blitt invitert til ' + req.params.name + ' den ' + time.date() + '.' + time.month() + '.' + time.year() + ' kl. ' + time.hours() + ':' + time.minutes();
-							connection.query("INSERT INTO message (message, time, owner, isSeen) VALUES('" + invitedString + "',NOW(),'" + participant.username + "','" + 0 + "')", function(err, rows, fields) {
-								if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
-							
-							});	
-						});
-					}
+						
+						});	
+					});
+				}
 				res.send(201, r[0].meetid)
-				});
-			}
-			
+			});
+		}
 	});
 })
 

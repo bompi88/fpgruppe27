@@ -4,7 +4,7 @@ import java.awt.Color;
 
 public final class AppConstants {
 	
-	public static final String REST_API_PATH = "http://localhost:9004/";
+	public static final String REST_API_PATH = "http://fpgruppe27.bompi88.eu.cloudbees.net/";
 	
 	public static final String COOKIE_FILE_PATH = "cookie.txt";
 	public static final int MAIN_FRAME_WIDTH = 1000;
