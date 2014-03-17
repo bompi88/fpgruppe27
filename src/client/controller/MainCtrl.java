@@ -102,7 +102,7 @@ public class MainCtrl extends Controller {
             	// init the controllers
         		calendarCtrl = new CalendarCtrl(getMainCtrl());
         		loginCtrl = new LoginCtrl(getMainCtrl());
-        		inboxCtrl = new InboxCtrl(getMainCtrl());
+        		
         		appointmentCtrl = new AppointmentCtrl(getMainCtrl());
             	
         		// if cookie: login
@@ -199,7 +199,7 @@ public class MainCtrl extends Controller {
 		
 		// have to initialize our sidebar
 		sidebarPanel.init();
-		
+		inboxCtrl = new InboxCtrl(getMainCtrl());
 		// finally show the contents of our app.
 		mainWrapperPanel.setVisible(true);
 		
@@ -230,7 +230,8 @@ public class MainCtrl extends Controller {
 		
 		// hide all states
 		calendarCtrl.hide();
-		inboxCtrl.hide();
+		if (inboxCtrl != null)
+			inboxCtrl.hide();
 		appointmentCtrl.hide();
 		loginCtrl.hide();
 		

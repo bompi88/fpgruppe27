@@ -61,10 +61,12 @@ public class ClientObjectFactory {
 	 */
 	public static List<Message> getMessages(String Username, Timestamp timeFrom){
 		
-		request = new HttpGet(API + "message?username="+ Username + "message?time>"+timeFrom);
+		request = new HttpGet(API + "message?username="+ Username + "&time="+timeFrom.getTime());
 		String messageString = getRequest(request);
 		EntityUtils.consumeQuietly(response.getEntity());
-		Message[] messagePrim = new Gson().fromJson(messageString, Message[].class);
+		Gson test = new GsonBuilder().setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+
+		Message[] messagePrim = test.fromJson(messageString, Message[].class);
 		List<Message> messages = new ArrayList<Message>(Arrays.asList(messagePrim));
 		return messages; 
 	}
@@ -92,7 +94,9 @@ public class ClientObjectFactory {
 		request = new HttpGet(API + "employee?username="+username);
 		String employeeString = getRequest(request);
 		EntityUtils.consumeQuietly(response.getEntity());
-		Employee employee = new Gson().fromJson(employeeString, Employee.class);
+		Gson test = new GsonBuilder().setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+		
+		Employee employee = test.fromJson(employeeString, Employee.class);
 		
 		return employee;
 	}

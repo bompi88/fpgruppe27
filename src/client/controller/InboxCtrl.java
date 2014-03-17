@@ -12,7 +12,7 @@ public class InboxCtrl extends Controller implements State {
 	public InboxCtrl(Controller ctrl) {
 		super(ctrl);
 		
-		inboxPanel = new InboxView();
+		inboxPanel = new InboxView(ctrl);
 		
 		ctrl.getMainFrame().getContentPane().add(inboxPanel);
 	}
