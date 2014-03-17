@@ -16,7 +16,7 @@ public class Message extends Model {
 	private String message;
 	private Meeting meeting;
 	private boolean isSeen;
-	private Participant userInQestion; 
+	private Participant userInQuestion; 
 	private Participant messageOwner; 
 	private int messid;  
 
@@ -38,11 +38,11 @@ public class Message extends Model {
 //	protected String userHasDeclinedMessage = "Har medlt avbud til" + meeting.getMeetingName();
 	
 	
-	public Message(Meeting meeting, String type, Participant messageOwner, Participant userInQestion) {
+	public Message(Meeting meeting, String type, Participant messageOwner, Participant userInQuestion) {
 		super();
 		this.meeting = meeting;
 		this.type = type; 	
-		this.userInQestion = userInQestion; 
+		this.userInQuestion = userInQuestion; 
 		this.messageOwner = messageOwner; 
 		//setMessage(); 
 	}
