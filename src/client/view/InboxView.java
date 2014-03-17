@@ -127,6 +127,7 @@ public class InboxView extends JPanel {
 		public InboxElementPanel(Message message) {
 			this.setLayout(new GridLayout());
 			
+			//String inboxLine = "    " + message.getTime() + "    " + message.getMessage();
 			JLabel label = new JLabel(message.getMessage());
 			add(label);
 			JLabel button = new JLabel("              Gå til");

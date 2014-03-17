@@ -1,22 +1,7 @@
 
-createInviteMessage()
-	for all participants
-		write to DB message, messid: int autogenerate
-		write to DB message, message: String "Du har blitt invitert til" + meeting.getMeetingName() + "kl: " + meeting.getStartTimeAsString() + "  "+ meeting.getStartDateAsString();
-		write to DB message, time: Timestamp now
-		write to DB message, owner: String participant.getUsername(); 
-		write to DB message, isSeen: false; 
-}
-
 createMeetingChangedMessage()
-	Meeting oldMeetingData = (getMessage fra DB, per meetid fra inputMessage)
-	Meeting newMeetingData = (getMessage fra inputMessage)
-	boolean timeChanged
-	boolean placeChanged
-	String TimeandPlaceChangedText = meeting.getMeetingName() + "Har blitt endret. Ny tid er: " + meeting.getStartTime() + " til: " + meeting.getEndTimeAsString() "  " og nytt sted er: " meeting.getPlaceOrRoom();
-	String TimeChangedText = meeting.getMeetingName() + "Har blitt endret. Ny tid er: " + meeting.getStartTime() + " til: " + meeting.getEndTimeAsString()
-	String PlaceChangedText = meeting.getMeetingName() + "har blitt flyttet til" + meeting.getPlaceOrRoom(); 
-	String outputMessage; 
+
+
 	
 	if ((starttime.oldMeetingData != starttime.newMeeting) &| (endTime.oldMeetingData != endTime.newMeeting))
 		timeChanged = true; 
@@ -50,7 +35,7 @@ createMeetingCancledMessage(){
 createUserHasConfirmedMessage(){
 	hent userInQestion; 
 	write to DB message, messid: int autogenerate
-	write to DB message, message: String userInQestion.getName() + "Har bekreftet møteinkallingen til "+ meeting.getMeetingName();   
+	write to DB message, message: String userInQestion.getName() + "Har bekreftet mï¿½teinkallingen til "+ meeting.getMeetingName();   
 	write to DB message, time: Timestamp now
 	write to DB message, owner: String meeting.getResponsible().getUsername()
 	write to DB message, isSeen: false; 	
