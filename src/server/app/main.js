@@ -318,10 +318,11 @@ server.post('/meeting', function(req, res, next) {
     					connection.query("INSERT INTO meeting_participants (meetid, username, status) values ('" + r[0].meetid + "','" + participant.username + "','" + participant.status + "')", function(err, rows, fields) {
 							if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 
-							var time = moment(meeting.startTime);
+							var time = moment(req.params.startTime);
 
-							var invitedString = 'Du har blitt invitert til ' + meeting.name + ' den ' + time.date() + '.' + time.month() + '.' + time.year() + ' kl. ' + time.hours() + ':' + time.minutes();
-							connection.query("INSERT INTO meeting (message, time, owner, isSeen) VALUES('" + invitedString + "','" + moment() + "','" + meeting.username + "','" + 0 + "')", function(err, rows, fields) {
+
+							var invitedString = 'Du har blitt invitert til ' + req.params.name + ' den ' + time.date() + '.' + time.month() + '.' + time.year() + ' kl. ' + time.hours() + ':' + time.minutes();
+							connection.query("INSERT INTO message (message, time, owner, isSeen) VALUES('" + invitedString + "',NOW(),'" + participant.username + "','" + 0 + "')", function(err, rows, fields) {
 								if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 							
 							});	
@@ -345,6 +346,19 @@ server.put('/meeting', function(req, res, next) {
 	
 	if (req.params.room === 0)
 		req.params.room = 'NULL';
+
+	var oldMeeting = undefined;
+	var newMeeting = req.params;
+	var timeChanged = false;
+	var placeChanged = false;
+
+	connection.query("SELECT * FROM meeting WHERE meetid='" + req.params.meetid + "'", function(err, rows, fields) {
+			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+
+			oldMeeting = rows[0];
+	}
+
+
 
 	connection.query("UPDATE meeting SET name='" + req.params.name + "', description='" + req.params.description + "', startDate='" + req.params.startDate
 					+ "', endDate='" + req.params.endDate +"', startTime='" + req.params.startTime +"', endTime='" + req.params.endTime +"', place='" 
@@ -601,7 +615,7 @@ server.get('/message', function(req, res, next) {
 		//connection.query("SELECT * FROM message WHERE username='" + req.params.username + "' AND time > '" + rew.params.timeFrom + "'", function(err, rows, fields) {
 		connection.query("SELECT * FROM message WHERE owner='" + req.params.username + "'", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
-			res.send(rows[0])
+			res.send(rows)
 		});
 	} else {
 		connection.query('SELECT * FROM message', function(err, rows, fields) {
