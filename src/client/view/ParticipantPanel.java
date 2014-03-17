@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
@@ -27,6 +28,7 @@ import database.ClientObjectFactory;
 
 import model.Employee;
 import model.Participant;
+import model.Status;
 
 public class ParticipantPanel extends JPanel {
 	
@@ -35,6 +37,7 @@ public class ParticipantPanel extends JPanel {
 	private JButton addParticipant;
 	private JButton addExternals;
 	protected static DefaultListModel<Employee> participantsModel; 
+	private ArrayList<Participant> participantList;
 
 
 	public ParticipantPanel() {
@@ -43,6 +46,7 @@ public class ParticipantPanel extends JPanel {
 		participantsModel = new DefaultListModel();
 		addParticipant = new JButton("Legg til");
 		addExternals = new JButton("Legg til eksterne deltakere");
+		participantList = new ArrayList<Participant>();
 		participants = new JList();
 		participants.setModel(participantsModel);
 		//participantPicker = new JComboBox();
@@ -56,7 +60,9 @@ public class ParticipantPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if(participantPicker.getSelectedIndex() != -1) {
 					Participant m = (Participant) participantPicker.getSelectedItem();
+					m.setStatus(Status.INVITED);
 					participantsModel.addElement(m);
+					participantList.add(m);
 				}
 				
 			}
@@ -108,6 +114,10 @@ public class ParticipantPanel extends JPanel {
 
 	public DefaultListModel getParticipantsModel() {
 		return participantsModel;
+	}
+	
+	public ArrayList<Participant> getParticipantList() {
+		return participantList;
 	}
 
 	public void setParticipantsModel(DefaultListModel participantsModel) {

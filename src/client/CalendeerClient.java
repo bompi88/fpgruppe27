@@ -3,7 +3,7 @@ import database.DatabaseInitalizer;
 
 /**
  * Calendeer Client is an application which displays your personal calendar in an awesome and 
- * fabulous way. It communicates with a SQL-Database through usage of tha' holy JDBC Driver.
+ * fabulous way. It communicates with a SQL-Database through usage of tha' holy JDBC Driver. Or does it...?
  * 
  * Here is where it all begins.
  * Once upon a time there was a...
