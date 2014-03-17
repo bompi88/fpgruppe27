@@ -1,0 +1,51 @@
+
+createInviteMessage()
+	for all participants
+		write to DB message, messid: int autogenerate
+		write to DB message, message: String "Du har blitt invitert til" + meeting.getMeetingName() + "kl: " + meeting.getStartTimeAsString() + "  "+ meeting.getStartDateAsString();
+		write to DB message, time: Timestamp now
+		write to DB message, owner: String participant.getUsername(); 
+		write to DB message, isSeen: false; 
+}
+
+createMeetingChangedMessage()
+	Meeting oldMeetingData = (getMessage fra DB, per meetid fra inputMessage)
+	Meeting newMeetingData = (getMessage fra inputMessage)
+	boolean timeChanged
+	boolean placeChanged
+	String TimeandPlaceChangedText = meeting.getMeetingName() + "Har blitt endret. Ny tid er: " + meeting.getStartTime() + " til: " + meeting.getEndTimeAsString() "  " og nytt sted er: " meeting.getPlaceOrRoom();
+	String TimeChangedText = meeting.getMeetingName() + "Har blitt endret. Ny tid er: " + meeting.getStartTime() + " til: " + meeting.getEndTimeAsString()
+	String PlaceChangedText = meeting.getMeetingName() + "har blitt flyttet til" + meeting.getPlaceOrRoom(); 
+	String outputMessage; 
+	
+	if ((starttime.oldMeetingData != starttime.newMeeting) &| (endTime.oldMeetingData != endTime.newMeeting))
+		timeChanged = true; 
+	if(place.oldMeetingData != place.newMeeting) &| (roomid.oldMeetingData != romeid.newMeeting)) 
+		placeChanged = true; 
+	
+	if(timeChanged && placeChanged)
+		outPutMessage= TimeandPlaceChangedText
+	else if(timeChanged)
+		outPutMessage= TimeChangedText
+	else if(timeChanged)
+		outPutMessage= PlaceChangedText
+
+	for all participants
+		write to DB message, messid: int autogenerate
+		write to DB message, message: outPutMessage
+		write to DB message, time: Timestamp now
+		write to DB message, owner: String participant.getUsername(); 
+		write to DB message, isSeen: false; 
+}
+
+createMeetingCancledMessage(){
+	for all participants
+		write to DB message, messid: int autogenerate
+		write to DB message, message: meeting.getMeetingName() + "  har blitt avlyst"; 
+		write to DB message, time: Timestamp now
+		write to DB message, owner: String participant.getUsername(); 
+		write to DB message, isSeen: false; 	
+}
+
+createUserHasConfirmedMessage(){
+	 
