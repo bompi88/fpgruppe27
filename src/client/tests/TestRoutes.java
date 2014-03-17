@@ -14,7 +14,7 @@ import org.junit.Test;
 import database.ClientObjectFactory;
 import junit.extensions.jfcunit.JFCTestCase;
 
-public class testRoutes extends JFCTestCase {
+public class TestRoutes extends JFCTestCase {
 
 	private String username = "test";
 	private String password = "test";
