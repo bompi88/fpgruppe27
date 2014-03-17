@@ -4,7 +4,6 @@ import javax.swing.JFrame;
 
 import framework.Model;
 
-
 /**
  * A template for a controller. The controller is responsible for a
  * state.

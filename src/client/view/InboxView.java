@@ -116,8 +116,8 @@ public class InboxView extends JPanel {
 		}
 
 		public void valueChanged(ListSelectionEvent arg0) {
-			// Aktiveres når noen trykker i innboksen
-			// UFERDIG, per nå sendes man bare til appointmentView
+			// Aktiveres nÃ¥r noen trykker i innboksen
+			// UFERDIG, per nÃ¥ sendes man bare til appointmentView
 			ctrl.setState(AppointmentCtrl.class);
 		}
 	}
@@ -130,7 +130,7 @@ public class InboxView extends JPanel {
 			//String inboxLine = "    " + message.getTime() + "    " + message.getMessage();
 			JLabel label = new JLabel(message.getMessage());
 			add(label);
-			JLabel button = new JLabel("              Gå til");
+			JLabel button = new JLabel("              GÃ¥ til");
 			button.setForeground(Color.BLUE);
 			add(button);
 			

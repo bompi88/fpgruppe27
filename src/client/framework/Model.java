@@ -25,27 +25,4 @@ public class Model {
         propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
     }
 	
-//	/**
-//	 * Creates a new entry in the sql-database, typically: "INSERT INTO ..."
-//	 */
-//	public abstract void create() throws ClassNotFoundException, SQLException;
-//	
-//	/**
-//	 * Updates an entry in the sql-database.
-//	 */	
-//	public abstract void save() throws ClassNotFoundException, SQLException;
-//	
-//	/**
-//	 * Deletes an entry from the sql-database.
-//	 */	
-//	public abstract void delete() throws ClassNotFoundException, SQLException;
-//	
-//	/**
-//	 * Fetches an entry from the sql-database, typically: "SELECT ..."
-//	 * @param id
-//	 * @return Model
-//	 */	
-//	public abstract void fetch() throws ClassNotFoundException, SQLException;
-//	
-	
 }

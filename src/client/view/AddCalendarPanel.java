@@ -26,6 +26,10 @@ import resources.AppConstants;
 import utils.RelativeLayout;
 import utils.WrapLayout;
 
+/**
+ * AddCalendarPanel is the panel in calendar view which take care of the subscriptions
+ * to other calendars. 
+ */
 @SuppressWarnings("serial")
 public class AddCalendarPanel extends JPanel {
 	
@@ -97,17 +101,20 @@ public class AddCalendarPanel extends JPanel {
 		});
 	}
 
+	
+	/**
+	 * Subscribe to a calendar.
+	 */
 	public void addCalendar() {
 		
+		// check if number of subscribed calendars is below 12 and if input text is not empty
 		if(((HashSet<Employee>) p.getModel()).size() < 12 && !addCalendarTextField.getText().equals("") && addCalendarTextField.getText() != null) {
 			
 			Employee emp = (Employee)ClientObjectFactory.getEmployeeByUsername(addCalendarTextField.getText());
 			
-			if(emp.getUsername() != null && emp.getUsername().equals(addCalendarTextField.getText())) {
-			
-				emp.setUsername(addCalendarTextField.getText());
-				emp.setName(addCalendarTextField.getText());
-				//p.modelsubscribedCalendars.add(emp);
+			// if employee exists
+			if(emp != null && emp.getUsername() != null && emp.getUsername().equals(addCalendarTextField.getText())) {
+				// fire a change event named "add_calendar"
 				p.changeEvent("add_calendar", emp);
 			}
 		}
@@ -130,17 +137,13 @@ public class AddCalendarPanel extends JPanel {
 		setPreferredSize(new Dimension((int)(getParent().getPreferredSize().width * (1 - AppConstants.HEADER_TITLE_PANEL_SCALE_WIDTH)/2)+1, getParent().getPreferredSize().height));
 	}
 	
+	/**
+	 * Contains the list of calendars the user has subscribed to
+	 */
 	public static class CalendarListPanel extends JPanel implements Observer, Observable {
 		
+		// only store once
 		private HashSet<Employee> model;
-		public HashSet<Employee> getModel() {
-			return model;
-		}
-
-		public void setModel(HashSet<Employee> model) {
-			this.model = model;
-		}
-
 		private List<AddCalendarPanelElement> elements = new ArrayList<AddCalendarPanelElement>();
 		private List<Observer> observers = new ArrayList<Observer>();
 		
@@ -164,26 +167,26 @@ public class AddCalendarPanel extends JPanel {
 		
 		@Override
 		public void changeEvent(String event, Object obj) {
+			// remove calendar
 			if(event.equals("remove_calendar")) {
 				if(model.remove(((AddCalendarPanelElement)obj).getModel())) {
-					//fireObserverEvent(event, obj);
-					//removeCalendar((Employee)obj);
-					System.out.println((((AddCalendarPanelElement)obj).getModel()).getName() + " deleted.");
 					remove((AddCalendarPanelElement)obj);
 					updateView();
 				}
-				
+			// add calendar
 			} else if(event.equals("add_calendar")) {
 				Employee e = (Employee)obj;
 				if (model.add(e)) {
 					addCalendar(e);
 					updateView();
-					//removeCalendar((Employee)obj);
-					System.out.println(((Employee)obj).getName() + " added.");
 				}
 			}
 		}
 		
+		/**
+		 * Adds a calendar to the list
+		 * @param e
+		 */
 		public void addCalendar(Employee e) {
 			AddCalendarPanelElement d = new AddCalendarPanelElement(e);
 			d.addObserver(this);
@@ -191,9 +194,20 @@ public class AddCalendarPanel extends JPanel {
 			add(d);
 		}
 		
+		/**
+		 * Update and repaint the view
+		 */
 		public void updateView() {
 			repaint();
 			revalidate();
+		}
+		
+		public HashSet<Employee> getModel() {
+			return model;
+		}
+
+		public void setModel(HashSet<Employee> model) {
+			this.model = model;
 		}
 
 		@Override
@@ -203,7 +217,6 @@ public class AddCalendarPanel extends JPanel {
 
 		@Override
 		public void fireObserverEvent(String event, Object obj) {
-
 			for (Observer o : observers) {
 				o.changeEvent(event, obj);
 			}
