@@ -30,6 +30,10 @@ import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
+import com.google.gson.stream.JsonWriter;
 
 import framework.Model;
 
@@ -95,7 +99,8 @@ public class ClientObjectFactory {
 		request = new HttpGet(API + "message?username="+ Username + "&time=" + timeFrom.getTime());
 		String messageString = getRequest(request);
 		EntityUtils.consumeQuietly(response.getEntity());
-		Gson test = new GsonBuilder().setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+		Gson test = new GsonBuilder().registerTypeAdapter(Boolean.class, booleanAsIntAdapter)
+			      .registerTypeAdapter(boolean.class, booleanAsIntAdapter).setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
 
 		Message[] messagePrim = test.fromJson(messageString, Message[].class);
 		List<Message> messages = new ArrayList<Message>(Arrays.asList(messagePrim));
@@ -510,5 +515,33 @@ public class ClientObjectFactory {
             return (f.getDeclaringClass() == Model.class && f.getName().equals("propertyChangeSupport"));
         }
 
+        
+        
     }
+	
+	private static final TypeAdapter<Boolean> booleanAsIntAdapter = new TypeAdapter<Boolean>() {
+		  @Override public void write(JsonWriter out, Boolean value) throws IOException {
+		    if (value == null) {
+		      out.nullValue();
+		    } else {
+		      out.value(value);
+		    }
+		  }
+		  @Override public Boolean read(JsonReader in) throws IOException {
+		    JsonToken peek = in.peek();
+		    switch (peek) {
+		    case BOOLEAN:
+		      return in.nextBoolean();
+		    case NULL:
+		      in.nextNull();
+		      return null;
+		    case NUMBER:
+		      return in.nextInt() != 0;
+		    case STRING:
+		      return Boolean.parseBoolean(in.nextString());
+		    default:
+		      throw new IllegalStateException("Expected BOOLEAN or NUMBER but was " + peek);
+		    }
+		  }
+		};
 }
