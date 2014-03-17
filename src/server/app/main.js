@@ -433,11 +433,43 @@ server.del('/meeting', function(req, res, next) {
 		return next(new restify.InvalidArgumentError('Required fields not supplied.'))
 	}
 
-	connection.query("DELETE FROM meeting WHERE meetid=" + req.params.meetid, function(err, rows, fields) {
+	var meetName = undefined;
+	console.log("var her")
+
+	console.log(req.params.meetid)
+
+	connection.query("SELECT * FROM meeting_participants WHERE meetid=" + req.params.meetid, function(err, participants, fields) {
 		if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 
-		res.send()
+		console.log(participants)
+
+	connection.query("SELECT name FROM meeting WHERE meetid=" + req.params.meetid, function(err, rows, fields) {
+		if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+
+		meetName = rows[0].name;
+
+		for (var i = 0; i < participants.length; i++) { 
+			var participant = participants[i];
+		
+			var outputMessage = meetName + " har blitt avlyst";
+			
+			connection.query("INSERT INTO message (message, time, owner, isSeen) VALUES('" + outputMessage + "',NOW(),'" + participant.username + "','" + 0 + "')", function(err, rows, fields) {
+				if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+				console.log("send to:" + participant.username)
+				res.send()
+			});	
+		}
+
+				connection.query("DELETE FROM meeting WHERE meetid=" + req.params.meetid, function(err, rows, fields) {
+		if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+		});
 	});
+
+
+		
+	});
+
+	
 })
 
 //------------------------------------------------------------------------------------------------
@@ -733,7 +765,13 @@ function myCustomFormatJSON(req, res, body) {
 
 
 
+// // Listen on port
+// server.listen(process.env.PORT, function() {
+// 	console.log('%s listening at %s', server.name, server.url);
+// });
+
+
 // Listen on port
-server.listen(process.env.PORT, function() {
+server.listen(9004, function() {
 	console.log('%s listening at %s', server.name, server.url);
 });

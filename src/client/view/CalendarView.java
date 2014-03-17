@@ -355,7 +355,7 @@ public class CalendarView extends JPanel{
 //			}
 			
 			// For testing
-			monday = ClientObjectFactory.getMeetingByWeek(calendar.get(Calendar.WEEK_OF_YEAR), "andybb1");
+			monday = ClientObjectFactory.getMeetingByWeek(calendar.get(Calendar.WEEK_OF_YEAR), ((Employee)((MainCtrl)getCtrl().getMainCtrl()).getModel()).getUsername());
 			
 			
 			mondayView = new CalendarColumn(monday);

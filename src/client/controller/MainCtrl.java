@@ -100,7 +100,7 @@ public class MainCtrl extends Controller {
             public void run() {
         		
             	// init the controllers
-        		calendarCtrl = new CalendarCtrl(getMainCtrl());
+        		
         		loginCtrl = new LoginCtrl(getMainCtrl());
         		
         		
@@ -193,7 +193,7 @@ public class MainCtrl extends Controller {
 	 * against the database.
 	 */
 	public void login() {
-		
+		calendarCtrl = new CalendarCtrl(getMainCtrl());
 		// go to calendar
 		setState(CalendarCtrl.class);
 		
@@ -201,6 +201,7 @@ public class MainCtrl extends Controller {
 		sidebarPanel.init();
 		appointmentCtrl = new AppointmentCtrl(getMainCtrl());
 		inboxCtrl = new InboxCtrl(getMainCtrl());
+		
 		// finally show the contents of our app.
 		mainWrapperPanel.setVisible(true);
 		
@@ -230,7 +231,8 @@ public class MainCtrl extends Controller {
 	public void setState(Class<? extends State> c) {
 		
 		// hide all states
-		calendarCtrl.hide();
+		if (calendarCtrl != null)
+			calendarCtrl.hide();
 		if (inboxCtrl != null)
 			inboxCtrl.hide();
 		if (appointmentCtrl != null)
