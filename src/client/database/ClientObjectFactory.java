@@ -53,6 +53,23 @@ public class ClientObjectFactory {
 		httpClient = HttpClientBuilder.create().build();
 	}
 	
+	
+	/**
+	 * Get a message by username and timeFrom(time after last retrieved message). 
+	 * @param meeting
+	 * @param Employee
+	 * @param status
+	 */
+	public static void setAttandence(Meeting meeting, Employee emp, String status){
+		int meetid = meeting.getMeetid(); 
+		String username = emp.getUsername(); 
+		 
+		put = new HttpPut(API + "meeting_participants?meetid="+meetid + "meeting_participants?username="+username + "meeting_participants?status="+status );
+		putRequest(put, null);
+		EntityUtils.consumeQuietly(response.getEntity());
+		
+	}
+	
 	/**
 	 * Get a message by username and timeFrom(time after last retrieved message). 
 	 * @param username
