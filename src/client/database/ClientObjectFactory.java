@@ -53,6 +53,23 @@ public class ClientObjectFactory {
 		httpClient = HttpClientBuilder.create().build();
 	}
 	
+	
+	/**
+	 * Get a message by username and timeFrom(time after last retrieved message). 
+	 * @param meeting
+	 * @param Employee
+	 * @param status
+	 */
+	public static void setAttandence(Meeting meeting, Employee emp, String status){
+		int meetid = meeting.getMeetid(); 
+		String username = emp.getUsername(); 
+		 
+		put = new HttpPut(API + "meeting_participants?meetid="+meetid + "meeting_participants?username="+username + "meeting_participants?status="+status );
+		putRequest(put, null);
+		EntityUtils.consumeQuietly(response.getEntity());
+		
+	}
+	
 	/**
 	 * Get a message by username and timeFrom(time after last retrieved message). 
 	 * @param username
@@ -61,10 +78,12 @@ public class ClientObjectFactory {
 	 */
 	public static List<Message> getMessages(String Username, Timestamp timeFrom){
 		
-		request = new HttpGet(API + "message?username="+ Username + "&time="+timeFrom);
+		request = new HttpGet(API + "message?username="+ Username + "&time="+timeFrom.getTime());
 		String messageString = getRequest(request);
 		EntityUtils.consumeQuietly(response.getEntity());
-		Message[] messagePrim = new Gson().fromJson(messageString, Message[].class);
+		Gson test = new GsonBuilder().setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+
+		Message[] messagePrim = test.fromJson(messageString, Message[].class);
 		List<Message> messages = new ArrayList<Message>(Arrays.asList(messagePrim));
 		return messages; 
 	}
@@ -92,7 +111,9 @@ public class ClientObjectFactory {
 		request = new HttpGet(API + "employee?username="+username);
 		String employeeString = getRequest(request);
 		EntityUtils.consumeQuietly(response.getEntity());
-		Employee employee = new Gson().fromJson(employeeString, Employee.class);
+		Gson test = new GsonBuilder().setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+		
+		Employee employee = test.fromJson(employeeString, Employee.class);
 		
 		return employee;
 	}
