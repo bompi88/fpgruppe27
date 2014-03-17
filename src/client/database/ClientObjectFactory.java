@@ -55,7 +55,7 @@ public class ClientObjectFactory {
 	
 	
 	/**
-	 * Get a message by username and timeFrom(time after last retrieved message). 
+	 * Sets status attandence DB by meeting, employee and status. 
 	 * @param meeting
 	 * @param Employee
 	 * @param status
@@ -66,9 +66,23 @@ public class ClientObjectFactory {
 		 
 		put = new HttpPut(API + "meeting_participants?meetid="+meetid + "meeting_participants?username="+username + "meeting_participants?status="+status );
 		putRequest(put, null);
-		EntityUtils.consumeQuietly(response.getEntity());
-		
+		EntityUtils.consumeQuietly(response.getEntity());	
 	}
+	
+	
+	/**
+	 * Removes employees pat in meeting. For use when user deletes meeting from calander.  
+	 * @param meeting
+	 * @param Employee
+	 */
+	public static void setNegAttandenceAndRemove(Meeting meeting, Employee emp){
+		int meetid = meeting.getMeetid(); 
+		String username = emp.getUsername(); 
+		delete = new HttpDelete((API + "meeting_participants?meetid="+meetid + "meeting_participants?username="+username)); 
+		deleteRequest(delete);
+		EntityUtils.consumeQuietly(response.getEntity());
+	}
+	
 	
 	/**
 	 * Get a message by username and timeFrom(time after last retrieved message). 
@@ -101,6 +115,7 @@ public class ClientObjectFactory {
 		EntityUtils.consumeQuietly(response.getEntity());
 	}
 	
+	
 	/**
 	 * Get an employee by username.
 	 * @param username
@@ -117,6 +132,7 @@ public class ClientObjectFactory {
 		
 		return employee;
 	}
+	
 	
 	/**
 	 * Get all employees in database.
