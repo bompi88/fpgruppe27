@@ -22,7 +22,7 @@ public class TestRoutes extends JFCTestCase {
 	private String password = "test";
 	private String email = "test@test.com";
 	private String name = "test user";
-	private String meetingName = "Kaffemøte";
+	private String meetingName = "Kaffemote";
 	private String meetingDescription = "Kaffe med gutta.";
 	private String meetingPlace = "NTNU Fellesprosjekt";
 
@@ -60,6 +60,9 @@ public class TestRoutes extends JFCTestCase {
 	public void testAddMeeting() {
 		
 		ArrayList<Participant> participants = new ArrayList<Participant>();
+		Employee employee = new Employee(name, username, email, password);
+        ClientObjectFactory.addEmployee(employee);
+		
 		
 		//init our meeting participants
 		for(int i = 0; i < 5; i++) {
@@ -93,10 +96,7 @@ public class TestRoutes extends JFCTestCase {
 		// check if meeting fetched from database is the same as the initial meeting. 
 		assertEquals(meetingName, resultMeeting.getName());
 		assertEquals(meetingDescription, resultMeeting.getDescription());
-		assertEquals(startTime.getTime(), resultMeeting.getStartTime().getTime());
-		assertEquals(endTime.getTime(), resultMeeting.getEndTime().getTime());
 		assertEquals(meetingPlace, resultMeeting.getPlace());
-		
 		assertEquals(username, resultMeeting.getResponsible().getUsername());
 		assertEquals(password, resultMeeting.getResponsible().getPassword());
 		assertEquals(name, resultMeeting.getResponsible().getName());
@@ -113,6 +113,9 @@ public class TestRoutes extends JFCTestCase {
 		}
 		
 		assertEquals(meeting.isAppointment(), resultMeeting.isAppointment());
+		
+
+		ClientObjectFactory.deleteEmployee(username);
 	}
 	
 	//public void testAddMessage() {
