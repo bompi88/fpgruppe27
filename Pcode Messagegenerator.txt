@@ -48,4 +48,19 @@ createMeetingCancledMessage(){
 }
 
 createUserHasConfirmedMessage(){
+	hent userInQestion; 
+	write to DB message, messid: int autogenerate
+	write to DB message, message: String userInQestion.getName() + "Har bekreftet møteinkallingen til "+ meeting.getMeetingName();   
+	write to DB message, time: Timestamp now
+	write to DB message, owner: String meeting.getResponsible().getUsername()
+	write to DB message, isSeen: false; 	
+}
+
+createUserHasDeclinedMessage(){
+	hent userInQestion; 
+	write to DB message, messid: int autogenerate
+	write to DB message, message: String userInQestion.getName() + "Har medlt avbud til "+ meeting.getMeetingName();   
+	write to DB message, time: Timestamp now
+	write to DB message, owner: String meeting.getResponsible().getUsername()
+	write to DB message, isSeen: false; 	
 	 
