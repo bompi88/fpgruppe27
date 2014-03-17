@@ -11,58 +11,50 @@ import model.Status;
 
 import org.junit.Test;
 
+import model.Message;
+
 import database.ClientObjectFactory;
 import junit.extensions.jfcunit.JFCTestCase;
 
 public class TestRoutes extends JFCTestCase {
 
-	private String username = "test";
+	private String username = "nicholat";
 	private String password = "test";
 	private String email = "test@test.com";
 	private String name = "test user";
-	
 	private String meetingName = "Kaffemøte";
 	private String meetingDescription = "Kaffe med gutta.";
 	private String meetingPlace = "NTNU Fellesprosjekt";
 
 	@Test
-	public void testRemoveEmployee() {
-		
-		ClientObjectFactory.deleteEmployee(username);
-		
-		Employee emp = ClientObjectFactory.getEmployeeByUsername(username);
-		
-		assertNull(emp);
-	}
-	
-	@Test
-	public void testUpdateEmployee() {
-		Employee employee = new Employee(name + "update", username, email + "update", password + "update");
-		
-		ClientObjectFactory.updateEmployee(employee);
-		
-		Employee emp = ClientObjectFactory.getEmployeeByUsername(username);
-		
-		assertEquals(username, emp.getUsername());
-        assertEquals(password + "update", emp.getPassword());
-        assertEquals(email + "update", emp.getEmail());
-        assertEquals(name + "update", emp.getName());
-	}
-	
-	@Test
-    public void testAddAndGETEmployee() {
+    public void testEmployee() {
 		
         Employee employee = new Employee(name, username, email, password);
-
         ClientObjectFactory.addEmployee(employee);
-        
         Employee emp = ClientObjectFactory.getEmployeeByUsername(username);
 
         assertEquals(username, emp.getUsername());
         assertEquals(password, emp.getPassword());
         assertEquals(email, emp.getEmail());
         assertEquals(name, emp.getName());
+        
+        employee.setName(this.name + "update");
+        employee.setEmail(this.email + "update");
+        employee.setPassword(this.password + "update");
+        ClientObjectFactory.updateEmployee(employee);
+        emp = ClientObjectFactory.getEmployeeByUsername(username);
+        
+        assertEquals(username, emp.getUsername());
+        assertEquals(password + "update", emp.getPassword());
+        assertEquals(email + "update", emp.getEmail());
+        assertEquals(name + "update", emp.getName());
+        
+        ClientObjectFactory.deleteEmployee(username);
+        emp = ClientObjectFactory.getEmployeeByUsername(username);
+		
+        assertNull(emp);
     }
+	
 	
 	@Test
 	public void testAddMeeting() {
@@ -121,5 +113,15 @@ public class TestRoutes extends JFCTestCase {
 		}
 		
 		assertEquals(meeting.isAppointment(), resultMeeting.isAppointment());
+	}
+	
+	//public void testAddMessage() {
+		//Message message = new Message(name, username, email, password);
+	//}
+	
+	public static void main(String args[]) {
+		TestRoutes tr = new TestRoutes();
+		tr.testEmployee();
+		tr.testAddMeeting();
 	}
 }
