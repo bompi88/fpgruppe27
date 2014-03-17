@@ -26,6 +26,7 @@ import framework.Observer;
 public class AddCalendarPanelElement extends JPanel implements Observable{
 	
 	private ImageIcon removeCalendarIcon;
+	private ImageIcon removeCalendarIconHover;
 	private JLabel removeCalendarButton = new JLabel();
     private List<Observer> observers = new ArrayList<Observer>(); 
 	private JLabel userLabel = new JLabel();
@@ -36,6 +37,7 @@ public class AddCalendarPanelElement extends JPanel implements Observable{
 	public AddCalendarPanelElement(Employee emp) {
 		setVisible(true);
     	removeCalendarIcon = new ImageIcon(ImageManager.getInstance().resizeImage(ImageManager.getInstance().getImage("delete_icon"), 15, 15));
+    	removeCalendarIconHover = new ImageIcon(ImageManager.getInstance().resizeImage(ImageManager.getInstance().getImage("delete_icon_hover"), 15, 15));
     	
     	removeCalendarButton.setIcon(removeCalendarIcon);
     	setPreferredSize(new Dimension((int)(300/4),20));
@@ -69,14 +71,12 @@ public class AddCalendarPanelElement extends JPanel implements Observable{
 			
 			@Override
 			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
+				removeCalendarButton.setIcon(removeCalendarIcon);
 			}
 			
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
+				removeCalendarButton.setIcon(removeCalendarIconHover);
 			}
 			
 			@Override
