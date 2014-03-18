@@ -335,10 +335,10 @@ server.post('/meeting', function(req, res, next) {
 			// get meeting id from newly inserted meeting
 			connection.query("SELECT meetid FROM meeting WHERE meetid = (SELECT MAX(meetid) FROM meeting)", function(err, r, fields) {
 				if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
-		
+				var participant = undefined;
 				// for all participants
 				for (var i = 0; i < req.params.participants.length; i++) { 
-					var participant = req.params.participants[i];
+					participant = req.params.participants[i];
 					
 					if (participant.status === undefined) 
 						participant.status = 'NULL';
@@ -347,21 +347,23 @@ server.post('/meeting', function(req, res, next) {
 					connection.query("INSERT INTO meeting_participants (meetid, username, status) values ('" + r[0].meetid + "','" + participant.username + "','" + participant.status + "')", function(err, rows, fields) {
 						if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 
-						var time = moment(req.params.startTime);
-
-						var minutes = time.minutes();
-
-						if (minutes < 10) {
-							minutes = '0' + minutes;
-						}
-
-						// create a message which is assigned to each participant.
-						var invitedString = 'Du har blitt invitert til ' + req.params.name + ' den ' + time.date() + '.' + time.month() + '.' + time.year() + ' kl. ' + time.hours() + ':' + minutes;
-						connection.query("INSERT INTO message (message, time, owner, isSeen) VALUES('" + invitedString + "',NOW(),'" + participant.username + "','" + 0 + "')", function(err, rows, fields) {
-							if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 						
-						});	
 					});
+					var time = moment(req.params.startTime);
+
+					var minutes = time.minutes();
+
+					if (minutes < 10) {
+						minutes = '0' + minutes;
+					}
+
+					// create a message which is assigned to each participant.
+					var invitedString = 'Du har blitt invitert til ' + req.params.name + ' den ' + time.date() + '.' + time.month() + '.' + time.year() + ' kl. ' + time.hours() + ':' + minutes;
+					console.log(participant.username)
+					connection.query("INSERT INTO message (message, time, owner, isSeen) VALUES('" + invitedString + "',NOW(),'" + participant.username + "','" + 0 + "')", function(err, rows, fields) {
+						if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+					
+					});	
 				}
 				res.charSet('utf-8');
 				res.send(201, r[0].meetid)
@@ -877,3 +879,11 @@ function myCustomFormatJSON(req, res, body) {
 server.listen(process.env.PORT, function() {
 	console.log('%s listening at %s', server.name, server.url);
 });
+
+
+// // Listen on port
+// server.listen(9004, function() {
+// 	console.log('%s listening at %s', server.name, server.url);
+// });
+
+
