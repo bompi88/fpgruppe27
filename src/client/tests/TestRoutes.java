@@ -103,14 +103,11 @@ public class TestRoutes extends JFCTestCase {
 		//assertEquals(room.getCapacity(), resultMeeting.getRoom().getCapacity());
 		//assertEquals(room.getName(), resultMeeting.getRoom().getName());
 		
-		/*
 		for (int i = 0; i < participants.size(); i++) {
 			assertEquals(participants.get(i).getUsername(), resultMeeting.getParticipants().get(i).getUsername());
 			assertEquals(participants.get(i).getName(), resultMeeting.getParticipants().get(i).getName());
-			assertEquals(participants.get(i).getPassword(), resultMeeting.getParticipants().get(i).getPassword());
 			assertEquals(participants.get(i).getEmail(), resultMeeting.getParticipants().get(i).getEmail());
 		}
-		*/
 		
 		//assertEquals(meeting.isAppointment(), resultMeeting.isAppointment());
 		
