@@ -2,6 +2,8 @@ package controller;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 import database.ClientObjectFactory;
 
@@ -30,16 +32,21 @@ public class LoginCtrl extends Controller implements State {
 		  });
 	}
 	
-	public void login() {
+	public void login(String password) {
 		
 		Employee model = (Employee) getModel();
 		
-		if(ClientObjectFactory.authenticate(model)) {
-			model = ClientObjectFactory.getEmployeeByUsername(model.getUsername());
-			((MainCtrl)getParentCtrl()).login();
-		} else {
-			loginDialog.showErrorMessage();
-		}	
+		try {
+			if(ClientObjectFactory.authenticate(model, password)) {
+				model = ClientObjectFactory.getEmployeeByUsername(model.getUsername());
+				((MainCtrl)getParentCtrl()).login();
+			} else {
+				loginDialog.showErrorMessage();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	
 	}
 
 	@Override

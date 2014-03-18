@@ -84,6 +84,7 @@ public class AppointmentPanel extends JPanel implements PropertyChangeListener{
 		nameLabel = new JLabel("Navn:");
 				
 		radioGroup.add(placeRadio); radioGroup.add(roomRadio);
+		placeRadio.setSelected(true);
 		
 		cancelButton.addActionListener(new ActionListener() {
 			@Override

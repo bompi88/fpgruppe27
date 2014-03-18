@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -497,14 +499,15 @@ public class ClientObjectFactory {
 		return returnString;
 	}
 	
-	public static boolean authenticate(Employee emp) {
+	public static boolean authenticate(Employee emp, String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
 		
 		if (emp.getUsername() != null && emp.getPassword() != null && !emp.getPassword().equals("") && !emp.getUsername().equals("")) {
 			// Not safe :p
 			Employee e = getEmployeeByUsername(emp.getUsername());
-			
-			if( e != null)
-				return emp.getPassword().equals(e.getPassword());
+			if(e != null) {
+				if(PasswordHash.validatePassword(password, e.getPassword()))
+					return true;
+			}
 			else
 				return false;
 		}
