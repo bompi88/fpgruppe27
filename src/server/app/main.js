@@ -45,12 +45,16 @@ server.get('/employee', function(req, res, next) {
 	if(typeof req.params.username !== "undefined") {
 		connection.query("SELECT * FROM employee WHERE username='" + req.params.username + "'", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+
+			res.charSet('utf-8');
 			res.send(rows[0])
 		});
 	// else: get all employees
 	} else {
 		connection.query('SELECT * FROM employee', function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+
+			res.charSet('utf-8');
 			res.send(rows)
 		});
 	}
@@ -71,6 +75,7 @@ server.post('/employee', function(req, res, next) {
 	connection.query("INSERT INTO employee (username, password, name, email) values ('" + req.params.username + "','" + req.params.password + "','" +  req.params.name + "','" + req.params.email + "')", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 			
+			res.charSet('utf-8');
 			res.send(201, rows)
 	});
 })
@@ -90,6 +95,7 @@ server.put('/employee', function(req, res, next) {
 	connection.query("UPDATE employee SET password='" + req.params.password + "', name='" + req.params.name + "', email='" + req.params.email + "' WHERE username='" + req.params.username + "'", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 			
+			res.charSet('utf-8');
 			res.send()
 	});
 })
@@ -109,6 +115,7 @@ server.del('/employee', function(req, res, next) {
 	connection.query("DELETE FROM employee WHERE username='" + req.params.username + "'", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 			
+			res.charSet('utf-8');
 			res.send()
 	});
 })
@@ -175,6 +182,7 @@ server.get('/meeting', function(req, res, next) {
 				meetings.room = results.room;
 				meetings.participants = results.participants;
 
+				res.charSet('utf-8');
 				res.send(meetings)
 			});	
 		});
@@ -226,6 +234,7 @@ server.get('/meeting', function(req, res, next) {
 				});
 			// respond when finished
 			}, function(err) {
+				res.charSet('utf-8');
 			    res.send(meetings)
 			}); 
 		});
@@ -261,6 +270,7 @@ server.get('/meeting', function(req, res, next) {
 				});
 
 			}, function(err) {
+				res.charSet('utf-8');
 			    res.send(meetings)
 			}); 
 		});
@@ -293,6 +303,7 @@ server.get('/meeting', function(req, res, next) {
 					})
 				});
 			}, function(err) {
+				res.charSet('utf-8');
 			    res.send(meetings)
 			}); 
 		});
@@ -352,6 +363,7 @@ server.post('/meeting', function(req, res, next) {
 						});	
 					});
 				}
+				res.charSet('utf-8');
 				res.send(201, r[0].meetid)
 			});
 		}
@@ -453,6 +465,7 @@ server.put('/meeting', function(req, res, next) {
 				}
 			});	
 		}
+		res.charSet('utf-8');
 		res.send()
 	});
 })
@@ -488,6 +501,7 @@ server.del('/meeting', function(req, res, next) {
 				connection.query("INSERT INTO message (message, time, owner, isSeen) VALUES('" + outputMessage + "',NOW(),'" + participant.username + "','" + 0 + "')", function(err, rows, fields) {
 					if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 
+					res.charSet('utf-8');
 					res.send()
 				});	
 			}
@@ -539,6 +553,7 @@ server.get('/meeting_participants', function(req, res, next) {
 				});
 
 			}, function(err) {
+				res.charSet('utf-8');
 			    res.send(meeting_participants)
 			});
 		});
@@ -563,6 +578,7 @@ server.get('/meeting_participants', function(req, res, next) {
 				});
 
 			}, function(err) {
+				res.charSet('utf-8');
 			    res.send(meeting_participants)
 			});
 		});
@@ -582,6 +598,7 @@ server.post('/meeting_participants', function(req, res, next) {
 	connection.query("insert into meeting_participants (meetid, username, status) values ('" + req.params.meetid + "," + req.params.username + "," + req.params.status + "')", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 			
+			res.charSet('utf-8');
 			res.send(201, rows)
 	});
 })
@@ -598,6 +615,7 @@ server.put('/meeting_participants', function(req, res, next) {
 	connection.query("UPDATE meeting_participants SET status='" + req.params.status + "' WHERE username='" + req.params.username + "'", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 			
+			res.charSet('utf-8');
 			res.send()
 	});
 })
@@ -615,6 +633,7 @@ server.del('/meeting_participants', function(req, res, next) {
 	connection.query("DELETE FROM meeting_participants WHERE username='" + req.params.username + "'", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 			
+			res.charSet('utf-8');
 			res.send()
 	});
 })
@@ -639,12 +658,16 @@ server.get('/room', function(req, res, next) {
 		// get room by id
 		connection.query("SELECT * FROM room WHERE roomid='" + req.params.roomID + "'", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+
+			res.charSet('utf-8');
 			res.send(rows[0])
 		});
 	// else: get all rooms
 	} else {
 		connection.query('SELECT * FROM room', function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+
+			res.charSet('utf-8');
 			res.send(rows)
 		});
 	}
@@ -664,6 +687,7 @@ server.post('/room', function(req, res, next) {
 	connection.query("INSERT INTO room (name, capacity) values ('" + req.params.name + "','" + req.params.capacity + "')", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 			
+			res.charSet('utf-8');
 			res.send(201, rows)
 	});
 })
@@ -682,6 +706,7 @@ server.put('/room', function(req, res, next) {
 	connection.query("UPDATE room SET name='" + req.params.name + "', capacity='" + req.params.capacity + "' WHERE roomID='" + req.params.roomID + "'", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 			
+			res.charSet('utf-8');
 			res.send()
 	});
 })
@@ -694,6 +719,7 @@ server.del('/room', function(req, res, next) {
 	connection.query("DELETE FROM room WHERE roomID='" + req.params.roomID + "'", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 			
+			res.charSet('utf-8');
 			res.send()
 	});
 })
@@ -719,6 +745,8 @@ server.get('/message', function(req, res, next) {
 		// get message by id
 		connection.query("SELECT * FROM message WHERE messid='" + req.params.messid + "'", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+
+			res.charSet('utf-8');
 			res.send(rows[0])
 		});
 	// if a username and timeFrom is specified
@@ -726,6 +754,8 @@ server.get('/message', function(req, res, next) {
 		// get all messages which is created after a certain point in time
 		connection.query("SELECT * FROM message WHERE owner='" + req.params.username + "' AND time > '" + rew.params.timeFrom + "'", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+
+			res.charSet('utf-8');
 			res.send(rows)
 		});
 	// if only username is specified
@@ -733,12 +763,16 @@ server.get('/message', function(req, res, next) {
 		// get all messages which is sent to a specific user
 		connection.query("SELECT * FROM message WHERE owner='" + req.params.username + "'", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+
+			res.charSet('utf-8');
 			res.send(rows)
 		});
 	// else: get all messages
 	} else {
 		connection.query('SELECT * FROM message', function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+
+			res.charSet('utf-8');
 			res.send(rows)
 		});
 	}
@@ -758,6 +792,7 @@ server.post('/message', function(req, res, next) {
 	connection.query("INSERT INTO message (message, owner) values ('" + req.params.message + "','" + req.params.username + "')", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 			
+			res.charSet('utf-8');
 			res.send(201, rows)
 	});
 })
@@ -776,6 +811,7 @@ server.put('/message', function(req, res, next) {
 	connection.query("UPDATE message SET isSeen='" + req.params.isSeen + "' WHERE messid='" + req.params.messid + "'", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 			
+			res.charSet('utf-8');
 			res.send()
 	});
 })
@@ -794,6 +830,7 @@ server.del('/message', function(req, res, next) {
 	connection.query("DELETE FROM message WHERE messid='" + req.params.messid + "'", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 			
+			res.charSet('utf-8');
 			res.send()
 	});
 })
