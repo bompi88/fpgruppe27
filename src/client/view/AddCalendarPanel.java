@@ -101,6 +101,9 @@ public class AddCalendarPanel extends JPanel {
 		});
 	}
 
+	public List<Employee> getAllSubscriptions() {
+		return calendarSubscribedList.getSelectedValuesList();
+	}
 	
 	/**
 	 * Subscribe to a calendar.
@@ -108,7 +111,7 @@ public class AddCalendarPanel extends JPanel {
 	public void addCalendar() {
 		
 		// check if number of subscribed calendars is below 12 and if input text is not empty
-		if(((HashSet<Employee>) p.getModel()).size() < 12 && !addCalendarTextField.getText().equals("") && addCalendarTextField.getText() != null) {
+		if(((HashSet<Employee>) p.getModel()).size() < 9 && !addCalendarTextField.getText().equals("") && addCalendarTextField.getText() != null) {
 			
 			Employee emp = (Employee)ClientObjectFactory.getEmployeeByUsername(addCalendarTextField.getText());
 			

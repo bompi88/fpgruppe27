@@ -20,6 +20,7 @@ public class CalendarCtrl extends Controller implements State {
 	@Override
 	public void show() {
 		calendarPanel.setVisible(true);
+		calendarPanel.update();
 	}
 
 	@Override

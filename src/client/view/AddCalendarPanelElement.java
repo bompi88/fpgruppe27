@@ -40,7 +40,7 @@ public class AddCalendarPanelElement extends JPanel implements Observable{
     	removeCalendarIconHover = new ImageIcon(ImageManager.getInstance().resizeImage(ImageManager.getInstance().getImage("delete_icon_hover"), 15, 15));
     	
     	removeCalendarButton.setIcon(removeCalendarIcon);
-    	setPreferredSize(new Dimension((int)(300/4),20));
+    	setPreferredSize(new Dimension((int)(300/3),20));
     	setLayout(new GridBagLayout());
     	this.emp = emp;
     	

@@ -13,6 +13,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import controller.CalendarCtrl;
+
 import database.ClientObjectFactory;
 
 import resources.AppConstants;
@@ -61,6 +63,7 @@ public class AppointmentView extends JPanel {
 					model.setParticipants(part.getParticipantList());
 					System.out.println(model);
 					ClientObjectFactory.addMeeting(model);
+					getCtrl().setState(CalendarCtrl.class);
 				}
 				else {
 					JOptionPane.showMessageDialog(new JFrame(),"Vennligst fyll inn alle feltene.", "Mangler informasjon", JOptionPane.ERROR_MESSAGE);
