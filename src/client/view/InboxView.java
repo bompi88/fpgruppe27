@@ -38,18 +38,15 @@ public class InboxView extends JPanel {
 	private InboxListPanel inboxPanel;
 	
 	private JLabel whereLabel = new JLabel(AppConstants.INBOX_HEADER_TEXT);
-	
-	protected DefaultListModel<Message> inbox = new DefaultListModel<Message>(); 
+	protected DefaultListModel<Message> inbox;
 	protected int noOfUnseenMessages = 0; 
 	
 	Controller ctrl;
 	Employee emp;
 	
-	
-	public InboxView(Controller controll) {
-		
+	public InboxView(Controller controll, DefaultListModel<Message> inbox) {
+		this.inbox = inbox;
 		ctrl = controll;
-		initInbox();
 		
 		inboxPanel = new InboxListPanel();
 		
@@ -140,7 +137,7 @@ public class InboxView extends JPanel {
 			JLabel mess = new JLabel(message.getMessage());
 			mess.setPreferredSize(new Dimension(500,25));
 			add(mess);
-			JLabel button = new JLabel("Gå til");
+			JLabel button = new JLabel("Gï¿½ til");
 			button.setForeground(Color.BLUE);
 			add(button);
 			

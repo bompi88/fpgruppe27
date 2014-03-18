@@ -201,7 +201,8 @@ public class MainCtrl extends Controller {
 		sidebarPanel.init();
 		appointmentCtrl = new AppointmentCtrl(getMainCtrl());
 		inboxCtrl = new InboxCtrl(getMainCtrl());
-		
+		inboxCtrl.initInbox();
+		sidebarPanel.setNumberOfUnseenMessages(inboxCtrl.getNumberOfUnseenMessages());
 		// finally show the contents of our app.
 		mainWrapperPanel.setVisible(true);
 		

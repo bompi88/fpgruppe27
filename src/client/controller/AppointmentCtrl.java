@@ -30,6 +30,7 @@ public class AppointmentCtrl extends Controller implements State {
 	@Override
 	public void hide() {
 		appointmentPanel.setVisible(false);
+		setModel(new Meeting());
 	}
 
 }

@@ -101,6 +101,10 @@ public class SideBarView extends JPanel {
 	public Controller getCtrl() {
 		return ctrl;
 	}
+	
+	public void setNumberOfUnseenMessages(int count) {
+		inboxButton.setText(AppConstants.SIDE_BAR_INBOX_TEXT + " (" + count + ")");
+	}
 
 	public void init() {
 		loggedInUser.setText("<html><b>user:</b> " + ((Employee)((MainCtrl)ctrl.getMainCtrl()).getModel()).getUsername() + "</html>");
