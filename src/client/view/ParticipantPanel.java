@@ -16,6 +16,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.AbstractButton;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -38,8 +39,7 @@ public class ParticipantPanel extends JPanel implements PropertyChangeListener {
 	
 	private JComboBox participantPicker;
 	private JList participants;
-	private JButton addParticipant;
-	private JButton addExternals;
+	private JButton addParticipant, addExternals, removeParticipant, changeStatusButton;
 	protected static DefaultListModel<Employee> participantsModel; 
 	private ArrayList<Participant> participantList;
 	private Controller ctrl;
@@ -51,6 +51,7 @@ public class ParticipantPanel extends JPanel implements PropertyChangeListener {
 		this.ctrl = ctrl;
 		participantsModel = new DefaultListModel();
 		addParticipant = new JButton("Legg til");
+		removeParticipant = new JButton("Fjern");
 		addExternals = new JButton("Legg til eksterne deltakere");
 		participantList = new ArrayList<Participant>();
 		participants = new JList();
@@ -70,6 +71,21 @@ public class ParticipantPanel extends JPanel implements PropertyChangeListener {
 					participantsModel.addElement(m);
 					participantList.add(m);
 				}
+				
+			}
+			
+		});
+		
+		removeParticipant.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int selectedIndex = participants.getSelectedIndex();
+				if (selectedIndex != -1) {
+				    ((DefaultListModel) participants.getModel()).remove(selectedIndex);
+				    participantList.remove(selectedIndex);
+				}
+
 				
 			}
 			
@@ -115,6 +131,7 @@ public class ParticipantPanel extends JPanel implements PropertyChangeListener {
 		add(new JScrollPane(participants), new GridBagConstraints(0,1,1,1,1,1,anc,0,in, 0,0));
 		add(addParticipant, new GridBagConstraints(1,0,1,1,1,1,anc,0,in, 0,0));
 		add(addExternals, new GridBagConstraints(0,2,1,1,1,1,anc,0,in, 0,0));
+		add(removeParticipant, new GridBagConstraints(1,1,1,1,1,1,anc,0,in, 0,0));
 	}
 	
 
