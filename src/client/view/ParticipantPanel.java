@@ -8,6 +8,8 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -25,12 +27,14 @@ import javax.swing.JScrollPane;
 import javax.swing.ListCellRenderer;
 
 import database.ClientObjectFactory;
+import framework.Controller;
 
 import model.Employee;
+import model.Meeting;
 import model.Participant;
 import model.Status;
 
-public class ParticipantPanel extends JPanel {
+public class ParticipantPanel extends JPanel implements PropertyChangeListener {
 	
 	private JComboBox participantPicker;
 	private JList participants;
@@ -38,11 +42,13 @@ public class ParticipantPanel extends JPanel {
 	private JButton addExternals;
 	protected static DefaultListModel<Employee> participantsModel; 
 	private ArrayList<Participant> participantList;
+	private Controller ctrl;
 
 
-	public ParticipantPanel() {
+	public ParticipantPanel(Controller ctrl) {
 		//setPreferredSize(new Dimension(250, 421));
 		setLayout(new GridBagLayout());
+		this.ctrl = ctrl;
 		participantsModel = new DefaultListModel();
 		addParticipant = new JButton("Legg til");
 		addExternals = new JButton("Legg til eksterne deltakere");
@@ -156,6 +162,19 @@ public class ParticipantPanel extends JPanel {
 				
 				return label;
 			}	
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		Meeting model = ctrl.getModel();
+		if(evt.getPropertyName() == "participants") {
+			DefaultListModel<Participant> listModel = new DefaultListModel<>();
+			 for(Participant e : model.getParticipants()) {
+			         listModel.addElement(e);
+			 }		
+			 participants.setModel(listModel);
+		}
+		
 	}
 
 }

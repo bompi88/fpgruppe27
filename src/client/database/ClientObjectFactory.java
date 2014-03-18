@@ -183,7 +183,6 @@ public class ClientObjectFactory {
 	 * @param employee
 	 */
 	public static void addEmployee(Employee employee) {
-		
 		post = new HttpPost(API + "employee");
 		Gson builder = new GsonBuilder().setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
 		String employeeString = builder.toJson(employee);
@@ -221,10 +220,9 @@ public class ClientObjectFactory {
 		post = new HttpPost(API + "meeting");
 		Gson builder = new GsonBuilder().setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
 		String meetingString = builder.toJson(meeting);
-		String meetID = postRequest(post, meetingString);
+		String meetid = postRequest(post, meetingString);
 		EntityUtils.consumeQuietly(response.getEntity());
-		
-		return Integer.valueOf(meetID);
+		return Integer.valueOf(meetid);
 	}
 	
 	/**

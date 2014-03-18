@@ -43,6 +43,23 @@ public class Meeting extends Model {
 		this.isAppointment = isAppointment;
 		this.name = name;
 	}
+	
+	public Meeting(String description, Timestamp startTime,
+			Timestamp endTime, Room room, String place, Employee responsible,
+			ArrayList<Participant> participants, boolean isAppointment,
+			String name) {
+		super();
+		this.description = description;
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.room = room;
+		this.place = place;
+		this.responsible = responsible;
+		this.participants = participants;
+		this.isAppointment = isAppointment;
+		this.name = name;
+	}
+	
 	public int getMeetid() {
 		return meetid;
 	}

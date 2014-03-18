@@ -41,7 +41,7 @@ public class AppointmentView extends JPanel {
 		this.ctrl = ctrl;
 		//ctrl.setModel(new Meeting());
 		app = new AppointmentPanel(ctrl);
-		part = new ParticipantPanel();
+		part = new ParticipantPanel(ctrl);
 		model = ctrl.getModel();
 		titlePanel = new TitlePanel();
 		saveButton = new JButton("Lagre");
