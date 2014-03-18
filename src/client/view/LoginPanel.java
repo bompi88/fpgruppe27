@@ -8,6 +8,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -21,6 +24,7 @@ import model.Employee;
 
 import controller.LoginCtrl;
 import controller.MainCtrl;
+import database.PasswordHash;
 import framework.Controller;
 
 /**
@@ -122,11 +126,20 @@ public class LoginPanel extends JPanel implements PropertyChangeListener {
 	
 	/**
 	 * fires login 
+	 * @throws InvalidKeySpecException 
+	 * @throws NoSuchAlgorithmException 
 	 */
 	private void fireLogin() {
-		((Employee)getCtrl().getModel()).setUsername(usernameField.getText());
-		((Employee)getCtrl().getModel()).setPassword(passwordField.getText());
-		((LoginCtrl)getCtrl()).login();
+		String hash = "";
+		try {
+			hash = PasswordHash.createHash(passwordField.getText());
+			((Employee)getCtrl().getModel()).setUsername(usernameField.getText());
+			((Employee)getCtrl().getModel()).setPassword(hash);
+			((LoginCtrl)getCtrl()).login(passwordField.getText());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	public Controller getCtrl() {
