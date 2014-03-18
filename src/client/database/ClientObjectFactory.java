@@ -103,10 +103,10 @@ public class ClientObjectFactory {
 		request = new HttpGet(API + "message?username="+ Username + "&time=" + fromTimeFormatted);
 		String messageString = getRequest(request);
 		EntityUtils.consumeQuietly(response.getEntity());
-		Gson test = new GsonBuilder().registerTypeAdapter(Boolean.class, booleanAsIntAdapter)
+		Gson builder = new GsonBuilder().registerTypeAdapter(Boolean.class, booleanAsIntAdapter)
 			      .registerTypeAdapter(boolean.class, booleanAsIntAdapter).setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
 
-		Message[] messagePrim = test.fromJson(messageString, Message[].class);
+		Message[] messagePrim = builder.fromJson(messageString, Message[].class);
 		List<Message> messages = new ArrayList<Message>(Arrays.asList(messagePrim));
 		return messages; 
 	}
@@ -135,10 +135,10 @@ public class ClientObjectFactory {
 		request = new HttpGet(API + "employee?username="+username);
 		String employeeString = getRequest(request);
 		EntityUtils.consumeQuietly(response.getEntity());
-		Gson test = new GsonBuilder().registerTypeAdapter(Boolean.class, booleanAsIntAdapter)
+		Gson builder = new GsonBuilder().registerTypeAdapter(Boolean.class, booleanAsIntAdapter)
 			      .registerTypeAdapter(boolean.class, booleanAsIntAdapter).setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
 		
-		Employee employee = test.fromJson(employeeString, Employee.class);
+		Employee employee = builder.fromJson(employeeString, Employee.class);
 		
 		return employee;
 	}
@@ -153,9 +153,9 @@ public class ClientObjectFactory {
 		request = new HttpGet(GET_EMPLOYEES);
 		String employeesString = getRequest(request);
 		EntityUtils.consumeQuietly(response.getEntity());
-		Gson test = new GsonBuilder().registerTypeAdapter(Boolean.class, booleanAsIntAdapter)
+		Gson builder = new GsonBuilder().registerTypeAdapter(Boolean.class, booleanAsIntAdapter)
 			      .registerTypeAdapter(boolean.class, booleanAsIntAdapter).setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
-		Employee[] employeePrim = test.fromJson(employeesString, Employee[].class);
+		Employee[] employeePrim = builder.fromJson(employeesString, Employee[].class);
 		ArrayList<Employee> employees = new ArrayList<Employee>(Arrays.asList(employeePrim));
 		
 		return employees;
@@ -170,9 +170,9 @@ public class ClientObjectFactory {
 		request = new HttpGet(GET_EMPLOYEES);
 		String employeesString = getRequest(request);
 		EntityUtils.consumeQuietly(response.getEntity());
-		Gson test = new GsonBuilder().registerTypeAdapter(Boolean.class, booleanAsIntAdapter)
+		Gson builder = new GsonBuilder().registerTypeAdapter(Boolean.class, booleanAsIntAdapter)
 			      .registerTypeAdapter(boolean.class, booleanAsIntAdapter).setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
-		Participant[] employeePrim = test.fromJson(employeesString, Participant[].class);
+		Participant[] employeePrim = builder.fromJson(employeesString, Participant[].class);
 		ArrayList<Participant> employees = new ArrayList<Participant>(Arrays.asList(employeePrim));
 		
 		return employees;
@@ -185,8 +185,8 @@ public class ClientObjectFactory {
 	public static void addEmployee(Employee employee) {
 		
 		post = new HttpPost(API + "employee");
-		Gson test = new GsonBuilder().setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
-		String employeeString = test.toJson(employee);
+		Gson builder = new GsonBuilder().setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+		String employeeString = builder.toJson(employee);
 	 	postRequest(post, employeeString);
 		EntityUtils.consumeQuietly(response.getEntity());
 	}
@@ -207,8 +207,8 @@ public class ClientObjectFactory {
 	 */
 	public static void updateEmployee(Employee emp) {
 		put = new HttpPut(API + "employee");
-		Gson test = new GsonBuilder().setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
-		String meetingString = test.toJson(emp);
+		Gson builder = new GsonBuilder().setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+		String meetingString = builder.toJson(emp);
 		putRequest(put, meetingString);
 		EntityUtils.consumeQuietly(response.getEntity());
 	}
@@ -219,8 +219,8 @@ public class ClientObjectFactory {
 	 */
 	public static int addMeeting(Meeting meeting) {
 		post = new HttpPost(API + "meeting");
-		Gson test = new GsonBuilder().setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
-		String meetingString = test.toJson(meeting);
+		Gson builder = new GsonBuilder().setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+		String meetingString = builder.toJson(meeting);
 		String meetID = postRequest(post, meetingString);
 		EntityUtils.consumeQuietly(response.getEntity());
 		
@@ -235,9 +235,9 @@ public class ClientObjectFactory {
 	public static Meeting getMeetingByID(int id) {
 		request = new HttpGet(API + "meeting?meetid=" +  id);
 		String meetingString = getRequest(request);
-		Gson test = new GsonBuilder().registerTypeAdapter(Boolean.class, booleanAsIntAdapter)
+		Gson builder = new GsonBuilder().registerTypeAdapter(Boolean.class, booleanAsIntAdapter)
 			      .registerTypeAdapter(boolean.class, booleanAsIntAdapter).setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
-		Meeting meeting = test.fromJson(meetingString, Meeting.class);
+		Meeting meeting = builder.fromJson(meetingString, Meeting.class);
 		
 		return meeting;
 	}
@@ -271,9 +271,9 @@ public class ClientObjectFactory {
 		String meetingString = getRequest(request);
 		EntityUtils.consumeQuietly(response.getEntity());
 		
-		Gson test = new GsonBuilder().registerTypeAdapter(Boolean.class, booleanAsIntAdapter)
+		Gson builder = new GsonBuilder().registerTypeAdapter(Boolean.class, booleanAsIntAdapter)
 			      .registerTypeAdapter(boolean.class, booleanAsIntAdapter).setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
-		Meeting[] meetingsPrim = test.fromJson(meetingString, Meeting[].class);
+		Meeting[] meetingsPrim = builder.fromJson(meetingString, Meeting[].class);
 		ArrayList<Meeting> meetings = new ArrayList<Meeting>(Arrays.asList(meetingsPrim));
 		
 		return meetings;
@@ -295,8 +295,8 @@ public class ClientObjectFactory {
 	 */
 	public static void updateMeeting(Meeting meeting) {
 		put = new HttpPut(API + "meeting");
-		Gson test = new GsonBuilder().setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
-		String meetingString = test.toJson(meeting);
+		Gson builder = new GsonBuilder().setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+		String meetingString = builder.toJson(meeting);
 		putRequest(put, meetingString);
 		EntityUtils.consumeQuietly(response.getEntity());
 	}
@@ -319,9 +319,9 @@ public class ClientObjectFactory {
 	public static ArrayList<Meeting> getMeetingsByUsername(String username) {
 		request = new HttpGet(API + "meeting?username=" +  username);
 		String meetingString = getRequest(request);
-		Gson test = new GsonBuilder().registerTypeAdapter(Boolean.class, booleanAsIntAdapter)
+		Gson builder = new GsonBuilder().registerTypeAdapter(Boolean.class, booleanAsIntAdapter)
 			      .registerTypeAdapter(boolean.class, booleanAsIntAdapter).setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
-		Meeting[] meetingsPrim = test.fromJson(meetingString, Meeting[].class);
+		Meeting[] meetingsPrim = builder.fromJson(meetingString, Meeting[].class);
 		ArrayList<Meeting> meetings = new ArrayList<Meeting>(Arrays.asList(meetingsPrim));
 		
 		return meetings;
@@ -335,9 +335,9 @@ public class ClientObjectFactory {
 	public static ArrayList<Room> getRooms() {
 		request = new HttpGet(API + "room");
 		String roomsString = getRequest(request);
-		Gson test = new GsonBuilder().registerTypeAdapter(Boolean.class, booleanAsIntAdapter)
+		Gson builder = new GsonBuilder().registerTypeAdapter(Boolean.class, booleanAsIntAdapter)
 			      .registerTypeAdapter(boolean.class, booleanAsIntAdapter).setExclusionStrategies(new ModelListenerExclusionStrategy()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
-		Room[] roomsPrim = test.fromJson(roomsString, Room[].class);
+		Room[] roomsPrim = builder.fromJson(roomsString, Room[].class);
 		ArrayList<Room> rooms = new ArrayList<Room>(Arrays.asList(roomsPrim));
 		
 		return rooms;

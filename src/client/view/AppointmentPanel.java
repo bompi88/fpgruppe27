@@ -12,6 +12,7 @@ import java.beans.PropertyChangeListener;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -29,6 +30,7 @@ import controller.MainCtrl;
 import framework.Controller;
 import model.Employee;
 import model.Meeting;
+import model.Participant;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
@@ -227,7 +229,21 @@ public class AppointmentPanel extends JPanel implements PropertyChangeListener{
 			placeField.setText(model.getPlace());
 		}
 		
-		//else if(evt.getPropertyName() == "")
+		else if(evt.getPropertyName() == "startTime") {
+			dateModelFrom.setValue(model.getStartTime());
+		}
+		
+		else if(evt.getPropertyName() == "endTime") {
+			dateModelTo.setValue(model.getEndTime());
+		}
+		
+		else if(evt.getPropertyName() == "participants") {
+			 DefaultListModel<Participant> listModel = new DefaultListModel<>();
+			 for(Participant e : model.getParticipants()) {
+			         listModel.addElement(e);
+			 }
+
+		}
 
 		
 	}
