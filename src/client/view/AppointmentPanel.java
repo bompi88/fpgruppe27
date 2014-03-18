@@ -231,19 +231,18 @@ public class AppointmentPanel extends JPanel implements PropertyChangeListener{
 		
 		else if(evt.getPropertyName() == "startTime") {
 			dateModelFrom.setValue(model.getStartTime());
+			timePickerFrom.getModel().setValue(model.getStartTime());
+
 		}
 		
 		else if(evt.getPropertyName() == "endTime") {
 			dateModelTo.setValue(model.getEndTime());
+			timePickerTo.getModel().setValue(model.getEndTime());
 		}
 		
-		else if(evt.getPropertyName() == "participants") {
-			 DefaultListModel<Participant> listModel = new DefaultListModel<>();
-			 for(Participant e : model.getParticipants()) {
-			         listModel.addElement(e);
-			 }
-
-		}
+		else if(evt.getPropertyName() == "description") {
+			descArea.setText(model.getDescription());
+		}		
 
 		
 	}
