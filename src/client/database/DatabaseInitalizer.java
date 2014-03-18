@@ -26,59 +26,89 @@ public class DatabaseInitalizer {
 	
 	public void initDatabase() {
 		
-		int numberOfUsers = 20;
-		int numberOfMeetings = 20;
-		
 		// init some test users
-		Employee employee = new Employee();
+		Employee eivingj = new Employee();
+		Employee bjorbrat = new Employee();
+		Employee einaree = new Employee();
+		Employee eivhav = new Employee();
+		Employee andybb = new Employee();
+		Employee nicholat = new Employee();
 		
-		for(int i = 0; i < numberOfUsers; i++) {
-			employee.setUsername(username + i);
-			employee.setName(name + i);
-			employee.setPassword(password + i);
-			employee.setEmail(username  + i + "@test.com");
-			
-			ClientObjectFactory.addEmployee(employee);
-		}
+		eivingj.setUsername("eivingj");
+		eivingj.setName("Eivind G");
+		eivingj.setEmail("eivingj@stud.ntnu.no");
+		eivingj.setPassword("eivingj");
+		
+		eivhav.setUsername("eivhav");
+		eivhav.setName("Eivind H");
+		eivhav.setEmail("eivhav@stud.ntnu.no");
+		eivhav.setPassword("eivhav");
+		
+		bjorbrat.setUsername("bjorbrat");
+		bjorbrat.setName("Bjørn");
+		bjorbrat.setEmail("bjorbrat@stud.ntnu.no");
+		bjorbrat.setPassword("bjorbrat");
+		
+		einaree.setUsername("einaree");
+		einaree.setName("Einar");
+		einaree.setEmail("einaree@stud.ntnu.no");
+		einaree.setPassword("einaree");
+		
+		andybb.setUsername("andybb");
+		andybb.setName("Andreas");
+		andybb.setEmail("andybb@stud.ntnu.no");
+		andybb.setPassword("andybb");
+		
+		nicholat.setUsername("nicholat");
+		nicholat.setName("Nicholas");
+		nicholat.setEmail("nicholat@stud.ntnu.no");
+		nicholat.setPassword("nicholat");
+		
+		ClientObjectFactory.addEmployee(eivingj);
+		ClientObjectFactory.addEmployee(eivhav);
+		ClientObjectFactory.addEmployee(einaree);
+		ClientObjectFactory.addEmployee(bjorbrat);
+		ClientObjectFactory.addEmployee(andybb);
+		ClientObjectFactory.addEmployee(nicholat);
 		
 		
-		for (int j = 0; j < numberOfMeetings; j++) {
-			// init some meetings
-			List<Participant> participants = new ArrayList<Participant>();
-			
-			//init our meeting participants
-			for(int i = 0; i < numberOfUsers; i++) {
-				if (Math.random() > 0.2) {
-					if (Math.random() < 0.33) {
-						participants.add(new Participant(name + i, username + i, username + i + "@test.com", password + i, Status.INVITED));
-					} else if (Math.random() > 0.66) {
-						participants.add(new Participant(name + i, username + i, username + i + "@test.com", password + i, Status.DECLINED));
-					} else {
-						participants.add(new Participant(name + i, username + i, username + i + "@test.com", password + i, Status.ATTENDING));
-					}
-				}
-			}
-			
-			// set time for meeting
-			Timestamp startTime = new Timestamp(System.currentTimeMillis() + (1000 * 60 * 60 * ((int)Math.random() * 10)));
-			Timestamp endTime = new Timestamp(System.currentTimeMillis() + (1000 * 60 * 60 * 2 * ((int)Math.random() * 10)));
-			
-			Room room = new Room(1,(int)(Math.random() * 100),"" + Character.toChars((int)(Math.random() * 20)).toString() + (int)(Math.random() * 400));
-			
-			// create a meeting
-			Meeting meeting = new Meeting();
-			meeting.setName(meetingName + j);
-			meeting.setDescription(meetingDescription + j);
-			meeting.setStartTime(startTime);
-			meeting.setEndTime(endTime);
-			meeting.setPlace(meetingPlace + j);
-			meeting.setResponsible((Employee)participants.get(0));
-			meeting.setRoom(room);
-			meeting.setParticipants(participants);
-			meeting.setAppointment(Math.random() > 0.5);
-			
-			// add the meetinh to database
-			ClientObjectFactory.addMeeting(meeting);
-		}
+//		for (int j = 0; j < numberOfMeetings; j++) {
+//			// init some meetings
+//			List<Participant> participants = new ArrayList<Participant>();
+//			
+//			//init our meeting participants
+//			for(int i = 0; i < numberOfUsers; i++) {
+//				if (Math.random() > 0.2) {
+//					if (Math.random() < 0.33) {
+//						participants.add(new Participant(name + i, username + i, username + i + "@test.com", password + i, Status.INVITED));
+//					} else if (Math.random() > 0.66) {
+//						participants.add(new Participant(name + i, username + i, username + i + "@test.com", password + i, Status.DECLINED));
+//					} else {
+//						participants.add(new Participant(name + i, username + i, username + i + "@test.com", password + i, Status.ATTENDING));
+//					}
+//				}
+//			}
+//			
+//			// set time for meeting
+//			Timestamp startTime = new Timestamp(System.currentTimeMillis() + (1000 * 60 * 60 * ((int)Math.random() * 10)));
+//			Timestamp endTime = new Timestamp(System.currentTimeMillis() + (1000 * 60 * 60 * 2 * ((int)Math.random() * 10)));
+//			
+//			Room room = new Room(1,(int)(Math.random() * 100),"" + Character.toChars((int)(Math.random() * 20)).toString() + (int)(Math.random() * 400));
+//			
+//			// create a meeting
+//			Meeting meeting = new Meeting();
+//			meeting.setName(meetingName + j);
+//			meeting.setDescription(meetingDescription + j);
+//			meeting.setStartTime(startTime);
+//			meeting.setEndTime(endTime);
+//			meeting.setPlace(meetingPlace + j);
+//			meeting.setResponsible((Employee)participants.get(0));
+//			meeting.setRoom(room);
+//			meeting.setParticipants(participants);
+//			meeting.setAppointment(Math.random() > 0.5);
+//			
+//			// add the meetinh to database
+//			ClientObjectFactory.addMeeting(meeting);
+//		}
 	}
 }
