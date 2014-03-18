@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.sql.Timestamp;
 import java.util.List;
@@ -125,12 +126,21 @@ public class InboxView extends JPanel {
 	public class InboxElementPanel extends JPanel {
 		
 		public InboxElementPanel(Message message) {
-			this.setLayout(new GridLayout());
+			this.setLayout(new GridBagLayout());
 			
-			//String inboxLine = "    " + message.getTime() + "    " + message.getMessage();
-			JLabel label = new JLabel(message.getMessage());
-			add(label);
-			JLabel button = new JLabel("              GÃ¥ til");
+//			JLabel space = new JLabel();
+//			space.setPreferredSize(new Dimension(10,25));
+//			add(space);
+			JLabel date = new JLabel(toDateString(message.getTime()));
+			date.setPreferredSize(new Dimension(100,25));
+			add(date);
+			JLabel time = new JLabel(toTimeString(message.getTime()));
+			time.setPreferredSize(new Dimension(60,25));
+			add(time);
+			JLabel mess = new JLabel(message.getMessage());
+			mess.setPreferredSize(new Dimension(500,25));
+			add(mess);
+			JLabel button = new JLabel("Gå til");
 			button.setForeground(Color.BLUE);
 			add(button);
 			
@@ -139,6 +149,17 @@ public class InboxView extends JPanel {
 			} else {
 				setBackground(Color.WHITE);
 			}
+		}
+		
+		public String toTimeString(Timestamp timestamp) {
+			String[] parts = timestamp.toString().split(" ");
+			String[] parts2 = parts[1].split(":");
+			return parts2[0] + ":" + parts2[1];
+		}
+		
+		public String toDateString(Timestamp timestamp) {
+			String[] parts = timestamp.toString().split(" ");
+			return parts[0];
 		}
 	}
 	
