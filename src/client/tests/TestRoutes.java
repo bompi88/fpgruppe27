@@ -111,7 +111,10 @@ public class TestRoutes extends JFCTestCase {
 		
 		//assertEquals(meeting.isAppointment(), resultMeeting.isAppointment());
 		
-
+		ClientObjectFactory.deleteMeeting(id);
+		for(int i = 0; i < 5; i++) {
+			ClientObjectFactory.deleteEmployee(username + i);
+		}
 		ClientObjectFactory.deleteEmployee(username);
 	}
 	
