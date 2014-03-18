@@ -204,7 +204,7 @@ server.get('/meeting', function(req, res, next) {
 		}
 
 		//get all meetings for all defined users in the given timeinterval.
-		connection.query("SELECT * FROM meeting WHERE username IN (" + users + ") AND startTime BETWEEN '" + req.params.startTime + "' AND '" + req.params.endTime + "'", function(err, rows, fields) {
+		connection.query("SELECT DISTINCT(meeting.meetid), meeting.name, meeting.description, meeting.startTime, meeting.endTime, meeting.place, meeting.roomid, meeting.isAppointment, meeting.username FROM meeting, meeting_participants WHERE meeting.meetid = meeting_participants.meetid AND meeting_participants.username IN (" + users + ") OR meeting.username IN (" + users + ") AND startTime BETWEEN '" + req.params.startTime + "' AND '" + req.params.endTime + "'", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 			
 			meetings = rows;

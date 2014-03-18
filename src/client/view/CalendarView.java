@@ -1,6 +1,5 @@
 package view;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -8,7 +7,6 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -64,6 +62,7 @@ public class CalendarView extends JPanel{
 	private JPanel weeklyCalendarWrapper = new JPanel();
 	private AddCalendarPanel addCalendarPanel;
 	private WeeklyCalendarPanel weeklyCalendarPanel;
+	JScrollPane scrollPane;
 	
 	Controller ctrl;
 	
@@ -100,15 +99,15 @@ public class CalendarView extends JPanel{
 		
 		weeklyCalendarWrapper.add(weeklyCalendarPanel);
 		
-		JScrollPane scrollPane = new JScrollPane(weeklyCalendarWrapper,
+		scrollPane = new JScrollPane(weeklyCalendarWrapper,
 		        JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, 
 		        JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		
 		scrollPane.setPreferredSize(new Dimension(AppConstants.MAIN_FRAME_WIDTH-AppConstants.SIDEBAR_WIDTH,
-				AppConstants.MAIN_FRAME_HEIGHT-AppConstants.HEADER_PANEL_HEIGHT));
-		scrollPane.setMinimumSize(new Dimension(AppConstants.MAIN_FRAME_WIDTH-AppConstants.SIDEBAR_WIDTH,
-				AppConstants.MAIN_FRAME_HEIGHT-AppConstants.HEADER_PANEL_HEIGHT));
-		
+				AppConstants.MAIN_FRAME_HEIGHT-AppConstants.HEADER_PANEL_HEIGHT - 20));
+		//scrollPane.setMinimumSize(new Dimension(AppConstants.MAIN_FRAME_WIDTH-AppConstants.SIDEBAR_WIDTH,
+				//AppConstants.MAIN_FRAME_HEIGHT-AppConstants.HEADER_PANEL_HEIGHT));
+		scrollPane.revalidate();
 		//scrollPane.setLayout(rl2);
 		scrollPane.setBackground(AppConstants.CALENDAR_BG_COLOR);
 
@@ -132,6 +131,15 @@ public class CalendarView extends JPanel{
 	
 	public void update() {
 		weeklyCalendarPanel.getMeetingsFromDB();
+		weeklyCalendarPanel.wednesdayView.revalidate();
+		weeklyCalendarPanel.wednesdayView.repaint();
+		weeklyCalendarPanel.wednesdayView.updateUI();
+		weeklyCalendarPanel.revalidate();
+		weeklyCalendarPanel.repaint();
+		scrollPane.revalidate();
+		scrollPane.repaint();
+		scrollPane.getViewport().revalidate();
+		scrollPane.getViewport().repaint();
 	}
 	
 	public List<Employee> getAllSubscriptions() {
