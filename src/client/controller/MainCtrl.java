@@ -99,6 +99,7 @@ public class MainCtrl extends Controller {
         		appointmentCtrl = new AppointmentCtrl(getMainCtrl());
         		viewAppointmentCtrl = new ViewAppointmentCtrl(getMainCtrl());
         		inboxCtrl = new InboxCtrl(getMainCtrl());
+        		calendarCtrl = new CalendarCtrl(getMainCtrl());
         		inboxCtrl.addObserver(sidebarPanel);
             	
         		updateThread uThread = new updateThread(true, inboxCtrl, calendarCtrl); 
@@ -191,7 +192,7 @@ public class MainCtrl extends Controller {
 	 * against the database.
 	 */
 	public void login() {
-		calendarCtrl = new CalendarCtrl(getMainCtrl());
+		
 		// go to calendar
 		
 		

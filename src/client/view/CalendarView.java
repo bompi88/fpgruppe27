@@ -84,7 +84,7 @@ public class CalendarView extends JPanel{
 		calendarCtrlPanel.fillSizeOfParent();
 		calendarTitlePanel.fillSizeOfParent();
 
-		weeklyCalendarPanel.getMeetingsFromDB();
+		//weeklyCalendarPanel.getMeetingsFromDB();
 
 	}
 
