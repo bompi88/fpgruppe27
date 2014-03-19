@@ -225,6 +225,4 @@ public class AddCalendarPanel extends JPanel {
 			}
 		}
 	}
-	
-	
 }

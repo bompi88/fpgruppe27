@@ -209,5 +209,4 @@ public class WeeklyCalendarPanel extends JPanel implements Observer {
 			updateAllCalendarColumnViews();
 		}
 	}
-	
 }
