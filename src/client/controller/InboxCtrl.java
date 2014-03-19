@@ -49,6 +49,10 @@ public class InboxCtrl extends Controller implements State, Observable {
 		inboxPanel.setVisible(false);
 	}
 	
+	public void updateInbox(){ 
+		inboxPanel.updateInbox(); 
+	}
+	
 	public int getNumberOfUnseenMessages() {
 		int count = 0;
 		for (int i = 0; i < inbox.size(); i++) {

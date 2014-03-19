@@ -100,6 +100,13 @@ public class MainCtrl extends Controller {
         		inboxCtrl = new InboxCtrl(getMainCtrl());
         		inboxCtrl.addObserver(sidebarPanel);
             	
+        		updateThread uThread = new updateThread(true, inboxCtrl, calendarCtrl); 
+        		uThread.start(); 
+        		inboxCtrl = uThread.getInboxCtrl(); 
+        		calendarCtrl = uThread.getCalandarCtrl(); 
+        		
+        		
+        		
         		// if cookie: login
         		if(isRemembered()) {
         			
