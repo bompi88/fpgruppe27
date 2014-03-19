@@ -6,15 +6,30 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 public final class ImageManager {
 
 	private static final String RESOURCE_PATH = "/resources/";
 
-	public static BufferedImage deleteIcon;
-	public static BufferedImage deleteIconHover;
-	public static BufferedImage appIcon;
-
+	private static BufferedImage deleteIconImage;
+	private static BufferedImage deleteIconHoverImage;
+	private static BufferedImage appIconImage;
+	private static BufferedImage attendingIconImage;
+	private static BufferedImage declinedIconImage;
+	private static BufferedImage invitedIconImage;
+	private static BufferedImage letterOpenedImage;
+	private static BufferedImage letterClosedImage;
+	
+	private static ImageIcon attendingIcon;
+	private static ImageIcon declinedIcon;
+	private static ImageIcon invitedIcon;
+	private static ImageIcon appIcon;
+	private static ImageIcon deleteIcon;
+	private static ImageIcon deleteIconHover;
+	private static ImageIcon letterOpenedIcon;
+	private static ImageIcon letterClosedIcon;
+	
 	private static volatile ImageManager INSTANCE = null;
 
 	private ImageManager() {
@@ -22,15 +37,34 @@ public final class ImageManager {
 		INSTANCE = this;
 
 		try {
-			appIcon = ImageIO.read(getClass().getResource(
+			appIconImage = ImageIO.read(getClass().getResource(
 					RESOURCE_PATH + "deer.png"));
-			deleteIcon = ImageIO.read(getClass().getResource(
-					RESOURCE_PATH + "non_responded_icon.png"));
-			deleteIconHover = ImageIO.read(getClass().getResource(
-					RESOURCE_PATH + "non_responded_icon_hover.png"));
+			deleteIconImage = ImageIO.read(getClass().getResource(
+					RESOURCE_PATH + "delete_icon.png"));
+			deleteIconHoverImage = ImageIO.read(getClass().getResource(
+					RESOURCE_PATH + "delete_icon_hover.png"));
+			attendingIconImage = ImageIO.read(getClass().getResource(
+					RESOURCE_PATH + "person_icon_green.png"));
+			declinedIconImage = ImageIO.read(getClass().getResource(
+					RESOURCE_PATH + "person_icon_red.png"));
+			invitedIconImage = ImageIO.read(getClass().getResource(
+					RESOURCE_PATH + "person_icon_yellow.png"));
+			letterClosedImage = ImageIO.read(getClass().getResource(
+					RESOURCE_PATH + "letter_closed_icon.png"));
+			letterOpenedImage = ImageIO.read(getClass().getResource(
+					RESOURCE_PATH + "letter_open_icon.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		appIcon = new ImageIcon(resizeImage(appIconImage, 120, 90));
+		deleteIcon = new ImageIcon(resizeImage(deleteIconImage, 15, 15));
+		deleteIconHover = new ImageIcon(resizeImage(deleteIconHoverImage, 15, 15));
+		attendingIcon = new ImageIcon(resizeImage(attendingIconImage, 10, 10));
+		declinedIcon = new ImageIcon(resizeImage(declinedIconImage, 10, 10));
+		invitedIcon = new ImageIcon(resizeImage(invitedIconImage, 10, 10));
+		letterClosedIcon = new ImageIcon(resizeImage(letterClosedImage, 20, 20));
+		letterOpenedIcon = new ImageIcon(resizeImage(letterOpenedImage, 20, 20));
 	}
 
 	public static ImageManager getInstance() {
@@ -40,17 +74,6 @@ public final class ImageManager {
 			}
 		}
 		return INSTANCE;
-	}
-	
-	public static BufferedImage getImage(String icon) {
-		if (icon.equals(IconType.DELETE_ICON.toString())) {
-			return deleteIcon;
-		} else if (icon.equals(IconType.APP_ICON.toString())) {
-			return appIcon;
-		} else if (icon.equals(IconType.DELETE_ICON_HOVER.toString())) {
-			return deleteIconHover;
-		}
-		return null;
 	}
 
 	/**
@@ -72,19 +95,37 @@ public final class ImageManager {
 		g2d.dispose();
 		return bi;
 	}
-
-	public enum IconType {
-		DELETE_ICON("delete_icon"), DELETE_ICON_HOVER("delete_icon_hover"), APP_ICON("app_icon");
-
-		private IconType(final String text) {
-			this.text = text;
-		}
-
-		private final String text;
-
-		@Override
-		public String toString() {
-			return text;
-		}
+	
+	public static ImageIcon getAppIcon() {
+		return appIcon;
 	}
+
+	public static ImageIcon getDeleteIcon() {
+		return deleteIcon;
+	}
+
+	public static ImageIcon getDeleteIconHover() {
+		return deleteIconHover;
+	}
+	
+	public static ImageIcon getAttendingIcon() {
+		return attendingIcon;
+	}
+
+	public static ImageIcon getDeclinedIcon() {
+		return declinedIcon;
+	}
+
+	public static ImageIcon getInvitedIcon() {
+		return invitedIcon;
+	}
+	
+	public static ImageIcon getLetterOpenedIcon() {
+		return letterOpenedIcon;
+	}
+
+	public static ImageIcon getLetterClosedIcon() {
+		return letterClosedIcon;
+	}
+
 }

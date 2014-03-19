@@ -151,7 +151,7 @@ server.get('/meeting', function(req, res, next) {
 			async.series({
 				// get info about our meeting participants
 				participants: function(callback) {
-					connection.query("SELECT * FROM meeting_participants WHERE meetid='" + req.params.meetid + "'", function(err, rows, fields) {
+					connection.query("SELECT employee.username, employee.name, employee.email, meeting_participants.status FROM employee, meeting_participants WHERE employee.username=meeting_participants.username AND meeting_participants.meetid='" + req.params.meetid + "'", function(err, rows, fields) {
 						if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 
 						callback(null, rows);
@@ -504,13 +504,15 @@ server.del('/meeting', function(req, res, next) {
 					if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 
 					res.charSet('utf-8');
-					res.send()
+					
 				});	
 			}
 
 			// delete the meeting from the database
 			connection.query("DELETE FROM meeting WHERE meetid=" + req.params.meetid, function(err, rows, fields) {
 				if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+
+				res.send()
 			});
 		});
 	});

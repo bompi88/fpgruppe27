@@ -4,10 +4,10 @@ import framework.Model;
 
 public class Employee extends Model {
 
-	private String username;
-	private String name;
-	private String email;
-	private String password;
+	private String username = "";
+	private String name = "";
+	private String email = "";
+	private String password = "";
 
 	
 	public Employee(String name, String username, String email, String password) {

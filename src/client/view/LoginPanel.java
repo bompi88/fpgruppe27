@@ -19,11 +19,11 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import resources.AppConstants;
+import resources.ImageManager;
 
 import model.Employee;
 
 import controller.LoginCtrl;
-import controller.MainCtrl;
 import database.PasswordHash;
 import framework.Controller;
 
@@ -50,9 +50,10 @@ public class LoginPanel extends JPanel implements PropertyChangeListener {
 		setPreferredSize(new Dimension(AppConstants.LOG_IN_DIALOG_WIDTH, AppConstants.LOG_IN_DIALOG_HEIGHT));
 		setBackground(backgroundColor);
 		
+		ImageManager.getInstance();
 		// set the app icon
-		ImageIcon myPicture = ((MainCtrl) ctrl.getMainCtrl()).getAppIcon();
-		picLabel = new JLabel(myPicture);
+		ImageIcon appIcon = ImageManager.getAppIcon();
+		picLabel = new JLabel(appIcon);
 		
 		// initialize fields
 		usernameField.setPreferredSize(new Dimension((AppConstants.LOG_IN_DIALOG_WIDTH / 4) * 3, 30));

@@ -12,6 +12,15 @@ public abstract class Controller {
 
 	private Controller parentCtrl;
 	protected Model model;
+	protected boolean isHidden = true;
+
+	public boolean isHidden() {
+		return isHidden;
+	}
+
+	public void setHidden(boolean isHidden) {
+		this.isHidden = isHidden;
+	}
 
 	public Controller(Controller ctrl) {
 		this.parentCtrl = ctrl;

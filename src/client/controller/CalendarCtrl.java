@@ -19,13 +19,19 @@ public class CalendarCtrl extends Controller implements State {
 
 	@Override
 	public void show() {
+		isHidden = false;
 		calendarPanel.setVisible(true);
 		calendarPanel.update();
 	}
 
 	@Override
 	public void hide() {
+		isHidden = true;
 		calendarPanel.setVisible(false);
 	}
 
+	public void init() {
+		calendarPanel.setVisible(false);
+		calendarPanel.update();
+	}
 }

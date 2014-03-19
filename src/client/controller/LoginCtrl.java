@@ -2,8 +2,6 @@ package controller;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 
 import database.ClientObjectFactory;
 
@@ -15,13 +13,13 @@ import view.LoginView;
 public class LoginCtrl extends Controller implements State {
 	
 	private LoginView loginDialog;
-
+	
 	public LoginCtrl(Controller ctrl) {
 		super(ctrl);
 		
+		setModel((Employee)ctrl.getModel());
 		
-		setModel(ctrl.getModel());
-		loginDialog = new LoginView(this, false);
+		loginDialog = new LoginView(this, (Employee)getModel(), false);
 		loginDialog.setVisible(true);
 		loginDialog.pack();
 		
@@ -33,13 +31,14 @@ public class LoginCtrl extends Controller implements State {
 	}
 	
 	public void login(String password) {
-		
+		MainCtrl ctrl = (MainCtrl)getMainCtrl();
 		Employee model = (Employee) getModel();
 		
 		try {
 			if(ClientObjectFactory.authenticate(model, password)) {
 				model = ClientObjectFactory.getEmployeeByUsername(model.getUsername());
-				((MainCtrl)getParentCtrl()).login();
+				ctrl.setModel(model);
+				ctrl.login();
 			} else {
 				loginDialog.showErrorMessage();
 			}
@@ -51,6 +50,7 @@ public class LoginCtrl extends Controller implements State {
 
 	@Override
 	public void show() {
+		isHidden = false;
 		loginDialog.hideErrorMessage();
 		loginDialog.setVisible(true);
 		loginDialog.setEnabled(true);
@@ -58,6 +58,7 @@ public class LoginCtrl extends Controller implements State {
 
 	@Override
 	public void hide() {
+		isHidden = true;
 		loginDialog.setVisible(false);
 		loginDialog.setEnabled(false);
 	}

@@ -29,9 +29,16 @@ public final class AppConstants {
 	// Maybe not that necessary?
 	public static final String CALENDAR_HEADER_TEXT = "Ukeskalender";
 	public static final String INBOX_HEADER_TEXT = "Din innboks";
-	public static final String APPOINTMENT_HEADER_TEXT = "Opprett en avtale";
+	public static final String APPOINTMENT_HEADER_TEXT = "Opprett avtale";
 	public static final String SHOW_CALENDAR_LABEL_TEXT = "Vis kalender til:";
 	public static final String SHOW_OTHER_CALENDARS_BUTTON_TEXT = "Vis";
+	public static final String WHOLE_DAY_TEXT = "hele dagen";
+	
+	public static final String SAVE_BUTTON_TEXT = "Lagre";
+	public static final String CANCEL_BUTTON_TEXT = "Avbryt";
+	public static final String ADD_BUTTON_TEXT = "Legg til";
+	public static final String REMOVE_BUTTON_TEXT = "fjern";
+	public static final String ADD_EXTERNAL_PARTICIPANTS_BUTTON_TEXT = "Legg til eksterne deltakere";
 	
 	public static final Color LOGIN_BG_COLOR = Color.lightGray;
 	public static final Color SIDE_BAR_BG_COLOR = Color.lightGray;
@@ -45,7 +52,12 @@ public final class AppConstants {
 	public static final String FRIDAY_TEXT = "Fredag";
 	public static final String SATURDAY_TEXT = "Lørdag";
 	public static final String SUNDAY_TEXT = "Søndag";
-
+	
+	public static final Color MEETING_BOX_COLOR = new Color(10,250,250,150);
+	public static final Color MEETING_BOX_COLOR_HOVER = new Color(10,250,250,100);
+	public static final Color MEETING_BOX_COLOR_HOVER_DELETE = new Color(250,20,20,150);
+	public static final Color MESSAGE_SEEN_COLOR = new Color(200,200,200,120);
+	
 	private AppConstants() {
 		throw new AssertionError();
 	}

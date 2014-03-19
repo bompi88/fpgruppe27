@@ -3,29 +3,28 @@ package model;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import framework.Model;
 
-
 public class Meeting extends Model {
 	
-	private int meetid;
-	private String description;
-	private Timestamp startTime;
-	private Timestamp endTime;
-	private Room room;
-	private String place;
-	private Employee responsible;
+	private int meetid = 0;
+	private String description = "";
+	private Timestamp startTime = new Timestamp(System.currentTimeMillis());
+	private Timestamp endTime = new Timestamp(System.currentTimeMillis());
+	private Room room = new Room();
+	private String place = "";
+	private Employee responsible = new Employee();
 	private List<Participant> participants = new ArrayList<Participant>();
-	private boolean isAppointment;
-	private String name;
+	private boolean isAppointment = false;
+	private String name = "";
 	
 	
 	public Meeting() {
 		super();
 	}
-	
 	
 	public Meeting(int meetid, String description, Timestamp startTime,
 			Timestamp endTime, Room room, String place, Employee responsible,
@@ -110,8 +109,13 @@ public class Meeting extends Model {
 		return participants;
 	}
 	public void setParticipants(List<Participant> participants) {
-		List<Participant> oldValue = participants;
+		List<Participant> oldValue = this.participants;
 		this.participants = participants;
+		firePropertyChange("participants", oldValue, this.participants);
+	}
+	public void setParticipants(HashSet<Participant> participants) {
+		List<Participant> oldValue = this.participants;
+		this.participants = new ArrayList<Participant>(participants);
 		firePropertyChange("participants", oldValue, this.participants);
 	}
 	public boolean isAppointment() {
@@ -171,5 +175,18 @@ public class Meeting extends Model {
 				+ responsible + ", participants=" + participants
 				+ ", isAppointment=" + isAppointment + ", name=" + name + "]";
 	}
-
+	
+	public void setModel(Meeting m) {
+		
+		setMeetid(m.getMeetid());
+		setDescription(m.getDescription());
+		setStartTime(m.getStartTime());
+		setEndTime(m.getEndTime());
+		setRoom(m.getRoom());
+		setPlace(m.getPlace());
+		setResponsible(m.getResponsible());
+		setParticipants(m.getParticipants());
+		setAppointment(m.isAppointment());
+		setName(m.getName());
+	}
 }

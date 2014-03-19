@@ -27,13 +27,12 @@ public class LoginView extends JDialog {
 	
 	private Dimension windowSize = new Dimension(AppConstants.LOG_IN_DIALOG_WIDTH, AppConstants.LOG_IN_DIALOG_HEIGHT);
 	
-	public LoginView(Controller ctrl, boolean modal) { 
+	public LoginView(Controller ctrl, Employee model, boolean modal) { 
 		super(ctrl.getMainFrame(), modal);
 		
+		this.model = model;
 		this.ctrl = ctrl;
-		
-		
-		
+	
 		// create error panel
 		errorPanel = new JPanel();
 		errorPanel.setPreferredSize(new Dimension(300, 40));
@@ -62,7 +61,6 @@ public class LoginView extends JDialog {
 		pack();
 		
 		// sets model and model listener
-		model = ctrl.getModel();
 		model.addPropertyChangeListener(loginPanel);
 	}
 	

@@ -39,7 +39,7 @@ public class AddCalendarPanel extends JPanel {
 	private JButton addCalendarButton;
 	private CalendarListPanel p;
 	
-	HashSet<Employee> subscribedCalendars = new HashSet<Employee>();
+	private HashSet<Employee> subscribedCalendars = new HashSet<Employee>();
 	private DefaultListModel<Employee> subscribedCalendarsModel = new DefaultListModel<Employee>();
 	
 	public AddCalendarPanel() {
