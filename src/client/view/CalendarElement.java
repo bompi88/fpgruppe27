@@ -153,7 +153,7 @@ public class CalendarElement extends RoundedPanel implements PropertyChangeListe
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				fireObserverEvent("edit", this);
+				fireObserverEvent("view_appointment", this);
 			}
 		});
 	}

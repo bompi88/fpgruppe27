@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -18,9 +19,11 @@ import resources.AppConstants;
 
 import controller.AppointmentCtrl;
 import controller.CalendarCtrl;
+import controller.MainCtrl;
 import database.ClientObjectFactory;
 
 import model.Meeting;
+import model.Participant;
 import utils.RelativeLayout;
 import view.AppointmentView.TitlePanel;
 import framework.Controller;
@@ -35,32 +38,32 @@ public class ViewAppointmentView extends JPanel implements Observable {
 	private ViewParticipantPanel part;
 	private TitlePanel titlePanel;
 	private JPanel mainWrapper;
-	private Meeting model;
+	private Meeting meetingModel;
+	private HashSet<Participant> participantModel = new HashSet<Participant>();
 	private JButton goBackButton, editButton, acceptButton, declineButton;
 	
-	public ViewAppointmentView(Controller ctrl) {
+	public ViewAppointmentView(Meeting model) {
+		this.meetingModel = model;
 		
-		this.ctrl = ctrl;
-		//ctrl.setModel(new Meeting());
+		meetingModel.addPropertyChangeListener(app);
+		
 		app = new ViewAppointmentPanel(ctrl);
 		part = new ViewParticipantPanel(ctrl);
-		model = ctrl.getModel();
+		
 		titlePanel = new TitlePanel();
 		goBackButton = new JButton("Tilbake");
 		editButton = new JButton("Endre");
 		acceptButton = new JButton("Godta");
 		declineButton = new JButton("Avvis");
+		
 		mainWrapper = new JPanel();
 		mainWrapper.setLayout(new RelativeLayout(RelativeLayout.X_AXIS, 0));
 		mainWrapper.add(app);
 		mainWrapper.add(part);
-		model.addPropertyChangeListener(app);
-		
-
 				
 		addUIElements();
 		
-		if (model.getResponsible() == ctrl.getMainCtrl().getModel()) {
+		if (meetingModel.getResponsible().getUsername() == MainCtrl.getCurrentEmployee().getUsername()) {
 			acceptButton.setVisible(false);
 			declineButton.setVisible(false);
 			editButton.setVisible(true);
@@ -75,9 +78,9 @@ public class ViewAppointmentView extends JPanel implements Observable {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
-				getCtrl().setState(CalendarCtrl.class);
-						
+				// set a new empty meeting and go to CalendarView
+				meetingModel.setModel(new Meeting());
+				fireObserverEvent("change_state", CalendarCtrl.class);	
 				
 			}
 			
@@ -87,7 +90,7 @@ public class ViewAppointmentView extends JPanel implements Observable {
 			
 			public void actionPerformed(ActionEvent e) {
 				
-				getCtrl().setState(AppointmentCtrl.class);
+				fireObserverEvent("edit", meetingModel);
 				
 			}
 		});
@@ -96,7 +99,7 @@ public class ViewAppointmentView extends JPanel implements Observable {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				fireObserverEvent("accepted", meetingModel);
 				
 			}
 		});
@@ -105,27 +108,43 @@ public class ViewAppointmentView extends JPanel implements Observable {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				fireObserverEvent("declined", meetingModel);
 				
 			}
 		});
 	}
 	
 	public void setModel(Meeting m) {
-		model.setName(m.getName());
-		model.setDescription(m.getDescription());
-		model.setStartTime(m.getStartTime());
-		model.setEndTime(m.getEndTime());
-		model.setPlace(m.getPlace());
-		model.setParticipants(m.getParticipants());
-		model.setMeetid(m.getMeetid());
-		model.setResponsible(m.getResponsible());
-		model.setRoom(m.getRoom());
+		meetingModel.setName(m.getName());
+		meetingModel.setDescription(m.getDescription());
+		meetingModel.setStartTime(m.getStartTime());
+		meetingModel.setEndTime(m.getEndTime());
+		meetingModel.setPlace(m.getPlace());
+		meetingModel.setParticipants(m.getParticipants());
+		meetingModel.setMeetid(m.getMeetid());
+		meetingModel.setResponsible(m.getResponsible());
+		meetingModel.setRoom(m.getRoom());
 		
 	}
 	
 	public Meeting getModel() {
-		return model;
+		return meetingModel;
+	}
+	
+	public void setMeetingModel(Meeting m) {
+		meetingModel.setName(m.getName());
+		meetingModel.setDescription(m.getDescription());
+		meetingModel.setStartTime(m.getStartTime());
+		meetingModel.setEndTime(m.getEndTime());
+		meetingModel.setPlace(m.getPlace());
+		meetingModel.setParticipants(m.getParticipants());
+		meetingModel.setMeetid(m.getMeetid());
+		meetingModel.setResponsible(m.getResponsible());
+		meetingModel.setRoom(m.getRoom());
+	}
+	
+	public Meeting getMeetingModel() {
+		return meetingModel;
 	}
 	
 	private void addUIElements() {
@@ -145,7 +164,7 @@ public class ViewAppointmentView extends JPanel implements Observable {
 		private JLabel title;
 		public TitlePanel() {
 			setBorder(BorderFactory.createEmptyBorder(30, -2, 0, 0));
-			title = new JLabel(model.getName());
+			title = new JLabel(meetingModel.getName());
 			title.setFont(new Font("Arial", Font.PLAIN, 28));
 			add(title);
 			setBackground(AppConstants.HEADER_BG_COLOR);
@@ -154,13 +173,14 @@ public class ViewAppointmentView extends JPanel implements Observable {
 	}
 	@Override
 	public void addObserver(Observer ob) {
-		// TODO Auto-generated method stub
+		observers.add(ob);
 		
 	}
 
 	@Override
 	public void fireObserverEvent(String event, Object obj) {
-		// TODO Auto-generated method stub
+		for (Observer o : observers)
+			o.changeEvent(event, obj);
 		
 	}
 	
