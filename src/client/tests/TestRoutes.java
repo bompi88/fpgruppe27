@@ -128,11 +128,18 @@ public class TestRoutes extends JFCTestCase {
 		assertEquals(email, resultMeeting.getResponsible().getEmail());
 		
 		ClientObjectFactory.deleteMeeting(id);
+		
+		resultMeeting = ClientObjectFactory.getMeetingByID(id);
+		
+		assertNull(resultMeeting);
+		
 		for(int i = 0; i < 5; i++) {
 			ClientObjectFactory.deleteEmployee(username + i);
 		}
 		ClientObjectFactory.deleteEmployee(username);
 	}
+	
+	
 	
 	//public void testAddMessage() {
 		//Message message = new Message(name, username, email, password);
