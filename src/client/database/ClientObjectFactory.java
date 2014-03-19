@@ -75,7 +75,7 @@ public class ClientObjectFactory {
 		put = new HttpPut(API + "meeting_participants?meetid=" + meetid
 				+ "&username=" + username
 				+ "&status=" + status);
-		putRequest(put, null);
+		putRequest(put, "");
 		EntityUtils.consumeQuietly(response.getEntity());
 	}
 

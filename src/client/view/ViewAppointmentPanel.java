@@ -9,6 +9,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import javax.swing.ButtonGroup;
@@ -35,36 +36,20 @@ import framework.Controller;
 
 public class ViewAppointmentPanel extends JPanel implements PropertyChangeListener {
 	
-	private UtilDateModel dateModelFrom, dateModelTo;
-	private JDatePanelImpl datePanelFrom, datePanelTo;
-	private JDatePickerImpl datePickerFrom, datePickerTo;
-	private JTextField meetingNameField, placeField;
-	private JLabel startTimeLabel, endTimeLabel, placeLabel, descLabel, nameLabel; 
+	private JTextField meetingNameField, placeField, startTimeField, endTimeField, ownerField;
+	private JLabel startTimeLabel, endTimeLabel, placeLabel, descLabel, nameLabel, ownerLabel; 
 	private JTextArea descArea;
 	private JScrollPane descScroll;	
-	private JComboBox meetingSizeBox, roomPickerBox; 
 	private JButton saveButton, cancelButton;
-	private JRadioButton placeRadio, roomRadio;
-	private ButtonGroup radioGroup;
-	private JSpinner timePickerFrom, timePickerTo;	
 	private boolean isEditable;
 	private Controller ctrl;
 	private Meeting model;
 	
 	public ViewAppointmentPanel(Meeting model) {
 		this.model = model;
-		placeRadio = new JRadioButton();	
-		roomRadio = new JRadioButton();
-		radioGroup = new ButtonGroup();
 		//for var denne Calendar.HOUR_OF_DAY?
-		timePickerFrom = new JSpinner(new SpinnerDateModel(new java.util.Date(), null, null, Calendar.MINUTE)); 
-		timePickerTo = new JSpinner(new SpinnerDateModel(new java.util.Date(), null, null, Calendar.MINUTE));
 		saveButton = new JButton("Lagre");
 		cancelButton = new JButton("Avbryt");
-		dateModelFrom = new UtilDateModel();
-		dateModelTo = new UtilDateModel();
-		datePanelFrom = new JDatePanelImpl(dateModelFrom);
-		datePanelTo = new JDatePanelImpl(dateModelTo);
 		meetingNameField = new JTextField(12);
 		placeField = new JTextField(12);
 		startTimeLabel = new JLabel("Starttid:");
@@ -73,13 +58,12 @@ public class ViewAppointmentPanel extends JPanel implements PropertyChangeListen
 		descLabel= new JLabel("Beskrivelse:");
 		descArea = new JTextArea(4, 15);
 		descScroll  = new JScrollPane(descArea);
-		datePickerFrom = new JDatePickerImpl(datePanelFrom);
-		datePickerTo = new JDatePickerImpl(datePanelTo);
-		meetingSizeBox = new JComboBox();
-		roomPickerBox = new JComboBox();
 		nameLabel = new JLabel("Navn:");
+		ownerLabel = new JLabel("Møteinnkaller: ");
+		startTimeField = new JTextField(19);
+		endTimeField = new JTextField(19);
+		ownerField = new JTextField(12);
 				
-		radioGroup.add(placeRadio); radioGroup.add(roomRadio);
 		
 		cancelButton.addActionListener(new ActionListener() {
 			@Override
@@ -97,57 +81,20 @@ public class ViewAppointmentPanel extends JPanel implements PropertyChangeListen
 			
 		});
 		
-		class MyItemListener implements ItemListener {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				  Object source = e.getItemSelectable();
-				    if (source == placeRadio) {
-				    	meetingSizeBox.setEnabled(false);
-				    	roomPickerBox.setEnabled(false);
-				    	//meetingSizeBox.setSelectedIndex(0);
-				    	//roomPickerBox.setSelectedIndex(0);
-				    	placeField.setEnabled(true);
-				    }
-				    else if(source == roomRadio) {
-				    	meetingSizeBox.setEnabled(true);
-				    	roomPickerBox.setEnabled(true);
 
-				    	placeField.setEnabled(false);
-				    }
-				    	
-				
-			}
-			
-		}
-		
 		disableIUElements();
-		
-		placeRadio.addItemListener(new MyItemListener());
-		roomRadio.addItemListener(new MyItemListener());		
 		addUIElements();
 	}
 	
 	private void disableIUElements() {
-		placeRadio.setEnabled(false);
-		roomRadio.setEnabled(false);
-		timePickerFrom.setEnabled(false);
-		timePickerTo.setEnabled(false);
 		saveButton.setEnabled(false);
 		cancelButton.setEnabled(false);
-		//dateModelFrom.
-		//dateModelTo = new UtilDateModel();
-		datePanelFrom.setEnabled(false);
-		//datePanelFrom.set
-		datePanelTo.setEnabled(false);
 		meetingNameField.setEditable(false);
 		placeField.setEditable(false);
 		descArea.setEditable(false);
-		datePickerFrom.setEnabled(false);
-		//datePickerFrom.setVisible(false);
-		datePickerTo.setEnabled(false);
-		//datePickerTo.setVisible(false);
-		meetingSizeBox.setEnabled(false);
-		roomPickerBox.setEnabled(false);
+		startTimeField.setEditable(false);
+		endTimeField.setEditable(false);
+		ownerField.setEditable(false);
 	}
 	
 	private void addUIElements() {
@@ -159,34 +106,28 @@ public class ViewAppointmentPanel extends JPanel implements PropertyChangeListen
         descArea.setWrapStyleWord(true);
         descScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         
-        timePickerFrom.setEditor(new JSpinner.DateEditor(timePickerFrom, "HH:mm"));
-        timePickerTo.setEditor(new JSpinner.DateEditor(timePickerTo, "HH:mm"));
 
 		//adding the labels in the left column
         add(nameLabel, new GridBagConstraints(0,0,1,1,1,1,anc,0,in,0,0));
-		add(startTimeLabel, new GridBagConstraints(0,1,1,1,1,1,anc,0,in,0,0));
-		add(endTimeLabel, new GridBagConstraints(0,2,1,1,1,1,anc,0,in,0,0));
-		add(placeLabel, new GridBagConstraints(0,3,1,1,1,1,anc,0,in,0,0));
-		add(descLabel, new GridBagConstraints(0,5,1,1,1,1,anc,0,in,0,0));
+        add(ownerLabel, new GridBagConstraints(0,1,1,1,1,1,anc,0,in,0,0));
+        add(ownerField, new GridBagConstraints(1,1,1,1,1,1,anc,0,in,0,0));
+
+
+        
+		add(startTimeLabel, new GridBagConstraints(0,2,1,1,1,1,anc,0,in,0,0));
+		add(endTimeLabel, new GridBagConstraints(0,3,1,1,1,1,anc,0,in,0,0));
+		add(placeLabel, new GridBagConstraints(0,4,1,1,1,1,anc,0,in,0,0));
+		add(descLabel, new GridBagConstraints(0,6,1,1,1,1,anc,0,in,0,0));
 		
         add(meetingNameField, new GridBagConstraints(1,0,1,1,1,1,anc,0,in,0,0));
 
 		//adding the date picker and time elements in the middle
-		add(timePickerFrom,  new GridBagConstraints(1,1,1,1,1,1,anc,0,in,0,0));
-		add(timePickerTo,  new GridBagConstraints(1,2,1,1,1,1,anc,0,in,0,0));
-		add(datePickerFrom, new GridBagConstraints(1,1,1,1,1,1,anc,0,new Insets(0,100,0,0),0,0));
-		add(datePickerTo, new GridBagConstraints(1,2,1,1,1,1,anc,0,new Insets(0,100,0,0),0,0));
+		add(startTimeField,  new GridBagConstraints(1,2,1,1,1,1,anc,0,in,0,0));
+		add(endTimeField,  new GridBagConstraints(1,3,1,1,1,1,anc,0,in,0,0));
 		
 		//adding the elements for place description/room choosing
-		add(placeRadio,  new GridBagConstraints(1,3,1,1,1,1,anc,0,in,0,0));
-		add(roomRadio,  new GridBagConstraints(1,4,1,1,1,1,anc,0,in,0,0));
-		add(placeField, new GridBagConstraints(1,3,1,1,1,1,anc,0,new Insets(0,40,0,0),0,0));
-		add(descScroll,  new GridBagConstraints(1,5,1,1,1,1,anc,0,in,0,0));
-		add(meetingSizeBox, new GridBagConstraints(1,4,1,1,1,1,anc,0,new Insets(0,40,0,0),0,0));
-		add(roomPickerBox, new GridBagConstraints(1,4,1,1,1,1,anc,0,new Insets(0,200,0,0),0,0));
-		
-		//add(cancelButton, new GridBagConstraints(1,7,1,1,1,1,anc,0,in,0,0));
-		
+		add(placeField, new GridBagConstraints(1,4,1,1,1,1,anc,0,in,0,0));
+		add(descScroll,  new GridBagConstraints(1,6,1,1,1,1,anc,0,in,0,0));		
 		
 	}
 	
@@ -203,19 +144,22 @@ public class ViewAppointmentPanel extends JPanel implements PropertyChangeListen
 		}
 		
 		else if(evt.getPropertyName() == "startTime") {
-			dateModelFrom.setValue(model.getStartTime());
-			timePickerFrom.getModel().setValue(model.getStartTime());
-
+			SimpleDateFormat dt = new SimpleDateFormat("EEEE dd. MMMM yyyy, 'kl.' hh:mm"); 
+			startTimeField.setText(dt.format(model.getStartTime()));
 		}
 		
 		else if(evt.getPropertyName() == "endTime") {
-			dateModelTo.setValue(model.getEndTime());
-			timePickerTo.getModel().setValue(model.getEndTime());
+			SimpleDateFormat dt = new SimpleDateFormat("EEEE dd. MMMM yyyy, 'kl.' hh:mm"); 
+			endTimeField.setText(dt.format(model.getEndTime()));
 		}
 		
 		else if(evt.getPropertyName() == "description") {
 			descArea.setText(model.getDescription());
 		}		
+		
+		else if(evt.getPropertyName() == "responsible") {
+			ownerField.setText(model.getResponsible().getName());
+		}
 
 		
 	}

@@ -27,6 +27,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListCellRenderer;
 
+import controller.MainCtrl;
+
 import resources.ImageManager;
 
 import database.ClientObjectFactory;
@@ -40,108 +42,36 @@ import model.Status;
 @SuppressWarnings("serial")
 public class ViewParticipantPanel extends JPanel implements PropertyChangeListener {
 	
-	private JComboBox<Participant> participantPicker;
 	private JList<Participant> participants;
-	private JButton addParticipant;
-	private JButton addExternals;
-	protected static DefaultListModel<Participant> participantsModel; 
 	private HashSet<Participant> participantList;
+	private JLabel participantsLabel;
 
 	public ViewParticipantPanel(HashSet<Participant> model) {
 		//setPreferredSize(new Dimension(250, 421));
 		setLayout(new GridBagLayout());
-		participantsModel = new DefaultListModel<Participant>();
-		addParticipant = new JButton("Legg til");
-		addExternals = new JButton("Legg til eksterne deltakere");
-		participantList = model;
+		ArrayList<Participant> m = new ArrayList<Participant>(model);
 		participants = new JList<Participant>();
-		participants.setModel(participantsModel);
-		//participantPicker = new JComboBox();
+		participantsLabel = new JLabel("Deltakere:");
 		
-		List<Participant> employees = ClientObjectFactory.getEmployeesAsParticipants();
-		participantPicker = new JComboBox<Participant>(employees.toArray(new Participant[employees.size()]));
-		
-		addParticipant.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(participantPicker.getSelectedIndex() != -1) {
-					Participant m = (Participant) participantPicker.getSelectedItem();
-					m.setStatus(Status.INVITED);
-					participantsModel.addElement(m);
-					participantList.add(m);
-				}
-				
-			}
-			
-		});
-		
-		addExternals.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Desktop desktop;
-				if (Desktop.isDesktopSupported() 
-				    && (desktop = Desktop.getDesktop()).isSupported(Desktop.Action.MAIL)) {
-				
-						URI mailto;
-						try {
-							mailto = new URI("mailto:ola@nordmann.no?subject=Moteinvitasjon&body=Du%20er%20invitert%20til%20mote");
-							desktop.mail(mailto);
-
-						} catch (URISyntaxException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						} catch (IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-				
-
-				
-				}
-			}
-		});
-		
-		disableUIElements();
 		
 		addUIElements();
 		participants.setCellRenderer(new IconListRenderer());
 		
 	}
 	
-	private void disableUIElements() {
-		participantPicker.setEnabled(false);
-		participantPicker.setVisible(false);
-		addParticipant.setEnabled(false);
-		addParticipant.setVisible(false);
-		addExternals.setEnabled(false);
-		addExternals.setVisible(false);
-		participants.setEnabled(false);
-	}
 	
 	private void addUIElements() {
         int anc = GridBagConstraints.WEST; 
-        Insets in = new Insets(4,12,4,12);
+        Insets in = new Insets(4,30,4,12);
+		add(participantsLabel, new GridBagConstraints(0,0,1,1,1,1,anc,0,in, 0,0));
 
-		add(participantPicker, new GridBagConstraints(0,0,1,1,1,1,anc,0,in, 0,0));
 		add(new JScrollPane(participants), new GridBagConstraints(0,1,1,1,1,1,anc,0,in, 0,0));
-		add(addParticipant, new GridBagConstraints(1,0,1,1,1,1,anc,0,in, 0,0));
-		add(addExternals, new GridBagConstraints(0,2,1,1,1,1,anc,0,in, 0,0));
-	}
-	
-
-	public DefaultListModel<Participant> getParticipantsModel() {
-		return participantsModel;
 	}
 	
 	public HashSet<Participant> getParticipantList() {
 		return participantList;
 	}
 
-	public void setParticipantsModel(DefaultListModel<Participant> participantsModel) {
-		this.participantsModel = participantsModel;
-	}
 	
 	class IconListRenderer implements ListCellRenderer<Participant> {
 	
@@ -184,11 +114,28 @@ public class ViewParticipantPanel extends JPanel implements PropertyChangeListen
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if(evt.getPropertyName() == "participants") {
+			ArrayList<Participant> teit = (ArrayList<Participant>) evt.getNewValue();
 			DefaultListModel<Participant> listModel = new DefaultListModel<>();
-			 for(Participant e : participantList) {
+			 for(Participant e : teit) {
 			         listModel.addElement(e);
 			 }		
 			 participants.setModel(listModel);
+			 
+				String ourUser = MainCtrl.getCurrentEmployee().getName();
+				List<Participant> participantNY = teit;;
+				for(Participant part : participantNY) {
+					if(part.getName().equals(ourUser)) {
+						if(part.getStatus() == Status.ATTENDING) {
+							view.ViewAppointmentView.acceptButton.setEnabled(false);
+							view.ViewAppointmentView.declineButton.setEnabled(true);
+						}
+						else if(part.getStatus() == Status.DECLINED) {
+							view.ViewAppointmentView.acceptButton.setEnabled(true);
+							view.ViewAppointmentView.declineButton.setEnabled(false);
+						}
+					}
+				}
+
 		}
 		
 	}
