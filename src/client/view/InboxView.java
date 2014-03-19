@@ -110,6 +110,7 @@ public class InboxView extends JPanel {
 			// Aktiveres når noen trykker i innboksen
 			// UFERDIG, per nå sendes man bare til appointmentView
 			((MainCtrl)ctrl.getMainCtrl()).setMeetingModel(ClientObjectFactory.getMeetingByID(list.getSelectedValue().getMeetID()));
+			list.clearSelection();
 			ctrl.setState(AppointmentCtrl.class);
 		}
 	}
