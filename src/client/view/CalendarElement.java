@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -38,10 +39,20 @@ public class CalendarElement extends RoundedPanel implements PropertyChangeListe
 	private ImageIcon normalDeleteIcon;
 	private ImageIcon hoverDeleteIcon;
 	private Calendar cal = Calendar.getInstance();
+	private Color color; 
 	
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
 	@SuppressWarnings({ "static-access", "deprecation" })
-	public CalendarElement(Meeting model, Date thisDate) {
+	public CalendarElement(Meeting model, Date thisDate, Color color) {
 		this.model = model;
+		this.color = color; 
 		
 		deleteButton = new JLabel();
 		
@@ -53,7 +64,7 @@ public class CalendarElement extends RoundedPanel implements PropertyChangeListe
 		
 		Font meetTitleFont = new Font("Arial", Font.BOLD, 12);
 		
-		setBackground(AppConstants.MEETING_BOX_COLOR);
+		setBackground(color);
 		meetingTitle = new JLabel(model.getName());
 		ImageManager.getInstance();
 		meetingTitle.setIcon(ImageManager.getLetterClosedIcon());
@@ -126,7 +137,7 @@ public class CalendarElement extends RoundedPanel implements PropertyChangeListe
 			@Override
 			public void mouseExited(MouseEvent e) {
 				deleteButton.setIcon(normalDeleteIcon);
-				setBackground(AppConstants.MEETING_BOX_COLOR);
+				setBackground(getColor());
 			}
 			
 		});
@@ -143,12 +154,12 @@ public class CalendarElement extends RoundedPanel implements PropertyChangeListe
 			
 			@Override
 			public void mouseExited(MouseEvent e) {
-				setBackground(AppConstants.MEETING_BOX_COLOR);
+				setBackground(getColor());
 			}
 			
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				setBackground(AppConstants.MEETING_BOX_COLOR_HOVER);
+				setBackground(CalendarColumn.choiceColor(getModel(), true));
 			}
 			
 			@Override

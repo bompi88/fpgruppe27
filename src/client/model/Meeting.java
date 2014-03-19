@@ -166,6 +166,16 @@ public class Meeting extends Model {
 	public void removeParticipants(Participant emp) {
 		participants.remove(emp);
 	}
+	
+	public boolean areUserpartInMeeting(String username){
+		boolean tempreturn = false; 
+		for(int i = 0; i < getParticipants().size(); i++){  
+			if(getParticipants().get(i).getUsername().equals(username)){
+				tempreturn = true; 
+			}
+		}
+		return tempreturn; 	
+	}
 
 	@Override
 	public String toString() {

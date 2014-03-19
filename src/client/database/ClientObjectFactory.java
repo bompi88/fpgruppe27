@@ -75,7 +75,7 @@ public class ClientObjectFactory {
 		put = new HttpPut(API + "meeting_participants?meetid=" + meetid
 				+ "&username=" + username
 				+ "&status=" + status);
-		putRequest(put, null);
+		putRequest(put, "");
 		EntityUtils.consumeQuietly(response.getEntity());
 	}
 
@@ -298,7 +298,7 @@ public class ClientObjectFactory {
 	 */
 	public static ArrayList<Meeting> getMeetingByWeek(int weekNumber,
 			String[] usernames) {
-
+		
 		SimpleDateFormat sdf = new SimpleDateFormat(
 				"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
@@ -324,7 +324,9 @@ public class ClientObjectFactory {
 				+ "&endTime=" + endDateParam + s);
 		String meetingString = getRequest(request);
 		EntityUtils.consumeQuietly(response.getEntity());
-
+		
+		System.out.println(request); 
+		
 		Gson builder = new GsonBuilder()
 				.registerTypeAdapter(Boolean.class, booleanAsIntAdapter)
 				.registerTypeAdapter(boolean.class, booleanAsIntAdapter)

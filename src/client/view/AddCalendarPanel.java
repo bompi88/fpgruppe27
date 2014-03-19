@@ -35,11 +35,11 @@ public class AddCalendarPanel extends JPanel {
 	
 	private JLabel addCalendarLabel;
 	private JTextField addCalendarTextField;
-	private JList<Employee> calendarSubscribedList;
+	private static JList<Employee> calendarSubscribedList;
 	private JButton addCalendarButton;
 	private CalendarListPanel p;
 	
-	private HashSet<Employee> subscribedCalendars = new HashSet<Employee>();
+	private static HashSet<Employee> subscribedCalendars = new HashSet<Employee>();
 	private DefaultListModel<Employee> subscribedCalendarsModel = new DefaultListModel<Employee>();
 	
 	public AddCalendarPanel() {
@@ -101,8 +101,8 @@ public class AddCalendarPanel extends JPanel {
 		});
 	}
 
-	public List<Employee> getAllSubscriptions() {
-		return calendarSubscribedList.getSelectedValuesList();
+	public static List<Employee> getAllSubscriptions() {
+		return new ArrayList<Employee>(subscribedCalendars);
 	}
 	
 	/**
