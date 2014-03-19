@@ -2,6 +2,7 @@ package controller;
 
 import java.sql.Timestamp;
 
+import view.SideBarView;
 import framework.Controller;
 
 class updateThread extends Thread {
@@ -10,12 +11,14 @@ class updateThread extends Thread {
 	private boolean running; 
 	private InboxCtrl inboxCtrl; 
 	private CalendarCtrl calanderCtrl; 
+	private SideBarView sidebarView; 
 	
     
-    public updateThread(boolean running, InboxCtrl inboxCtrl, CalendarCtrl calanderCtrl) {
+    public updateThread(boolean running, InboxCtrl inboxCtrl, CalendarCtrl calanderCtrl, SideBarView sidebarView) {
     	this.running = running; 
     	this.inboxCtrl = inboxCtrl; 
     	this.calanderCtrl= calanderCtrl; 
+    	this.sidebarView= sidebarView;
     	
     }
         	
@@ -41,6 +44,7 @@ class updateThread extends Thread {
 	public void runUpdates(){
 		inboxCtrl.updateInbox();  
 		calanderCtrl.update(); 
+		sidebarView.setNumberOfUnseenMessages(inboxCtrl.getNumberOfUnseenMessages()); 
 	}
 		 
 	public InboxCtrl getInboxCtrl(){

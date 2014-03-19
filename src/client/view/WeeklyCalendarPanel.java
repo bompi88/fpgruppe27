@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+import model.Employee;
 import model.Meeting;
 import resources.AppConstants;
 import utils.RelativeLayout;
@@ -144,8 +145,24 @@ public class WeeklyCalendarPanel extends JPanel implements Observer {
 //		}
 
 		// For testing
-		meetings = ClientObjectFactory.getMeetingByWeek(Calendar.getInstance().get(Calendar.WEEK_OF_YEAR), MainCtrl.getCurrentEmployee().getUsername());
-
+		
+		List<Employee> subscribers  = AddCalendarPanel.getAllSubscriptions();
+		
+		String[] subscribersUsernames = new String[subscribers.size() + 1];  
+		
+		for (int i = 0; i < subscribers.size(); i++) {
+			subscribersUsernames[i] = subscribers.get(i).getUsername(); 
+			System.out.println(subscribers.get(i).getUsername()); 
+			
+		}
+		System.out.println("kjøres getMeetingsFromDB()"); 
+		
+		subscribersUsernames[subscribers.size()] = MainCtrl.getCurrentEmployee().getUsername();
+		
+		meetings = ClientObjectFactory.getMeetingByWeek(Calendar.getInstance().get(Calendar.WEEK_OF_YEAR), subscribersUsernames);
+		
+		
+		
 		monday = new ArrayList<Meeting>();
 		thuesday = new ArrayList<Meeting>();
 		wednesday = new ArrayList<Meeting>();

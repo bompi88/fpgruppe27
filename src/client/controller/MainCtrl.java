@@ -101,7 +101,7 @@ public class MainCtrl extends Controller {
         		calendarCtrl = new CalendarCtrl(getMainCtrl());
         		inboxCtrl.addObserver(sidebarPanel);
             	
-        		updateThread uThread = new updateThread(true, inboxCtrl, calendarCtrl); 
+        		updateThread uThread = new updateThread(true, inboxCtrl, calendarCtrl, sidebarPanel); 
         		uThread.start(); 
          
         		

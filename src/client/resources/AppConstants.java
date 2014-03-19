@@ -53,9 +53,16 @@ public final class AppConstants {
 	public static final String SATURDAY_TEXT = "Lørdag";
 	public static final String SUNDAY_TEXT = "Søndag";
 	
-	public static final Color MEETING_BOX_COLOR = new Color(10,250,250,150);
-	public static final Color MEETING_BOX_COLOR_HOVER = new Color(10,250,250,100);
+	public static final Color MEETING_BOX_COLOR_ADMIN = new Color(10,250,250,150);
+	public static final Color MEETING_BOX_COLOR_PART = new Color(179,255,255,255);
+	public static final Color MEETING_BOX_COLOR_STALKER = new Color(210,220,220,255);
+	public static final Color MEETING_BOX_COLOR_ADMIN_HOVER = new Color(10,250,250,100);
+	public static final Color MEETING_BOX_COLOR_PART_HOVER = new Color(179,255,255,155);
+	public static final Color MEETING_BOX_COLOR_STALKER_HOVER = new Color(210,220,220,155);
 	public static final Color MEETING_BOX_COLOR_HOVER_DELETE = new Color(250,20,20,150);
+	
+	//public static final Color MEETING_BOX_COLOR_HOVER = new Color(10,250,250,100);
+	
 	public static final Color MESSAGE_SEEN_COLOR = new Color(200,200,200,120);
 	
 	private AppConstants() {

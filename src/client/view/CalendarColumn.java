@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,10 +37,14 @@ public class CalendarColumn extends JPanel implements Observer, Observable {
 	private int dayViewHeight = AppConstants.MAIN_FRAME_HEIGHT - AppConstants.HEADER_PANEL_HEIGHT;
 	private Dimension columnSize = new Dimension(dayViewWidth, dayViewHeight);
 	private Date thisDate;
+	Employee userEmp; 
+	
+	
 	
 	public CalendarColumn(List<Meeting> model, Date thisDate) {
 		this.model = model;
 		this.thisDate = thisDate;
+		this.userEmp = MainCtrl.getCurrentEmployee();
 		
 		RelativeLayout rl = new RelativeLayout(RelativeLayout.Y_AXIS, 0);
 		rl.setAlignment(RelativeLayout.LEADING);
@@ -53,13 +58,40 @@ public class CalendarColumn extends JPanel implements Observer, Observable {
 		add(dayLabel);
 		
 		for(Meeting meeting : model) {
-			CalendarElement e = new CalendarElement(meeting, thisDate);
+			
+			Color color = choiceColor(meeting, false); 
+			CalendarElement e = new CalendarElement(meeting, thisDate, color);
 			meetings.add(e);
 			add(e);
 			e.setPreferredSize(new Dimension(dayViewWidth, 50));
 			e.addObserver(this);
 		}
 		
+	}
+	
+	public static Color choiceColor(Meeting meeting, boolean hover){
+		Color tempColor; 
+		String currentUser = MainCtrl.getCurrentEmployee().getUsername(); 
+		
+		if(meeting.getResponsible().getUsername().equals(currentUser)){
+			if(!hover)
+				tempColor = AppConstants.MEETING_BOX_COLOR_ADMIN;  
+			else 
+				tempColor = AppConstants.MEETING_BOX_COLOR_ADMIN_HOVER; 
+		}
+		else if(meeting.areUserpartInMeeting(currentUser)){
+			if(!hover)
+				tempColor = AppConstants.MEETING_BOX_COLOR_PART;  
+			else 
+				tempColor = AppConstants.MEETING_BOX_COLOR_PART_HOVER;  
+		}
+		else{
+			if(!hover)
+				tempColor = AppConstants.MEETING_BOX_COLOR_STALKER;  
+			else 
+				tempColor = AppConstants.MEETING_BOX_COLOR_STALKER_HOVER;  
+		}
+		return tempColor; 
 	}
 	
 	public void updateView() {
@@ -73,8 +105,9 @@ public class CalendarColumn extends JPanel implements Observer, Observable {
 		meetings.removeAll(meetings);
 		
 		for(Meeting meeting : model) {
-
-			CalendarElement e = new CalendarElement(meeting, thisDate);
+			
+			Color color = choiceColor(meeting, false); 
+			CalendarElement e = new CalendarElement(meeting, thisDate, color);
 			meetings.add(e);
 			add(e);
 			e.setPreferredSize(new Dimension(dayViewWidth, 50));
@@ -98,6 +131,8 @@ public class CalendarColumn extends JPanel implements Observer, Observable {
 	}
 
 	
+	
+	
 	@Override
 	public void changeEvent(String event, Object obj) {
 		Meeting meet = ((CalendarElement)obj).getModel();
@@ -109,10 +144,15 @@ public class CalendarColumn extends JPanel implements Observer, Observable {
 			Participant p = new Participant(emp.getName(), emp.getUsername(), emp.getEmail(), emp.getPassword(), Status.DECLINED);
 			
 			meet.removeParticipants(p);
-			if(model.remove(meet)){
-				ClientObjectFactory.deleteMeeting(meet.getMeetid());
+			if((model.remove(meet))){
+				if(p.getUsername().equals(meet.getResponsible().getUsername())){
+					ClientObjectFactory.deleteMeeting(meet.getMeetid()); 
+					 
+				} else{
+					ClientObjectFactory.setNegAttandenceAndRemove(meet, emp); 
+					
+				}
 			}
-			
 			deleteMeeting(obj, true);
 			fireObserverEvent("delete", obj);
 			
