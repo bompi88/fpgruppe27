@@ -6,16 +6,16 @@ import framework.Controller;
 
 class updateThread extends Thread {
 	
-	Timestamp refressRate = new Timestamp(300000);
-	boolean running; 
-	Controller ctrl; 
-	String type; 
+	Timestamp refressRate = new Timestamp(50000);
+	private boolean running; 
+	private InboxCtrl inboxCtrl; 
+	private CalendarCtrl calanderCtrl; 
 	
     
-    public updateThread(boolean running, Controller ctrl, String type) {
+    public updateThread(boolean running, InboxCtrl inboxCtrl, CalendarCtrl calanderCtrl) {
     	this.running = running; 
-    	this.ctrl = ctrl; 
-    	this.type= type; 
+    	this.inboxCtrl = inboxCtrl; 
+    	this.calanderCtrl= calanderCtrl; 
     	
     }
         	
@@ -39,13 +39,14 @@ class updateThread extends Thread {
 	}
 	
 	public void runUpdates(){
-		if (type.equals("updateInbox")){
-			//((MainCtrl)ctrl).inboxCtrl.updateInbox();   
-		}
-		else if (type.equals("updateMeetings")){
-			//((MainCtrl)ctrl).inboxCtrl.updateInbox();   
-		}
+		inboxCtrl.updateInbox();  
+		calanderCtrl.update(); 
+	}
 		 
-		// 
+	public InboxCtrl getInboxCtrl(){
+		return inboxCtrl; 
+	}
+	public CalendarCtrl getCalandarCtrl(){
+		return calanderCtrl; 
 	}
 }
