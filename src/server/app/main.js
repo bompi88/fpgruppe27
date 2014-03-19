@@ -616,12 +616,41 @@ server.put('/meeting_participants', function(req, res, next) {
 		return next(new restify.InvalidArgumentError('Required fields not supplied.'))
 	}
 
-	connection.query("UPDATE meeting_participants SET status='" + req.params.status + "' WHERE username='" + req.params.username + "'", function(err, rows, fields) {
-			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
-			
-			res.charSet('utf-8');
-			res.send()
+	connection.query("UPDATE meeting_participants SET status='" + req.params.status + "' WHERE username='" + req.params.username + "' AND meetid='" + req.params.meetid + "'", function(err, rows, fields) {
+		if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+		
 	});
+	
+	var meetName = undefined;
+	var outputMessage = undefined; 
+	var userInqestion = req.params.username;
+	var userAdmin = undefined; 	
+	
+	//get Useradmin of meeting
+	connection.query("SELECT name, username FROM meeting WHERE meetid=" + req.params.meetid, function(err, rows, fields) {
+		if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+		
+		userAdmin = rows[0].username;
+		meetName = rows[0].name;
+		
+		
+		if (req.status == 'ATTENDING'){
+			var outputMessage = userInQestion + " har bekreftet møteinkallingen til " + meetname; 
+		}
+	
+		else if (req.status == 'DECLINED'){
+			var outputMessage = userInQestion + " har avslått møteinkallingen til "+ meetname; 
+		}
+		
+		if(req.status == 'ATTENDING' || req.status == 'DECLINED'){
+			connection.query("INSERT INTO message (message, time, owner, isSeen) VALUES('" + outputMessage + "',NOW(),'" + userAdmin + "','" + 0 + "')", function(err, rows, fields) {
+				if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))				
+		
+				res.charSet('utf-8');
+				res.send()
+			});
+		}
+	}
 })
 
 //------------------------------------------------------------------------------------------------
@@ -633,13 +662,21 @@ server.del('/meeting_participants', function(req, res, next) {
 	if (req.params.username === undefined) {
 		return next(new restify.InvalidArgumentError('Required fields not supplied.'))
 	}
-
-	connection.query("DELETE FROM meeting_participants WHERE username='" + req.params.username + "'", function(err, rows, fields) {
+	if(typeof req.params.meetid !== "undefined" && typeof req.params.username !== "undefined") {
+		connection.query("DELETE FROM meeting_participants WHERE username='" + req.params.username + "' AND meetid='" + req.params.meetid +"'", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 			
 			res.charSet('utf-8');
 			res.send()
-	});
+		});
+	} else {
+		connection.query("DELETE FROM meeting_participants WHERE username='" + req.params.username + "'", function(err, rows, fields) {
+			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+			
+			res.charSet('utf-8');
+			res.send()
+		});
+	}
 })
 
 //------------------------------------------------------------------------------------------------
