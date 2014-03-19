@@ -212,7 +212,7 @@ server.get('/meeting', function(req, res, next) {
 			// for each meeting, get all related information to that meeting
 			async.forEach(Object.keys(meetings), function (item, callback){ 
 				// get all meeting participants for each meeting
-			    connection.query("SELECT * FROM meeting_participants WHERE meetid='" + meetings[item].meetid + "'", function(err, rows, fields) {
+			    connection.query("SELECT employee.username, employee.name, employee.email, meeting_participants.status FROM employee, meeting_participants WHERE employee.username=meeting_participants.username AND meeting_participants.meetid='" + meetings[item].meetid + "'", function(err, rows, fields) {
 					if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 								
 					meetings[item].participants = rows;
