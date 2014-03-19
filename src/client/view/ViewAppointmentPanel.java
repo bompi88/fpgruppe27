@@ -49,10 +49,10 @@ public class ViewAppointmentPanel extends JPanel implements PropertyChangeListen
 	private JSpinner timePickerFrom, timePickerTo;	
 	private boolean isEditable;
 	private Controller ctrl;
-	private Meeting meeting;
+	private Meeting model;
 	
-	public ViewAppointmentPanel(Controller ctrl) {
-		this.ctrl = ctrl;
+	public ViewAppointmentPanel(Meeting model) {
+		this.model = model;
 		placeRadio = new JRadioButton();	
 		roomRadio = new JRadioButton();
 		radioGroup = new ButtonGroup();
@@ -195,7 +195,6 @@ public class ViewAppointmentPanel extends JPanel implements PropertyChangeListen
 	}
 	
 	public void propertyChange(PropertyChangeEvent evt) {
-		Meeting model = ctrl.getModel();
 		if (evt.getPropertyName() == "name") {
 			meetingNameField.setText(model.getName());
 		}

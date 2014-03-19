@@ -20,6 +20,7 @@ import framework.State;
 
 import framework.Model;
 import utils.RelativeLayout;
+import view.AppointmentView;
 import view.MainView;
 import view.SideBarView;
 
@@ -251,6 +252,7 @@ public class MainCtrl extends Controller {
 		} else if (c.equals(inboxCtrl.getClass())) {
 			inboxCtrl.show();
 		} else if (c.equals(appointmentCtrl.getClass())) {
+			appointmentCtrl.appointmentPanel.setMeetingModel(new Meeting());
 			appointmentCtrl.show();
 		} else if (c.equals(viewAppointmentCtrl.getClass())) {
 			viewAppointmentCtrl.show();

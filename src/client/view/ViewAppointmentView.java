@@ -45,10 +45,10 @@ public class ViewAppointmentView extends JPanel implements Observable {
 	public ViewAppointmentView(Meeting model) {
 		this.meetingModel = model;
 		
-		meetingModel.addPropertyChangeListener(app);
-		
-		app = new ViewAppointmentPanel(ctrl);
+		app = new ViewAppointmentPanel(meetingModel);
 		part = new ViewParticipantPanel(ctrl);
+		
+		meetingModel.addPropertyChangeListener(app);
 		
 		titlePanel = new TitlePanel();
 		goBackButton = new JButton("Tilbake");
