@@ -114,6 +114,19 @@ public class TestRoutes extends JFCTestCase {
 		
 		//assertEquals(meeting.isAppointment(), resultMeeting.isAppointment());
 		
+		String newDescription = "ny motetekst";
+		meeting.setDescription(newDescription);
+		ClientObjectFactory.updateMeeting(meeting);
+		resultMeeting = ClientObjectFactory.getMeetingByID(id);
+		
+		assertEquals(meetingName, resultMeeting.getName());
+		assertEquals(description, resultMeeting.getDescription());
+		assertEquals(meetingPlace, resultMeeting.getPlace());
+		assertEquals(username, resultMeeting.getResponsible().getUsername());
+		assertEquals(password, resultMeeting.getResponsible().getPassword());
+		assertEquals(name, resultMeeting.getResponsible().getName());
+		assertEquals(email, resultMeeting.getResponsible().getEmail());
+		
 		ClientObjectFactory.deleteMeeting(id);
 		for(int i = 0; i < 5; i++) {
 			ClientObjectFactory.deleteEmployee(username + i);
