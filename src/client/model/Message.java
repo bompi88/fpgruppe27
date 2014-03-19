@@ -13,7 +13,7 @@ public class Message extends Model {
 	private String type;
 	private Timestamp time; 
 	private String message;
-	private Meeting meeting;
+	private int meetid;
 	private boolean isSeen;
 	private Participant userInQuestion; 
 	private Participant messageOwner; 
@@ -23,9 +23,9 @@ public class Message extends Model {
 //	protected String userHasDeclinedMessage = "Har medlt avbud til" + meeting.getMeetingName();
 	
 	
-	public Message(Meeting meeting, String type, Participant messageOwner, Participant userInQuestion) {
+	public Message(int meetid, String type, Participant messageOwner, Participant userInQuestion) {
 		super();
-		this.meeting = meeting;
+		this.meetid = meetid;
 		this.type = type; 	
 		this.userInQuestion = userInQuestion; 
 		this.messageOwner = messageOwner; 
@@ -52,12 +52,12 @@ public class Message extends Model {
 		return message;
 	}
 	
-	public Meeting getMeeting() {
-		return meeting;
+	public int getMeetID() {
+		return meetid;
 	}
 	
-	public void setMeeting(Meeting meeting) {
-		this.meeting = meeting;
+	public void setMeetID(int meetid) {
+		this.meetid = meetid;
 	}
 	
 	public boolean isSeen() {
