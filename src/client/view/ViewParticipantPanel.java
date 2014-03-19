@@ -113,28 +113,39 @@ public class ViewParticipantPanel extends JPanel implements PropertyChangeListen
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if(evt.getPropertyName() == "participants") {
+		if(evt.getPropertyName().equals("participants")) {
 			ArrayList<Participant> teit = (ArrayList<Participant>) evt.getNewValue();
 			DefaultListModel<Participant> listModel = new DefaultListModel<>();
 			 for(Participant e : teit) {
 			         listModel.addElement(e);
-			 }		
-			 participants.setModel(listModel);
+			 }	
+//			Object[] testing = listModel.toArray();
 			 
-				String ourUser = MainCtrl.getCurrentEmployee().getName();
-				List<Participant> participantNY = teit;;
-				for(Participant part : participantNY) {
-					if(part.getName().equals(ourUser)) {
-						if(part.getStatus() == Status.ATTENDING) {
-							view.ViewAppointmentView.acceptButton.setEnabled(false);
-							view.ViewAppointmentView.declineButton.setEnabled(true);
-						}
-						else if(part.getStatus() == Status.DECLINED) {
-							view.ViewAppointmentView.acceptButton.setEnabled(true);
-							view.ViewAppointmentView.declineButton.setEnabled(false);
-						}
-					}
-				}
+//			 for(int i = 0; i<testing.length; i++) {
+//				 System.out.println((((Participant) testing[i]).getStatus()));
+//			 }
+//			 
+//			 
+			 participants.setModel(listModel);
+			 participants.setCellRenderer(new IconListRenderer());
+			 participants.repaint();
+//			 
+//			 System.out.println("particpantpanel");
+//			 
+//			String ourUser = MainCtrl.getCurrentEmployee().getName();
+//			for(Participant part : teit) {
+//				if(part.getName().equals(ourUser)) {
+//					System.out.println(part.getStatus() + "panelll");
+//					if(part.getStatus() == Status.ATTENDING) {
+//						view.ViewAppointmentView.acceptButton.setEnabled(false);
+//						view.ViewAppointmentView.declineButton.setEnabled(true);
+//					}
+//					else if(part.getStatus() == Status.DECLINED) {
+//						view.ViewAppointmentView.acceptButton.setEnabled(true);
+//						view.ViewAppointmentView.declineButton.setEnabled(false);
+//					}
+//				}
+//			}
 
 		}
 		

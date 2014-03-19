@@ -90,9 +90,12 @@ public class ViewAppointmentView extends JPanel implements Observable {
 
 				String ourUser = MainCtrl.getCurrentEmployee().getName();
 				List<Participant> participants = meetingModel.getParticipants();
-				for(Participant part : participants) {
+				for(int i = 0; i<participants.size(); i++) {
+					Participant part = participants.get(i);
 					if(part.getName().equals(ourUser)) {
+						participants.remove(i);
 						part.setStatus(Status.ATTENDING);
+						participants.add(part);
 						meetingModel.setParticipants(participants);
 						ClientObjectFactory.setAttandence(meetingModel, MainCtrl.getCurrentEmployee(), "ATTENDING");
 						
@@ -110,9 +113,12 @@ public class ViewAppointmentView extends JPanel implements Observable {
 				//fireObserverEvent("declined", meetingModel);
 				String ourUser = MainCtrl.getCurrentEmployee().getName();
 				List<Participant> participants = meetingModel.getParticipants();
-				for(Participant part : participants) {
+				for(int i = 0; i<participants.size(); i++) {
+					Participant part = participants.get(i);
 					if(part.getName().equals(ourUser)) {
+						participants.remove(i);
 						part.setStatus(Status.DECLINED);
+						participants.add(part);
 						meetingModel.setParticipants(participants);
 						ClientObjectFactory.setAttandence(meetingModel, MainCtrl.getCurrentEmployee(), "DECLINED");
 						
