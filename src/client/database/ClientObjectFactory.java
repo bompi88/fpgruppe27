@@ -111,7 +111,7 @@ public class ClientObjectFactory {
 
 		String fromTimeFormatted = sdf.format(timeFrom.getTime());
 
-		request = new HttpGet(API + "message?username=" + Username + "&time="
+		request = new HttpGet(API + "message?username=" + Username + "&timeFrom="
 				+ fromTimeFormatted);
 		String messageString = getRequest(request);
 		EntityUtils.consumeQuietly(response.getEntity());

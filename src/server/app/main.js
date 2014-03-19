@@ -795,7 +795,7 @@ server.get('/message', function(req, res, next) {
 	// if a username and timeFrom is specified
 	} else if(typeof req.params.username !== "undefined" && typeof req.params.timeFrom !== "undefined") {
 		// get all messages which is created after a certain point in time
-		connection.query("SELECT * FROM message WHERE owner='" + req.params.username + "' AND time > '" + rew.params.timeFrom + "'", function(err, rows, fields) {
+		connection.query("SELECT * FROM message WHERE owner='" + req.params.username + "' AND time > '" + req.params.timeFrom + "'", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 
 			res.charSet('utf-8');
