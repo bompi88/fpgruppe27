@@ -18,7 +18,6 @@ import utils.RelativeLayout;
 import controller.AppointmentCtrl;
 import controller.CalendarCtrl;
 import controller.MainCtrl;
-import controller.ViewAppointmentCtrl;
 import database.ClientObjectFactory;
 import framework.Observable;
 import framework.Observer;
@@ -127,7 +126,7 @@ public class CalendarColumn extends JPanel implements Observer, Observable {
 			
 			MainCtrl mainCtrl = (MainCtrl)((CalendarCtrl)((CalendarView)((JPanel)((WeeklyCalendarPanel)getParent()).getParent()).getParent().getParent().getParent()).getCtrl()).getMainCtrl();
 			mainCtrl.setMeetingModel(meet);
-			mainCtrl.setState(ViewAppointmentCtrl.class);
+			mainCtrl.setState(AppointmentCtrl.class);
 		}
 	}
 	

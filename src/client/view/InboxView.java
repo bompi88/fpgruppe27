@@ -23,7 +23,6 @@ import model.Employee;
 import model.Message;
 import controller.AppointmentCtrl;
 import controller.MainCtrl;
-import controller.ViewAppointmentCtrl;
 import database.ClientObjectFactory;
 import framework.Controller;
 import resources.AppConstants;
@@ -114,7 +113,7 @@ public class InboxView extends JPanel {
 				((MainCtrl)ctrl.getMainCtrl()).setMeetingModel(ClientObjectFactory.getMeetingByID(list.getSelectedValue().getMeetID()));
 			
 				list.clearSelection();
-				ctrl.setState(ViewAppointmentCtrl.class);
+				ctrl.setState(AppointmentCtrl.class);
 			}
 		}
 	}

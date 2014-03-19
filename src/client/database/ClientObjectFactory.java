@@ -332,10 +332,14 @@ public class ClientObjectFactory {
 				.setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
 		Meeting[] meetingsPrim = builder.fromJson(meetingString,
 				Meeting[].class);
-		ArrayList<Meeting> meetings = new ArrayList<Meeting>(
-				Arrays.asList(meetingsPrim));
-
-		return meetings;
+		
+		if(meetingsPrim != null) {
+			ArrayList<Meeting> meetings = new ArrayList<Meeting>(Arrays.asList(meetingsPrim));
+	
+			return meetings;
+		} else {
+			return new ArrayList<Meeting>();
+		}
 	}
 
 	/**
@@ -456,7 +460,7 @@ public class ClientObjectFactory {
 			} else
 				return null;
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			return null;
 		} finally {
 			try {

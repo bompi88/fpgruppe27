@@ -29,8 +29,9 @@ import view.AppointmentView.TitlePanel;
 import framework.Controller;
 import framework.Observable;
 import framework.Observer;
+import framework.State;
 
-public class ViewAppointmentView extends JPanel implements Observable {
+public class ViewAppointmentView extends JPanel implements Observable, State {
 	
 	private Controller ctrl;
 	private List<Observer> observers = new ArrayList<Observer>();
@@ -188,4 +189,11 @@ public class ViewAppointmentView extends JPanel implements Observable {
 		return ctrl;
 	}
 
+	public void showState() {
+		setVisible(true);
+	}
+	
+	public void hideState() {
+		setVisible(false);
+	}
 }
