@@ -17,6 +17,9 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import framework.Observable;
+import framework.Observer;
+
 import resources.AppConstants;
 import utils.RelativeLayout;
 
@@ -24,11 +27,12 @@ import utils.RelativeLayout;
  * This is the control panel which handles Week traversal in calendar view.
  */
 @SuppressWarnings("serial")
-public class CalendarCtrlPanel extends JPanel {
+public class CalendarCtrlPanel extends JPanel implements Observable{
 	
+	private List<Observer> observers = new ArrayList<Observer>();
 	private Calendar calendar = new GregorianCalendar();
 	private JLabel l;
-	private Week selectedWeek;
+	private static Week selectedWeek;
 	
 	public CalendarCtrlPanel() {
 		
@@ -141,6 +145,10 @@ public class CalendarCtrlPanel extends JPanel {
 		return weeks;
 	}
 	
+	public int getCurrentWeek() {
+		return selectedWeek.getWeekNumber();
+	}
+	
 	public class Week {
 		private int weekNumber;
 		
@@ -173,6 +181,9 @@ public class CalendarCtrlPanel extends JPanel {
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			if(evt.getPropertyName().equals("weekChange")) {
+				
+				fireObserverEvent(evt.getPropertyName(), getCurrentWeek());
+				
 				if (getPreviousWeek() < calendar.get(Calendar.WEEK_OF_YEAR)) {
 					getSelf().setEnabled(false);
 				} else {
@@ -184,5 +195,16 @@ public class CalendarCtrlPanel extends JPanel {
 		public JButton getSelf() {
 			return this;
 		}
+	}
+
+	@Override
+	public void addObserver(Observer ob) {
+		observers.add(ob);
+	}
+
+	@Override
+	public void fireObserverEvent(String event, Object obj) {
+		for (Observer o : observers)
+			o.changeEvent(event, obj);
 	}
 }

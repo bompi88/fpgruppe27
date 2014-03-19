@@ -95,6 +95,13 @@ public class WeeklyCalendarPanel extends JPanel implements Observer {
 		
 		getMeetingsFromDB();
 	}
+	
+	public void fireWeekChange(int week) {
+		setWeek(week);
+		getMeetingsFromDB();
+		
+		updateAllCalendarColumnViews();
+	}
 
 	private void setWeek(int week) {
 		cal.set(Calendar.WEEK_OF_YEAR, week);
@@ -207,6 +214,8 @@ public class WeeklyCalendarPanel extends JPanel implements Observer {
 			sundayView.deleteMeeting(obj, false);
 			
 			updateAllCalendarColumnViews();
+		} else if (event.equals("weekChange")) {
+			fireWeekChange((int)obj);
 		}
 	}
 }

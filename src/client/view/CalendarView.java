@@ -61,6 +61,7 @@ public class CalendarView extends JPanel{
 		
 		weeklyCalendarPanel = new WeeklyCalendarPanel();
 		
+		calendarCtrlPanel.addObserver(weeklyCalendarPanel);
 		weeklyCalendarWrapper.add(weeklyCalendarPanel);
 		
 		scrollPane = new JScrollPane(weeklyCalendarWrapper,
