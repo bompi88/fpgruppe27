@@ -106,9 +106,10 @@ public class InboxView extends JPanel {
 			add(scrollPane);
 		}
 
-		public void valueChanged(ListSelectionEvent arg0) {
+		public void valueChanged(ListSelectionEvent evt) {
 			// Aktiveres når noen trykker i innboksen
 			// UFERDIG, per nå sendes man bare til appointmentView
+			((MainCtrl)ctrl.getMainCtrl()).setMeetingModel(ClientObjectFactory.getMeetingByID(list.getSelectedValue().getMeetID()));
 			list.clearSelection();
 			ctrl.setState(AppointmentCtrl.class);
 		}
@@ -172,6 +173,7 @@ public class InboxView extends JPanel {
 	}
 	
 	public void initInbox(){
+		
 		emp = (Employee) ((MainCtrl)ctrl.getMainCtrl()).getModel();
 
 		Timestamp timeNull = new Timestamp(0); 
@@ -182,8 +184,14 @@ public class InboxView extends JPanel {
 		}
 	}
 		
-	public void updateInbox(){	
-		Timestamp timeLastMessage = inbox.get(0).getTime();
+	public void updateInbox(){
+		Timestamp timeLastMessage;
+		
+		if(inbox != null &  inbox.get(0) != null)
+			timeLastMessage = inbox.get(0).getTime();
+		else
+			timeLastMessage = new Timestamp(0);
+		
 		List<model.Message> messages = ClientObjectFactory.getMessages(emp.getUsername(), timeLastMessage); 
 		
 		for(int i = 0; i < messages.size(); i++){

@@ -46,7 +46,7 @@ public class ViewAppointmentView extends JPanel implements Observable {
 		this.meetingModel = model;
 		
 		app = new ViewAppointmentPanel(meetingModel);
-		part = new ViewParticipantPanel(ctrl);
+		part = new ViewParticipantPanel(participantModel);
 		
 		meetingModel.addPropertyChangeListener(app);
 		

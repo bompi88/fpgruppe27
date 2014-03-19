@@ -17,7 +17,6 @@ CREATE TABLE IF NOT EXISTS meeting (
     isAppointment BOOLEAN,
 	username VARCHAR(15) REFERENCES employee(username),
 	PRIMARY KEY(meetid)
-
 	);
 
 CREATE TABLE IF NOT EXISTS room (
@@ -40,9 +39,8 @@ CREATE TABLE IF NOT EXISTS message (
 	messid INT NOT NULL AUTO_INCREMENT, 
 	message VARCHAR(255),
 	time TIMESTAMP,
-	owner VARCHAR(15),
+    meetid INT,
+	username VARCHAR(15) REFERENCES employee(username),
 	isSeen BOOLEAN,
 	PRIMARY KEY(messid)
 	)
-
-	

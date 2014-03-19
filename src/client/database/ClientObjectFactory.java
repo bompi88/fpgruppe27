@@ -123,9 +123,13 @@ public class ClientObjectFactory {
 
 		Message[] messagePrim = builder
 				.fromJson(messageString, Message[].class);
-		List<Message> messages = new ArrayList<Message>(
-				Arrays.asList(messagePrim));
-		return messages;
+		if(messagePrim != null && messagePrim.length > 0) {
+			List<Message> messages = new ArrayList<Message>(
+					Arrays.asList(messagePrim));
+			return messages;
+		} else {
+			return new ArrayList<Message>();
+		}
 	}
 
 	/**
