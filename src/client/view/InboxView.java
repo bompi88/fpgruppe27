@@ -109,6 +109,7 @@ public class InboxView extends JPanel {
 		public void valueChanged(ListSelectionEvent arg0) {
 			// Aktiveres når noen trykker i innboksen
 			// UFERDIG, per nå sendes man bare til appointmentView
+			list.clearSelection();
 			ctrl.setState(AppointmentCtrl.class);
 		}
 	}
