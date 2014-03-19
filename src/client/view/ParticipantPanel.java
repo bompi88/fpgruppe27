@@ -57,6 +57,7 @@ public class ParticipantPanel extends JPanel implements PropertyChangeListener {
 		
 		participantsModel = new DefaultListModel<Participant>();
 		participants = new JList<Participant>();
+
 		participants.setModel(participantsModel);
 		participants.setPreferredSize(new Dimension(250, 421));
 		

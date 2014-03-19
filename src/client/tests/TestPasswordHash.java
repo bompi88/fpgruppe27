@@ -1,9 +1,5 @@
 package tests;
 
-import static org.junit.Assert.*;
-
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import junit.extensions.jfcunit.JFCTestCase;
 import org.junit.Test;
 import database.PasswordHash;
@@ -29,10 +25,5 @@ public class TestPasswordHash extends JFCTestCase {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		
-	
 	}
-	
-
 }

@@ -11,8 +11,6 @@ import model.Status;
 
 import org.junit.Test;
 
-import model.Message;
-
 import database.ClientObjectFactory;
 import junit.extensions.jfcunit.JFCTestCase;
 
@@ -103,18 +101,18 @@ public class TestRoutes extends JFCTestCase {
 		//assertEquals(room.getCapacity(), resultMeeting.getRoom().getCapacity());
 		//assertEquals(room.getName(), resultMeeting.getRoom().getName());
 		
-		/*
 		for (int i = 0; i < participants.size(); i++) {
 			assertEquals(participants.get(i).getUsername(), resultMeeting.getParticipants().get(i).getUsername());
 			assertEquals(participants.get(i).getName(), resultMeeting.getParticipants().get(i).getName());
-			assertEquals(participants.get(i).getPassword(), resultMeeting.getParticipants().get(i).getPassword());
 			assertEquals(participants.get(i).getEmail(), resultMeeting.getParticipants().get(i).getEmail());
 		}
-		*/
 		
 		//assertEquals(meeting.isAppointment(), resultMeeting.isAppointment());
 		
-
+		ClientObjectFactory.deleteMeeting(id);
+		for(int i = 0; i < 5; i++) {
+			ClientObjectFactory.deleteEmployee(username + i);
+		}
 		ClientObjectFactory.deleteEmployee(username);
 	}
 	
