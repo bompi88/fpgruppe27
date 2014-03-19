@@ -9,15 +9,12 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.sql.Timestamp;
 import java.util.Calendar;
+
 import javax.swing.ButtonGroup;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -25,18 +22,18 @@ import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
+
 import controller.CalendarCtrl;
 import controller.MainCtrl;
-import framework.Controller;
-import model.Employee;
+
 import model.Meeting;
-import model.Participant;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
+import framework.Controller;
 
-public class AppointmentPanel extends JPanel implements PropertyChangeListener{
+public class ViewAppointmentPanel extends JPanel implements PropertyChangeListener {
 	
 	private UtilDateModel dateModelFrom, dateModelTo;
 	private JDatePanelImpl datePanelFrom, datePanelTo;
@@ -53,11 +50,10 @@ public class AppointmentPanel extends JPanel implements PropertyChangeListener{
 	private boolean isEditable;
 	private Controller ctrl;
 	private Meeting meeting;
-
-
-	public AppointmentPanel(Controller ctrl) {
+	
+	public ViewAppointmentPanel(Controller ctrl) {
 		this.ctrl = ctrl;
-		placeRadio = new JRadioButton();
+		placeRadio = new JRadioButton();	
 		roomRadio = new JRadioButton();
 		radioGroup = new ButtonGroup();
 		//for var denne Calendar.HOUR_OF_DAY?
@@ -88,13 +84,14 @@ public class AppointmentPanel extends JPanel implements PropertyChangeListener{
 		cancelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// Skal sendes tilbake til calnderView
 				
-				descArea.setText("");
-				placeField.setText("");
-				meetingNameField.setText("");
-				ViewParticipantPanel.participantsModel.clear();
-				
-				((MainCtrl)((Controller)getCtrl()).getMainCtrl()).setState(CalendarCtrl.class);
+//				descArea.setText("");
+//				placeField.setText("");
+//				meetingNameField.setText("");
+//				ParticipantPanel.participantsModel.clear();
+//				
+//				((MainCtrl)((Controller)getCtrl()).getMainCtrl()).setState(CalendarCtrl.class);
 				
 			}
 			
@@ -122,10 +119,35 @@ public class AppointmentPanel extends JPanel implements PropertyChangeListener{
 			}
 			
 		}
+		
+		disableIUElements();
+		
 		placeRadio.addItemListener(new MyItemListener());
 		roomRadio.addItemListener(new MyItemListener());		
 		addUIElements();
-
+	}
+	
+	private void disableIUElements() {
+		placeRadio.setEnabled(false);
+		roomRadio.setEnabled(false);
+		timePickerFrom.setEnabled(false);
+		timePickerTo.setEnabled(false);
+		saveButton.setEnabled(false);
+		cancelButton.setEnabled(false);
+		//dateModelFrom.
+		//dateModelTo = new UtilDateModel();
+		datePanelFrom.setEnabled(false);
+		//datePanelFrom.set
+		datePanelTo.setEnabled(false);
+		meetingNameField.setEditable(false);
+		placeField.setEditable(false);
+		descArea.setEditable(false);
+		datePickerFrom.setEnabled(false);
+		//datePickerFrom.setVisible(false);
+		datePickerTo.setEnabled(false);
+		//datePickerTo.setVisible(false);
+		meetingSizeBox.setEnabled(false);
+		roomPickerBox.setEnabled(false);
 	}
 	
 	private void addUIElements() {
@@ -163,63 +185,15 @@ public class AppointmentPanel extends JPanel implements PropertyChangeListener{
 		add(meetingSizeBox, new GridBagConstraints(1,4,1,1,1,1,anc,0,new Insets(0,40,0,0),0,0));
 		add(roomPickerBox, new GridBagConstraints(1,4,1,1,1,1,anc,0,new Insets(0,200,0,0),0,0));
 		
-		add(cancelButton, new GridBagConstraints(1,7,1,1,1,1,anc,0,in,0,0));
+		//add(cancelButton, new GridBagConstraints(1,7,1,1,1,1,anc,0,in,0,0));
 		
-		
-	}
-	
-	public boolean checkInput() {
-		try {
-			java.util.Date selectedFrom = (java.util.Date) datePickerFrom.getModel().getValue();
-			java.util.Date selectedTo = (java.util.Date) datePickerTo.getModel().getValue();
-			java.util.Date ye = (java.util.Date) timePickerFrom.getValue();
-			java.util.Date ye2 = (java.util.Date) timePickerTo.getValue();
-			java.util.Date from = (java.util.Date) new java.util.Date(selectedFrom.getYear(), selectedFrom.getMonth(), selectedFrom.getDate(), ye.getHours(), ye.getMinutes());
-			java.util.Date to = (java.util.Date) new java.util.Date(selectedTo.getYear(), selectedTo.getMonth(), selectedTo.getDate(), ye2.getHours(), ye2.getMinutes());
-			
-			if(!descArea.getText().equals("") && !placeField.getText().equals("") && !meetingNameField.getText().equals("")) {
-				if(selectedFrom != null && selectedTo != null && timePickerFrom != null && timePickerTo != null) {
-					System.out.println("selectedfrom");
-					if(to.compareTo(from) >= 0) {
-						System.out.println(from + " " + to);
-						return true;
-					}
-					
-				}
-				
-			}
-		}
-		catch(Exception e) {
-			return false;
-		}
-		
-		return false;
-	}
-	
-	public Meeting createMeeting(Meeting m) {
-		m.setName(meetingNameField.getText());
-		m.setAppointment(false);
-		m.setPlace(placeField.getText());
-		m.setDescription(descArea.getText());
-		java.util.Date fromDate = (java.util.Date) datePickerFrom.getModel().getValue();
-		java.util.Date toDate = (java.util.Date) datePickerTo.getModel().getValue();
-		java.util.Date fromTime = (java.util.Date) timePickerFrom.getValue();
-		java.util.Date toTime = (java.util.Date) timePickerTo.getValue();
-		m.setStartTime(new Timestamp(fromDate.getYear(),fromDate.getMonth(),fromDate.getDate(),fromTime.getHours(),fromTime.getMinutes(),fromTime.getSeconds(),0));
-		m.setEndTime(new Timestamp(toDate.getYear(),toDate.getMonth(),toDate.getDate(),toTime.getHours(),toTime.getMinutes(),toTime.getSeconds(),0));
-		Employee user = getCtrl().getMainCtrl().getModel();
-		//m.setRoom(new Room());
-		m.setResponsible(user);	
-	
-		return m;
 		
 	}
 	
 	public Controller getCtrl() {
 		return ctrl;
 	}
-
-	@Override
+	
 	public void propertyChange(PropertyChangeEvent evt) {
 		Meeting model = ctrl.getModel();
 		if (evt.getPropertyName() == "name") {
@@ -246,7 +220,5 @@ public class AppointmentPanel extends JPanel implements PropertyChangeListener{
 
 		
 	}
-
-
 
 }

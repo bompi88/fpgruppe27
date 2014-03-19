@@ -34,6 +34,7 @@ import javax.swing.border.EmptyBorder;
 import controller.AppointmentCtrl;
 import controller.CalendarCtrl;
 import controller.MainCtrl;
+import controller.ViewAppointmentCtrl;
 import database.ClientObjectFactory;
 
 import framework.Observable;
@@ -362,7 +363,7 @@ public class CalendarView extends JPanel{
 				// hmmm.... :P
 				MainCtrl mainCtrl = (MainCtrl)((CalendarCtrl)((CalendarView)((JPanel)((WeeklyCalendarPanel)getParent()).getParent()).getParent().getParent().getParent()).getCtrl()).getMainCtrl();
 				mainCtrl.setMeetingModel(((CalendarElement)obj).model);
-				mainCtrl.setState(AppointmentCtrl.class);
+				mainCtrl.setState(ViewAppointmentCtrl.class);
 			}
 		}
 		

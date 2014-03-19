@@ -53,6 +53,7 @@ public class MainCtrl extends Controller {
 	private CalendarCtrl calendarCtrl;
 	private InboxCtrl inboxCtrl;
 	private AppointmentCtrl appointmentCtrl;
+	private ViewAppointmentCtrl viewAppointmentCtrl;
 
 	public MainCtrl() {
 		
@@ -200,6 +201,7 @@ public class MainCtrl extends Controller {
 		// have to initialize our sidebar
 		sidebarPanel.init();
 		appointmentCtrl = new AppointmentCtrl(getMainCtrl());
+		viewAppointmentCtrl = new ViewAppointmentCtrl(getMainCtrl());
 		inboxCtrl = new InboxCtrl(getMainCtrl());
 		
 		// finally show the contents of our app.
@@ -237,6 +239,8 @@ public class MainCtrl extends Controller {
 			inboxCtrl.hide();
 		if (appointmentCtrl != null)
 			appointmentCtrl.hide();
+		if (viewAppointmentCtrl != null)
+			viewAppointmentCtrl.hide();
 		loginCtrl.hide();
 		
 		// show a new state
@@ -248,6 +252,8 @@ public class MainCtrl extends Controller {
 			inboxCtrl.show();
 		} else if (c.equals(appointmentCtrl.getClass())) {
 			appointmentCtrl.show();
+		} else if (c.equals(viewAppointmentCtrl.getClass())) {
+			viewAppointmentCtrl.show();
 		}
 	}
 	
@@ -280,5 +286,6 @@ public class MainCtrl extends Controller {
 	
 	public void setMeetingModel(Meeting model) {
 		appointmentCtrl.appointmentPanel.setModel(model);
+		viewAppointmentCtrl.appointmentPanel.setModel(model);
 	}
 }
