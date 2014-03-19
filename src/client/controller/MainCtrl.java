@@ -103,10 +103,7 @@ public class MainCtrl extends Controller {
             	
         		updateThread uThread = new updateThread(true, inboxCtrl, calendarCtrl); 
         		uThread.start(); 
-        		inboxCtrl = uThread.getInboxCtrl(); 
-        		calendarCtrl = uThread.getCalandarCtrl(); 
-        		
-        		
+         
         		
         		// if cookie: login
         		if(isRemembered()) {
