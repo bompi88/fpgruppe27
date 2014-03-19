@@ -5,7 +5,6 @@ import java.util.List;
 
 import framework.Model;
 
-
 public class Room extends Model {
 	
 	private int roomID;
@@ -50,6 +49,4 @@ public class Room extends Model {
 		return "Room [roomID=" + roomID + ", capacity=" + capacity + ", name="
 				+ name + "]";
 	}
-	
-
 }

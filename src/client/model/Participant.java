@@ -5,6 +5,7 @@ import model.Employee;
 
 public class Participant extends Employee {
 	
+	private int meetid;
 	private Status status;
 	
 	public Participant(String name, String username, String email,
@@ -31,5 +32,13 @@ public class Participant extends Employee {
 	@Override
 	public String toString() {
 		return getName();
+	}
+
+	public int getMeetid() {
+		return meetid;
+	}
+
+	public void setMeetid(int meetid) {
+		this.meetid = meetid;
 	}
 }

@@ -151,7 +151,7 @@ server.get('/meeting', function(req, res, next) {
 			async.series({
 				// get info about our meeting participants
 				participants: function(callback) {
-					connection.query("SELECT * FROM meeting_participants WHERE meetid='" + req.params.meetid + "'", function(err, rows, fields) {
+					connection.query("SELECT employee.username, employee.name, employee.email, meeting_participants.status FROM employee, meeting_participants WHERE employee.username=meeting_participants.username AND meeting_participants.meetid='" + req.params.meetid + "'", function(err, rows, fields) {
 						if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 
 						callback(null, rows);
@@ -204,7 +204,7 @@ server.get('/meeting', function(req, res, next) {
 		}
 
 		//get all meetings for all defined users in the given timeinterval.
-		connection.query("SELECT * FROM meeting WHERE username IN (" + users + ") AND startTime BETWEEN '" + req.params.startTime + "' AND '" + req.params.endTime + "'", function(err, rows, fields) {
+		connection.query("SELECT DISTINCT(meeting.meetid), meeting.name, meeting.description, meeting.startTime, meeting.endTime, meeting.place, meeting.roomid, meeting.isAppointment, meeting.username FROM meeting, meeting_participants WHERE meeting.meetid = meeting_participants.meetid AND meeting_participants.username IN (" + users + ") OR meeting.username IN (" + users + ") AND startTime BETWEEN '" + req.params.startTime + "' AND '" + req.params.endTime + "'", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 			
 			meetings = rows;
@@ -335,10 +335,10 @@ server.post('/meeting', function(req, res, next) {
 			// get meeting id from newly inserted meeting
 			connection.query("SELECT meetid FROM meeting WHERE meetid = (SELECT MAX(meetid) FROM meeting)", function(err, r, fields) {
 				if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
-		
+				var participant = undefined;
 				// for all participants
 				for (var i = 0; i < req.params.participants.length; i++) { 
-					var participant = req.params.participants[i];
+					participant = req.params.participants[i];
 					
 					if (participant.status === undefined) 
 						participant.status = 'NULL';
@@ -347,21 +347,23 @@ server.post('/meeting', function(req, res, next) {
 					connection.query("INSERT INTO meeting_participants (meetid, username, status) values ('" + r[0].meetid + "','" + participant.username + "','" + participant.status + "')", function(err, rows, fields) {
 						if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 
-						var time = moment(req.params.startTime);
-
-						var minutes = time.minutes();
-
-						if (minutes < 10) {
-							minutes = '0' + minutes;
-						}
-
-						// create a message which is assigned to each participant.
-						var invitedString = 'Du har blitt invitert til ' + req.params.name + ' den ' + time.date() + '.' + time.month() + '.' + time.year() + ' kl. ' + time.hours() + ':' + minutes;
-						connection.query("INSERT INTO message (message, time, owner, isSeen) VALUES('" + invitedString + "',NOW(),'" + participant.username + "','" + 0 + "')", function(err, rows, fields) {
-							if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 						
-						});	
 					});
+					var time = moment(req.params.startTime);
+
+					var minutes = time.minutes();
+
+					if (minutes < 10) {
+						minutes = '0' + minutes;
+					}
+
+					// create a message which is assigned to each participant.
+					var invitedString = 'Du har blitt invitert til ' + req.params.name + ' den ' + time.date() + '.' + time.month() + '.' + time.year() + ' kl. ' + time.hours() + ':' + minutes;
+					console.log(participant.username)
+					connection.query("INSERT INTO message (message, time, owner, isSeen) VALUES('" + invitedString + "',NOW(),'" + participant.username + "','" + 0 + "')", function(err, rows, fields) {
+						if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+					
+					});	
 				}
 				res.charSet('utf-8');
 				res.send(201, r[0].meetid)
@@ -502,13 +504,15 @@ server.del('/meeting', function(req, res, next) {
 					if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 
 					res.charSet('utf-8');
-					res.send()
+					
 				});	
 			}
 
 			// delete the meeting from the database
 			connection.query("DELETE FROM meeting WHERE meetid=" + req.params.meetid, function(err, rows, fields) {
 				if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+
+				res.send()
 			});
 		});
 	});
@@ -877,3 +881,11 @@ function myCustomFormatJSON(req, res, body) {
 server.listen(process.env.PORT, function() {
 	console.log('%s listening at %s', server.name, server.url);
 });
+
+
+// // Listen on port
+// server.listen(9004, function() {
+// 	console.log('%s listening at %s', server.name, server.url);
+// });
+
+

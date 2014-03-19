@@ -6,7 +6,6 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -37,19 +36,14 @@ public class InboxView extends JPanel {
 	private JPanel topPanelWrapper = new JPanel();
 	private InboxListPanel inboxPanel;
 	
-	private JLabel whereLabel = new JLabel(AppConstants.INBOX_HEADER_TEXT);
+	private DefaultListModel<Message> inbox;
 	
-	protected DefaultListModel<Message> inbox = new DefaultListModel<Message>(); 
-	protected int noOfUnseenMessages = 0; 
+	private Controller ctrl;
+	private Employee emp;
 	
-	Controller ctrl;
-	Employee emp;
-	
-	
-	public InboxView(Controller controll) {
-		
+	public InboxView(Controller controll, DefaultListModel<Message> inbox) {
+		this.inbox = inbox;
 		ctrl = controll;
-		initInbox();
 		
 		inboxPanel = new InboxListPanel();
 		
@@ -86,7 +80,6 @@ public class InboxView extends JPanel {
 		
 		@Override
 		public Container getParent() {
-			// TODO Auto-generated method stub
 			return super.getParent();
 		}
 		
@@ -100,15 +93,12 @@ public class InboxView extends JPanel {
 		JList<Message> list;
 		
 		public InboxListPanel() {
-			
-			
-			
+
 			list = new JList<Message>(inbox);
 			//list.setModel(testmessages);		
 			list.setCellRenderer(new InboxListCellRenderer());
 			list.addListSelectionListener(this);
 		
-			
 			JScrollPane scrollPane = new JScrollPane();
 			scrollPane.setViewportView(list);
 			scrollPane.setPreferredSize(new Dimension(780,450));
@@ -140,12 +130,12 @@ public class InboxView extends JPanel {
 			JLabel mess = new JLabel(message.getMessage());
 			mess.setPreferredSize(new Dimension(500,25));
 			add(mess);
-			JLabel button = new JLabel("Gå til");
+			JLabel button = new JLabel("Gï¿½ til");
 			button.setForeground(Color.BLUE);
 			add(button);
 			
 			if (message.isSeen()) {
-				this.setBackground(Color.DARK_GRAY);
+				this.setBackground(AppConstants.MESSAGE_SEEN_COLOR);
 			} else {
 				setBackground(Color.WHITE);
 			}
@@ -165,6 +155,7 @@ public class InboxView extends JPanel {
 	
 	public class InboxListCellRenderer extends DefaultListCellRenderer {
 		
+		@SuppressWarnings("rawtypes")
 		public Component getListCellRendererComponent(JList list,
 	            Object value,
 	            int index,
@@ -181,16 +172,12 @@ public class InboxView extends JPanel {
 	
 	public void initInbox(){
 		emp = (Employee) ((MainCtrl)ctrl.getMainCtrl()).getModel();
-		System.out.print(emp.getUsername());
+
 		Timestamp timeNull = new Timestamp(0); 
 		List<Message> messages = ClientObjectFactory.getMessages(emp.getUsername(), timeNull); 
 		
 		for(int i = 0; i < messages.size(); i++){
 			inbox.add(0, messages.get(i));  
-			if (messages.get(i).isSeen() == false){
-				noOfUnseenMessages++; 
-			}
-				
 		}
 	}
 		
@@ -200,9 +187,6 @@ public class InboxView extends JPanel {
 		
 		for(int i = 0; i < messages.size(); i++){
 			inbox.add(0, messages.get(i)); 
-			if (messages.get(i).isSeen() == false){
-				noOfUnseenMessages++; 
-			}
 		}
 	}
 	
@@ -223,6 +207,5 @@ public class InboxView extends JPanel {
 				inbox.get(i).setSeen(true); 
 			} 
 		}
-		noOfUnseenMessages = 0; 
 	}
 }

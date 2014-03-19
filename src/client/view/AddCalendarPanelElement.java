@@ -36,8 +36,8 @@ public class AddCalendarPanelElement extends JPanel implements Observable{
 	@SuppressWarnings("static-access")
 	public AddCalendarPanelElement(Employee emp) {
 		setVisible(true);
-    	removeCalendarIcon = new ImageIcon(ImageManager.getInstance().resizeImage(ImageManager.getInstance().getImage("delete_icon"), 15, 15));
-    	removeCalendarIconHover = new ImageIcon(ImageManager.getInstance().resizeImage(ImageManager.getInstance().getImage("delete_icon_hover"), 15, 15));
+    	removeCalendarIcon = ImageManager.getInstance().getDeleteIcon();
+    	removeCalendarIconHover = ImageManager.getInstance().getDeleteIconHover();
     	
     	removeCalendarButton.setIcon(removeCalendarIcon);
     	setPreferredSize(new Dimension((int)(300/3),20));

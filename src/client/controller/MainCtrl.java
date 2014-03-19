@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -16,8 +15,6 @@ import javax.swing.SwingUtilities;
 import database.ClientObjectFactory;
 
 import resources.AppConstants;
-import resources.ImageManager;
-
 import framework.Controller;
 import framework.State;
 
@@ -44,9 +41,7 @@ public class MainCtrl extends Controller {
 	private JPanel mainWrapperPanel = new JPanel();
 	
 	// Our current logged in user
-	private Employee currentEmployee;
-	
-	private ImageIcon appIcon;
+	private static Employee currentEmployee;
 	
 	// Our controllers (Internal main states)
 	private LoginCtrl loginCtrl;
@@ -68,11 +63,9 @@ public class MainCtrl extends Controller {
 	/**
 	 * Initializes the user interface.
 	 */
-	@SuppressWarnings("static-access")
 	public void initUI() {
-		
-		setAppIcon(new ImageIcon(ImageManager.getInstance().resizeImage(ImageManager.getInstance().getImage("app_icon"), 120, 90)));	
-		// Create a layout fro mainFrame
+
+		// Create a layout for mainFrame
 		RelativeLayout rl = new RelativeLayout(RelativeLayout.X_AXIS, 0);
 		rl.setAlignment(RelativeLayout.LEADING);
 		
@@ -84,11 +77,10 @@ public class MainCtrl extends Controller {
 		mainWrapperPanel.add(sidebarPanel);
 		mainWrapperPanel.setVisible(false);
 		mainFrame.setContentPane(mainWrapperPanel);
-		mainFrame.setPreferredSize(new Dimension(1000,800));
+		mainFrame.setPreferredSize(new Dimension(AppConstants.MAIN_FRAME_WIDTH,AppConstants.MAIN_FRAME_HEIGHT));
 		
 		// To simplify things, we only have one possible size of our main window.
 		mainFrame.setResizable(false);
-		
 	}
 	
 	/**
@@ -103,8 +95,10 @@ public class MainCtrl extends Controller {
             	// init the controllers
         		
         		loginCtrl = new LoginCtrl(getMainCtrl());
-        		
-        		
+        		appointmentCtrl = new AppointmentCtrl(getMainCtrl());
+        		viewAppointmentCtrl = new ViewAppointmentCtrl(getMainCtrl());
+        		inboxCtrl = new InboxCtrl(getMainCtrl());
+        		inboxCtrl.addObserver(sidebarPanel);
             	
         		// if cookie: login
         		if(isRemembered()) {
@@ -133,16 +127,14 @@ public class MainCtrl extends Controller {
 	public boolean isRemembered() {
 		
 		BufferedReader br = null;
-		String hash = "";
 		
-		// create a model
-		model = new Employee();
+		Employee emp = new Employee();
 		
 		try {
 			br = new BufferedReader(new FileReader(cookieFileName));
-	        hash = br.readLine();
-	        ((Employee)model).setUsername(br.readLine());
-	        
+	        emp.setPassword(br.readLine());
+	        emp.setUsername(br.readLine());
+	        model = emp;
 		} catch (IOException e) {
 			
 		} finally {
@@ -155,7 +147,8 @@ public class MainCtrl extends Controller {
 			}
 		}
 		
-		return hash.equals("logged in");
+		// security issues :P
+		return ClientObjectFactory.authenticateWithHash(emp);
 	}
 	
 	/**
@@ -186,7 +179,6 @@ public class MainCtrl extends Controller {
 		} finally {
 			
 		}
-		System.out.println("logged out");
 	}
 	
 	/**
@@ -196,14 +188,17 @@ public class MainCtrl extends Controller {
 	public void login() {
 		calendarCtrl = new CalendarCtrl(getMainCtrl());
 		// go to calendar
-		setState(CalendarCtrl.class);
+		
 		
 		// have to initialize our sidebar
 		sidebarPanel.init();
-		appointmentCtrl = new AppointmentCtrl(getMainCtrl());
-		viewAppointmentCtrl = new ViewAppointmentCtrl(getMainCtrl());
-		inboxCtrl = new InboxCtrl(getMainCtrl());
-		
+
+		inboxCtrl.initInbox();
+		appointmentCtrl.init();
+		calendarCtrl.init();
+		inboxCtrl.init();
+		setState(CalendarCtrl.class);
+		sidebarPanel.setNumberOfUnseenMessages(inboxCtrl.getNumberOfUnseenMessages());
 		// finally show the contents of our app.
 		mainWrapperPanel.setVisible(true);
 		
@@ -212,7 +207,7 @@ public class MainCtrl extends Controller {
 		
 		try {
 			writer = new PrintWriter(cookieFileName, "UTF-8");
-			writer.println("logged in");
+			writer.println(currentEmployee.getPassword());
 			writer.println(currentEmployee.getUsername());
 			writer.close();
 		} catch (FileNotFoundException e) {
@@ -222,29 +217,27 @@ public class MainCtrl extends Controller {
 		} finally {
 			
 		}
-		System.out.println("logged in");
-	}
-	
-	public JFrame getMainFrame() {
-		return mainFrame;
 	}
 	
 	@Override
 	public void setState(Class<? extends State> c) {
 		
-		// hide all states
-		if (calendarCtrl != null)
+		// hide all states if they exists and if they are allready not hidden
+		if (calendarCtrl != null && !calendarCtrl.isHidden())
 			calendarCtrl.hide();
-		if (inboxCtrl != null)
+		if (inboxCtrl != null && !inboxCtrl.isHidden())
 			inboxCtrl.hide();
-		if (appointmentCtrl != null)
+		if (appointmentCtrl != null && !appointmentCtrl.isHidden())
 			appointmentCtrl.hide();
 		if (viewAppointmentCtrl != null)
 			viewAppointmentCtrl.hide();
 		loginCtrl.hide();
 		
+		if (loginCtrl != null)
+			loginCtrl.hide();
+			
 		// show a new state
-		if(c.equals(loginCtrl.getClass())) {
+		if(c.equals(loginCtrl.getClass())) {			
 			loginCtrl.show();
 		} else if (c.equals(calendarCtrl.getClass())) {
 			calendarCtrl.show();
@@ -257,20 +250,12 @@ public class MainCtrl extends Controller {
 		}
 	}
 	
-	/**
-	 * Sets the applications' icon.
-	 * @param ImageIcon
-	 */
-	public void setAppIcon(ImageIcon icon) {
-		appIcon = icon;
+	public static Employee getCurrentEmployee() {
+		return currentEmployee;
 	}
 	
-	/**
-	 * Gets the applications' icon.
-	 * @return ImageIcon
-	 */
-	public ImageIcon getAppIcon() {
-		return appIcon;
+	public JFrame getMainFrame() {
+		return mainFrame;
 	}
 	
 	@Override
@@ -285,7 +270,7 @@ public class MainCtrl extends Controller {
 	}
 	
 	public void setMeetingModel(Meeting model) {
-		appointmentCtrl.appointmentPanel.setModel(model);
 		viewAppointmentCtrl.appointmentPanel.setModel(model);
+		appointmentCtrl.appointmentPanel.setMeetingModel(model);
 	}
 }

@@ -28,6 +28,7 @@ import javax.swing.JPanel;
 /**
  * This class represents a Rounded Border JPanel.
  */
+@SuppressWarnings("serial")
 public class RoundedPanel extends JPanel {
 
     /** Stroke size. it is recommended to set it to 1 for better view */
