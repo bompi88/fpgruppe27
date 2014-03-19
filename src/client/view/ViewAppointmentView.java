@@ -4,6 +4,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -22,10 +24,13 @@ import model.Meeting;
 import utils.RelativeLayout;
 import view.AppointmentView.TitlePanel;
 import framework.Controller;
+import framework.Observable;
+import framework.Observer;
 
-public class ViewAppointmentView extends JPanel {
+public class ViewAppointmentView extends JPanel implements Observable {
 	
 	private Controller ctrl;
+	private List<Observer> observers = new ArrayList<Observer>();
 	private ViewAppointmentPanel app;
 	private ViewParticipantPanel part;
 	private TitlePanel titlePanel;
@@ -123,10 +128,6 @@ public class ViewAppointmentView extends JPanel {
 		return model;
 	}
 	
-	public Controller getCtrl() {
-		return ctrl;
-	}
-
 	private void addUIElements() {
 		
 		RelativeLayout rl1 = new RelativeLayout(RelativeLayout.Y_AXIS, 0);
@@ -150,6 +151,21 @@ public class ViewAppointmentView extends JPanel {
 			setBackground(AppConstants.HEADER_BG_COLOR);
 			setPreferredSize(new Dimension(AppConstants.MAIN_FRAME_WIDTH-AppConstants.SIDEBAR_WIDTH, AppConstants.HEADER_PANEL_HEIGHT));
 		}
+	}
+	@Override
+	public void addObserver(Observer ob) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void fireObserverEvent(String event, Object obj) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public Controller getCtrl() {
+		return ctrl;
 	}
 
 }

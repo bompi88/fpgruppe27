@@ -28,5 +28,17 @@ public class ViewAppointmentCtrl extends Controller implements State {
 	public void hide() {
 		appointmentPanel.setVisible(false);
 	}
+	
+	public void init() {
+		appointmentPanel.setVisible(false);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void changeEvent(String event, Object obj) {
+		if (event.equals("change_state")) {
+			((MainCtrl)getMainCtrl()).setState((Class<State>)obj);
+		}		
+	}
 
 }
