@@ -6,7 +6,7 @@ import framework.Controller;
 
 class updateThread extends Thread {
 	
-	Timestamp refressRate = new Timestamp(50000);
+	Timestamp refressRate = new Timestamp(500000);
 	private boolean running; 
 	private InboxCtrl inboxCtrl; 
 	private CalendarCtrl calanderCtrl; 

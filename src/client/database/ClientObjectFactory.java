@@ -73,8 +73,8 @@ public class ClientObjectFactory {
 		String username = emp.getUsername();
 
 		put = new HttpPut(API + "meeting_participants?meetid=" + meetid
-				+ "meeting_participants?username=" + username
-				+ "meeting_participants?status=" + status);
+				+ "&username=" + username
+				+ "&status=" + status);
 		putRequest(put, null);
 		EntityUtils.consumeQuietly(response.getEntity());
 	}
@@ -87,10 +87,11 @@ public class ClientObjectFactory {
 	 * @param Employee
 	 */
 	public static void setNegAttandenceAndRemove(Meeting meeting, Employee emp) {
+		setAttandence(meeting, emp, "DECLINED");
 		int meetid = meeting.getMeetid();
 		String username = emp.getUsername();
 		delete = new HttpDelete((API + "meeting_participants?meetid=" + meetid
-				+ "meeting_participants?username=" + username));
+				+ "&username=" + username));
 		deleteRequest(delete);
 		EntityUtils.consumeQuietly(response.getEntity());
 	}
