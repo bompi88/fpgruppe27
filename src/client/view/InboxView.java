@@ -191,7 +191,7 @@ public class InboxView extends JPanel {
 	public void updateInbox(){
 		Timestamp timeLastMessage;
 		
-		if(inbox != null &  inbox.get(0) != null)
+		if(inbox != null && inbox.size() > 0)
 			timeLastMessage = inbox.get(0).getTime();
 		else
 			timeLastMessage = new Timestamp(0);
