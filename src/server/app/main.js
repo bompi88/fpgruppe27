@@ -330,6 +330,8 @@ server.post('/meeting', function(req, res, next) {
 						+ req.params.isAppointment + "','" + req.params.responsible.username + "')", function(err, rows, fields) {
 		if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 		
+		var meetID = undefined; 
+		
 		// if we have participants
 		if(typeof req.params.participants !== "undefined") {
 			// get meeting id from newly inserted meeting
@@ -360,7 +362,7 @@ server.post('/meeting', function(req, res, next) {
 					// create a message which is assigned to each participant.
 					var invitedString = 'Du har blitt invitert til ' + req.params.name + ' den ' + time.date() + '.' + time.month() + '.' + time.year() + ' kl. ' + time.hours() + ':' + minutes;
 					console.log(participant.username)
-					connection.query("INSERT INTO message (message, time, owner, isSeen) VALUES('" + invitedString + "',NOW(),'" + participant.username + "','" + 0 + "')", function(err, rows, fields) {
+					connection.query("INSERT INTO message (message, time, meetid, owner, isSeen) VALUES('" + invitedString + "',NOW(),'" + r[0].meetid + "','" + participant.username + "','" + 0 + "')", function(err, rows, fields) {
 						if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 					
 					});	
@@ -460,7 +462,7 @@ server.put('/meeting', function(req, res, next) {
 					
 					var participant = req.params.participants[i];
 
-					connection.query("INSERT INTO message (message, time, owner, isSeen) VALUES('" + outputMessage + "',NOW(),'" + participant.username + "','" + 0 + "')", function(err, rows, fields) {
+					connection.query("INSERT INTO message (message, time, meetid, owner, isSeen) VALUES('" + outputMessage + "',NOW(),'" + req.params.meetid + "' ,'" + participant.username + "','" + 0 + "')", function(err, rows, fields) {
 						if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 					
 					});	
@@ -500,7 +502,7 @@ server.del('/meeting', function(req, res, next) {
 				var outputMessage = meetName + " har blitt avlyst";
 				
 				// Send cenceled message
-				connection.query("INSERT INTO message (message, time, owner, isSeen) VALUES('" + outputMessage + "',NOW(),'" + participant.username + "','" + 0 + "')", function(err, rows, fields) {
+				connection.query("INSERT INTO message (message, time, meetid, owner, isSeen) VALUES('" + outputMessage + "',NOW(),'" + req.params.meetid + "','" + participant.username + "','" + 0 + "')", function(err, rows, fields) {
 					if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 
 					res.charSet('utf-8');
@@ -643,7 +645,7 @@ server.put('/meeting_participants', function(req, res, next) {
 		}
 		
 		if(req.status == 'ATTENDING' || req.status == 'DECLINED'){
-			connection.query("INSERT INTO message (message, time, owner, isSeen) VALUES('" + outputMessage + "',NOW(),'" + userAdmin + "','" + 0 + "')", function(err, rows, fields) {
+			connection.query("INSERT INTO message (message, time, meetid, owner, isSeen) VALUES('" + outputMessage + "',NOW(),'" + req.params.meetid + "','" + userAdmin + "','" + 0 + "')", function(err, rows, fields) {
 				if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))				
 		
 				res.charSet('utf-8');

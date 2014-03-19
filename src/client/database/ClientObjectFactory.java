@@ -60,6 +60,7 @@ public class ClientObjectFactory {
 		httpClient = HttpClientBuilder.create().build();
 	}
 
+	
 	/**
 	 * Sets status attandence DB by meeting, employee and status.
 	 * 
@@ -67,8 +68,7 @@ public class ClientObjectFactory {
 	 * @param Employee
 	 * @param status
 	 */
-	public static void setAttandence(Meeting meeting, Employee emp,
-			String status) {
+	public static void setAttandence(Meeting meeting, Employee emp, String status) {
 		int meetid = meeting.getMeetid();
 		String username = emp.getUsername();
 
