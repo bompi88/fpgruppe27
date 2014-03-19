@@ -60,9 +60,9 @@ public final class ImageManager {
 		appIcon = new ImageIcon(resizeImage(appIconImage, 120, 90));
 		deleteIcon = new ImageIcon(resizeImage(deleteIconImage, 15, 15));
 		deleteIconHover = new ImageIcon(resizeImage(deleteIconHoverImage, 15, 15));
-		attendingIcon = new ImageIcon(resizeImage(attendingIconImage, 10, 10));
-		declinedIcon = new ImageIcon(resizeImage(declinedIconImage, 10, 10));
-		invitedIcon = new ImageIcon(resizeImage(invitedIconImage, 10, 10));
+		attendingIcon = new ImageIcon(resizeImage(attendingIconImage, 15, 15));
+		declinedIcon = new ImageIcon(resizeImage(declinedIconImage, 15, 15));
+		invitedIcon = new ImageIcon(resizeImage(invitedIconImage, 15, 15));
 		letterClosedIcon = new ImageIcon(resizeImage(letterClosedImage, 20, 20));
 		letterOpenedIcon = new ImageIcon(resizeImage(letterOpenedImage, 20, 20));
 	}
