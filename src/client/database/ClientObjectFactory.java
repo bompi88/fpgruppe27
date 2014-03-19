@@ -60,6 +60,7 @@ public class ClientObjectFactory {
 		httpClient = HttpClientBuilder.create().build();
 	}
 
+	
 	/**
 	 * Sets status attandence DB by meeting, employee and status.
 	 * 
@@ -67,8 +68,7 @@ public class ClientObjectFactory {
 	 * @param Employee
 	 * @param status
 	 */
-	public static void setAttandence(Meeting meeting, Employee emp,
-			String status) {
+	public static void setAttandence(Meeting meeting, Employee emp, String status) {
 		int meetid = meeting.getMeetid();
 		String username = emp.getUsername();
 
@@ -111,7 +111,7 @@ public class ClientObjectFactory {
 
 		String fromTimeFormatted = sdf.format(timeFrom.getTime());
 
-		request = new HttpGet(API + "message?username=" + Username + "&time="
+		request = new HttpGet(API + "message?username=" + Username + "&timeFrom="
 				+ fromTimeFormatted);
 		String messageString = getRequest(request);
 		EntityUtils.consumeQuietly(response.getEntity());
@@ -123,9 +123,13 @@ public class ClientObjectFactory {
 
 		Message[] messagePrim = builder
 				.fromJson(messageString, Message[].class);
-		List<Message> messages = new ArrayList<Message>(
-				Arrays.asList(messagePrim));
-		return messages;
+		if(messagePrim != null && messagePrim.length > 0) {
+			List<Message> messages = new ArrayList<Message>(
+					Arrays.asList(messagePrim));
+			return messages;
+		} else {
+			return new ArrayList<Message>();
+		}
 	}
 
 	/**

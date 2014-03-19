@@ -93,7 +93,7 @@ public class WeeklyCalendarPanel extends JPanel implements Observer {
 
 		setBackground(AppConstants.CALENDAR_BG_COLOR);
 
-		getMeetingsFromDB();
+		
 	}
 
 	public void fireWeekChange(int week) {

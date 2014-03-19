@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
@@ -26,6 +27,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListCellRenderer;
 
+import resources.ImageManager;
+
 import database.ClientObjectFactory;
 import framework.Controller;
 
@@ -34,31 +37,29 @@ import model.Meeting;
 import model.Participant;
 import model.Status;
 
+@SuppressWarnings("serial")
 public class ViewParticipantPanel extends JPanel implements PropertyChangeListener {
 	
-	private JComboBox participantPicker;
-	private JList participants;
+	private JComboBox<Participant> participantPicker;
+	private JList<Participant> participants;
 	private JButton addParticipant;
 	private JButton addExternals;
-	protected static DefaultListModel<Employee> participantsModel; 
-	private ArrayList<Participant> participantList;
-	private Controller ctrl;
+	protected static DefaultListModel<Participant> participantsModel; 
+	private HashSet<Participant> participantList;
 
-
-	public ViewParticipantPanel(Controller ctrl) {
+	public ViewParticipantPanel(HashSet<Participant> model) {
 		//setPreferredSize(new Dimension(250, 421));
 		setLayout(new GridBagLayout());
-		this.ctrl = ctrl;
-		participantsModel = new DefaultListModel();
+		participantsModel = new DefaultListModel<Participant>();
 		addParticipant = new JButton("Legg til");
 		addExternals = new JButton("Legg til eksterne deltakere");
-		participantList = new ArrayList<Participant>();
-		participants = new JList();
+		participantList = model;
+		participants = new JList<Participant>();
 		participants.setModel(participantsModel);
 		//participantPicker = new JComboBox();
 		
-		List<Participant> employees = (List<Participant>)ClientObjectFactory.getEmployeesAsParticipants();
-		participantPicker = new JComboBox(employees.toArray());
+		List<Participant> employees = ClientObjectFactory.getEmployeesAsParticipants();
+		participantPicker = new JComboBox<Participant>(employees.toArray(new Participant[employees.size()]));
 		
 		addParticipant.addActionListener(new ActionListener() {
 
@@ -130,15 +131,15 @@ public class ViewParticipantPanel extends JPanel implements PropertyChangeListen
 	}
 	
 
-	public DefaultListModel getParticipantsModel() {
+	public DefaultListModel<Participant> getParticipantsModel() {
 		return participantsModel;
 	}
 	
-	public ArrayList<Participant> getParticipantList() {
+	public HashSet<Participant> getParticipantList() {
 		return participantList;
 	}
 
-	public void setParticipantsModel(DefaultListModel participantsModel) {
+	public void setParticipantsModel(DefaultListModel<Participant> participantsModel) {
 		this.participantsModel = participantsModel;
 	}
 	
@@ -152,17 +153,21 @@ public class ViewParticipantPanel extends JPanel implements PropertyChangeListen
 				JLabel label = new JLabel(name);
 				label.setOpaque(true);
 				
-				ImageIcon attIcon = new ImageIcon("src/client/resources/PersonIconGreen.png");
-				ImageIcon decIcon = new ImageIcon("src/client/resources/PersonIconRed.png");
-				ImageIcon invIcon = new ImageIcon("src/client/resources/personIconYellow.png");
+				ImageManager.getInstance();
 				
-				Image img = invIcon.getImage();  
-				Image newimg = img.getScaledInstance(10, 10,  java.awt.Image.SCALE_SMOOTH);  
-				ImageIcon newIcon = new ImageIcon(newimg);  
-
-
+				// get icons
+				ImageIcon attIcon = ImageManager.getAttendingIcon();
+				ImageIcon decIcon = ImageManager.getDeclinedIcon();
+				ImageIcon invIcon = ImageManager.getInvitedIcon();
 				
-				label.setIcon(newIcon);
+				// Set correct icon
+				if (value.getStatus() == Status.INVITED) {
+					label.setIcon(invIcon);
+				} else if (value.getStatus() == Status.ATTENDING) {
+					label.setIcon(attIcon);
+				} else {
+					label.setIcon(decIcon);
+				}
 				
 				if(isSelected) {
 					label.setBackground(list.getSelectionBackground());
@@ -178,10 +183,9 @@ public class ViewParticipantPanel extends JPanel implements PropertyChangeListen
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		Meeting model = ctrl.getModel();
 		if(evt.getPropertyName() == "participants") {
 			DefaultListModel<Participant> listModel = new DefaultListModel<>();
-			 for(Participant e : model.getParticipants()) {
+			 for(Participant e : participantList) {
 			         listModel.addElement(e);
 			 }		
 			 participants.setModel(listModel);

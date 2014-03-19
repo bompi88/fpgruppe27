@@ -23,6 +23,7 @@ import model.Employee;
 import model.Message;
 import controller.AppointmentCtrl;
 import controller.MainCtrl;
+import controller.ViewAppointmentCtrl;
 import database.ClientObjectFactory;
 import framework.Controller;
 import resources.AppConstants;
@@ -106,11 +107,15 @@ public class InboxView extends JPanel {
 			add(scrollPane);
 		}
 
-		public void valueChanged(ListSelectionEvent arg0) {
+		public void valueChanged(ListSelectionEvent evt) {
 			// Aktiveres når noen trykker i innboksen
 			// UFERDIG, per nå sendes man bare til appointmentView
-			list.clearSelection();
-			ctrl.setState(AppointmentCtrl.class);
+			if (list.getSelectedValue() != null) {
+				((MainCtrl)ctrl.getMainCtrl()).setMeetingModel(ClientObjectFactory.getMeetingByID(list.getSelectedValue().getMeetID()));
+			
+				list.clearSelection();
+				ctrl.setState(ViewAppointmentCtrl.class);
+			}
 		}
 	}
 	
@@ -172,6 +177,7 @@ public class InboxView extends JPanel {
 	}
 	
 	public void initInbox(){
+		
 		emp = (Employee) ((MainCtrl)ctrl.getMainCtrl()).getModel();
 
 		Timestamp timeNull = new Timestamp(0); 
@@ -182,8 +188,14 @@ public class InboxView extends JPanel {
 		}
 	}
 		
-	public void updateInbox(){	
-		Timestamp timeLastMessage = inbox.get(0).getTime();
+	public void updateInbox(){
+		Timestamp timeLastMessage;
+		
+		if(inbox != null && inbox.size() > 0)
+			timeLastMessage = inbox.get(0).getTime();
+		else
+			timeLastMessage = new Timestamp(0);
+		
 		List<model.Message> messages = ClientObjectFactory.getMessages(emp.getUsername(), timeLastMessage); 
 		
 		for(int i = 0; i < messages.size(); i++){
