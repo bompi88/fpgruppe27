@@ -99,7 +99,10 @@ public class MainCtrl extends Controller {
         		appointmentCtrl = new AppointmentCtrl(getMainCtrl());
         		viewAppointmentCtrl = new ViewAppointmentCtrl(getMainCtrl());
         		inboxCtrl = new InboxCtrl(getMainCtrl());
+<<<<<<< HEAD
         		currentEmployee = new Employee();
+=======
+>>>>>>> 35f5f88c899fb6a8e0bf335b30c4fadefd1b5ff5
         		calendarCtrl = new CalendarCtrl(getMainCtrl());
         		inboxCtrl.addObserver(sidebarPanel);
             	
