@@ -48,6 +48,7 @@ public class MainCtrl extends Controller {
 	private CalendarCtrl calendarCtrl;
 	private InboxCtrl inboxCtrl;
 	private AppointmentCtrl appointmentCtrl;
+	private ViewAppointmentCtrl viewAppointmentCtrl;
 
 	public MainCtrl() {
 		
@@ -95,9 +96,17 @@ public class MainCtrl extends Controller {
         		
         		loginCtrl = new LoginCtrl(getMainCtrl());
         		appointmentCtrl = new AppointmentCtrl(getMainCtrl());
+        		viewAppointmentCtrl = new ViewAppointmentCtrl(getMainCtrl());
         		inboxCtrl = new InboxCtrl(getMainCtrl());
         		inboxCtrl.addObserver(sidebarPanel);
             	
+        		updateThread uThread = new updateThread(true, inboxCtrl, calendarCtrl); 
+        		uThread.start(); 
+        		inboxCtrl = uThread.getInboxCtrl(); 
+        		calendarCtrl = uThread.getCalandarCtrl(); 
+        		
+        		
+        		
         		// if cookie: login
         		if(isRemembered()) {
         			
@@ -227,6 +236,10 @@ public class MainCtrl extends Controller {
 			inboxCtrl.hide();
 		if (appointmentCtrl != null && !appointmentCtrl.isHidden())
 			appointmentCtrl.hide();
+		if (viewAppointmentCtrl != null)
+			viewAppointmentCtrl.hide();
+		loginCtrl.hide();
+		
 		if (loginCtrl != null)
 			loginCtrl.hide();
 			
@@ -239,6 +252,8 @@ public class MainCtrl extends Controller {
 			inboxCtrl.show();
 		} else if (c.equals(appointmentCtrl.getClass())) {
 			appointmentCtrl.show();
+		} else if (c.equals(viewAppointmentCtrl.getClass())) {
+			viewAppointmentCtrl.show();
 		}
 	}
 	
@@ -262,6 +277,7 @@ public class MainCtrl extends Controller {
 	}
 	
 	public void setMeetingModel(Meeting model) {
+		viewAppointmentCtrl.appointmentPanel.setModel(model);
 		appointmentCtrl.appointmentPanel.setMeetingModel(model);
 	}
 }

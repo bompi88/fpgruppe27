@@ -34,4 +34,9 @@ public class CalendarCtrl extends Controller implements State {
 		calendarPanel.setVisible(false);
 		calendarPanel.update();
 	}
+	
+	public void update(){
+		calendarPanel.update();
+	}
+	
 }

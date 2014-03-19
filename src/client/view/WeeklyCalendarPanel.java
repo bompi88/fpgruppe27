@@ -16,11 +16,11 @@ import framework.Observer;
 
 @SuppressWarnings("serial")
 public class WeeklyCalendarPanel extends JPanel implements Observer {
-	
+
 	private Calendar cal = Calendar.getInstance();
-	
+
 	private List<Meeting> meetings = new ArrayList<Meeting>();
-	
+
 	private Date mondayDate;
 	private Date thuesdayDate;
 	private Date wednesdayDate;
@@ -28,9 +28,9 @@ public class WeeklyCalendarPanel extends JPanel implements Observer {
 	private Date fridayDate;
 	private Date saturdayDate;
 	private Date sundayDate;
-	
+
 	private Date nextMondayDate;
-	
+
 	private List<Meeting> monday = new ArrayList<Meeting>();
 	private List<Meeting> thuesday = new ArrayList<Meeting>();
 	private List<Meeting> wednesday = new ArrayList<Meeting>();
@@ -38,7 +38,7 @@ public class WeeklyCalendarPanel extends JPanel implements Observer {
 	private List<Meeting> friday = new ArrayList<Meeting>();
 	private List<Meeting> saturday = new ArrayList<Meeting>();
 	private List<Meeting> sunday = new ArrayList<Meeting>();
-	
+
 	private CalendarColumn mondayView;
 	private CalendarColumn thuesdayView;
 	private CalendarColumn wednesdayView;
@@ -46,13 +46,13 @@ public class WeeklyCalendarPanel extends JPanel implements Observer {
 	private CalendarColumn fridayView;
 	private CalendarColumn saturdayView;
 	private CalendarColumn sundayView;
-	
+
 	@SuppressWarnings("deprecation")
 	public WeeklyCalendarPanel() {
-		
+
 		setWeek(cal.get(Calendar.WEEK_OF_YEAR));
-		
-		
+
+
 		// initialize Day Column Views
 		mondayView = new CalendarColumn(monday, mondayDate);
 		thuesdayView = new CalendarColumn(thuesday, thuesdayDate);
@@ -61,7 +61,7 @@ public class WeeklyCalendarPanel extends JPanel implements Observer {
 		fridayView = new CalendarColumn(thursday, fridayDate);
 		saturdayView = new CalendarColumn(saturday, saturdayDate);
 		sundayView = new CalendarColumn(sunday, sundayDate);
-		
+
 		mondayView.addObserver(this);
 		thuesdayView.addObserver(this);
 		wednesdayView.addObserver(this);
@@ -69,12 +69,12 @@ public class WeeklyCalendarPanel extends JPanel implements Observer {
 		fridayView.addObserver(this);
 		saturdayView.addObserver(this);
 		sundayView.addObserver(this);
-		
+
 		RelativeLayout rl = new RelativeLayout(RelativeLayout.X_AXIS, 0);
 		rl.setAlignment(RelativeLayout.LEADING);
-		
+
 		setLayout(rl);
-		
+
 		mondayView.setHeaderText(AppConstants.MONDAY_TEXT + " " + mondayDate.getDate() + "." + mondayDate.getMonth());
 		thuesdayView.setHeaderText(AppConstants.THUESDAY_TEXT + " " + thuesdayDate.getDate() + "." + thuesdayDate.getMonth());
 		wednesdayView.setHeaderText(AppConstants.WEDNESDAY_TEXT + " " + wednesdayDate.getDate() + "." + wednesdayDate.getMonth());
@@ -82,7 +82,7 @@ public class WeeklyCalendarPanel extends JPanel implements Observer {
 		fridayView.setHeaderText(AppConstants.FRIDAY_TEXT + " " + fridayDate.getDate() + "." + fridayDate.getMonth());
 		saturdayView.setHeaderText(AppConstants.SATURDAY_TEXT + " " + saturdayDate.getDate() + "." + saturdayDate.getMonth());
 		sundayView.setHeaderText(AppConstants.SUNDAY_TEXT + " " + sundayDate.getDate() + "." + sundayDate.getMonth());
-		
+
 		add(mondayView);
 		add(thuesdayView);
 		add(wednesdayView);
@@ -90,16 +90,16 @@ public class WeeklyCalendarPanel extends JPanel implements Observer {
 		add(fridayView);
 		add(saturdayView);
 		add(sundayView);
-	
+
 		setBackground(AppConstants.CALENDAR_BG_COLOR);
-		
+
 		getMeetingsFromDB();
 	}
-	
+
 	public void fireWeekChange(int week) {
 		setWeek(week);
 		getMeetingsFromDB();
-		
+
 		updateAllCalendarColumnViews();
 	}
 
@@ -127,11 +127,11 @@ public class WeeklyCalendarPanel extends JPanel implements Observer {
 		cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
 		nextMondayDate = cal.getTime();
 	}
-	
+
 	public void getMeetingsFromDB() {
-		
+
 		// get all subscriptions, and create an array
-		
+
 //		System.out.println(((CalendarView)getParent().getParent().getParent().getParent().getParent()).calendar.getInstance().get(Calendar.DAY_OF_WEEK));
 //		
 //		List<Employee> subs = ((CalendarView)getParent().getParent().getParent()).getAllSubscriptions();
@@ -142,10 +142,10 @@ public class WeeklyCalendarPanel extends JPanel implements Observer {
 //		for (int i = 0; i < subs.size(); i++) {
 //			subsUsers[i] = subs.get(i).getUsername();
 //		}
-		
+
 		// For testing
 		meetings = ClientObjectFactory.getMeetingByWeek(Calendar.getInstance().get(Calendar.WEEK_OF_YEAR), MainCtrl.getCurrentEmployee().getUsername());
-		
+
 		monday = new ArrayList<Meeting>();
 		thuesday = new ArrayList<Meeting>();
 		wednesday = new ArrayList<Meeting>();
@@ -153,11 +153,11 @@ public class WeeklyCalendarPanel extends JPanel implements Observer {
 		friday = new ArrayList<Meeting>();
 		saturday = new ArrayList<Meeting>();
 		sunday = new ArrayList<Meeting>();
-		
+
 		for(Meeting m : meetings) {
 			long startTime = m.getStartTime().getTime();
 			long endTime = m.getEndTime().getTime();
-			
+
 			if ((startTime >= mondayDate.getTime() && startTime < thuesdayDate.getTime()) || (endTime > mondayDate.getTime() && startTime < mondayDate.getTime())) {
 				monday.add(m);
 			} 
@@ -180,7 +180,7 @@ public class WeeklyCalendarPanel extends JPanel implements Observer {
 				sunday.add(m);
 			}
 		}
-		
+
 		mondayView.setModel(monday);
 		thuesdayView.setModel(thuesday);
 		wednesdayView.setModel(wednesday);
@@ -188,10 +188,10 @@ public class WeeklyCalendarPanel extends JPanel implements Observer {
 		fridayView.setModel(friday);
 		saturdayView.setModel(saturday);
 		sundayView.setModel(sunday);
-		
+
 		updateAllCalendarColumnViews();
 	}
-	
+
 	public void updateAllCalendarColumnViews() {
 		mondayView.updateView();
 		thuesdayView.updateView();
@@ -212,7 +212,7 @@ public class WeeklyCalendarPanel extends JPanel implements Observer {
 			fridayView.deleteMeeting(obj, false);
 			saturdayView.deleteMeeting(obj, false);
 			sundayView.deleteMeeting(obj, false);
-			
+
 			updateAllCalendarColumnViews();
 		} else if (event.equals("weekChange")) {
 			fireWeekChange((int)obj);

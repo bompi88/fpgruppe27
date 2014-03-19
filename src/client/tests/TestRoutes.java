@@ -27,35 +27,43 @@ public class TestRoutes extends JFCTestCase {
 	@Test
     public void testEmployee() {
 		
-        Employee employee = new Employee(name, username, email, password);
+        //create a new employee and add it to the db
+		Employee employee = new Employee(name, username, email, password);
         ClientObjectFactory.addEmployee(employee);
+        
+        //create an employee from the newly created db entry
         Employee emp = ClientObjectFactory.getEmployeeByUsername(username);
 
+        //check if the employee we just created is the same as we get from the db
         assertEquals(username, emp.getUsername());
         assertEquals(password, emp.getPassword());
         assertEquals(email, emp.getEmail());
         assertEquals(name, emp.getName());
         
+        //change the name of the employee we created, update the db with this and then get it back from the db again
         employee.setName(this.name + "update");
         employee.setEmail(this.email + "update");
         employee.setPassword(this.password + "update");
         ClientObjectFactory.updateEmployee(employee);
         emp = ClientObjectFactory.getEmployeeByUsername(username);
         
+        //check if the employee we first created locally still matches what we get from the db
         assertEquals(username, emp.getUsername());
         assertEquals(password + "update", emp.getPassword());
         assertEquals(email + "update", emp.getEmail());
         assertEquals(name + "update", emp.getName());
         
+        //delete the employee from the db and try to get it anyways
         ClientObjectFactory.deleteEmployee(username);
         emp = ClientObjectFactory.getEmployeeByUsername(username);
 		
+        //check to see if the employee we just tried to get is null, as it should be
         assertNull(emp);
     }
 	
 	
 	@Test
-	public void testAddMeeting() {
+	public void testMeeting() {
 		
 		Employee employee = new Employee(name, username, email, password);
 		ClientObjectFactory.addEmployee(employee);
@@ -68,7 +76,6 @@ public class TestRoutes extends JFCTestCase {
 			ClientObjectFactory.addEmployee(emp);
 			participants.add(new Participant(name + i, username + i, email, password + i, Status.INVITED));
 		}
-		System.out.println(participants);
 		
 		// set time for meeting
 		Timestamp startTime = new Timestamp(System.currentTimeMillis() + (1000 * 60 * 60));
@@ -79,14 +86,12 @@ public class TestRoutes extends JFCTestCase {
 		
 		// create a meeting
 		Meeting meeting = new Meeting(description, startTime, endTime, room, meetingPlace, emp, participants, true, meetingName);
-		System.out.println(meeting);
 		
-		// add the meetinh to database
+		// add the meeting to database
 		int id = ClientObjectFactory.addMeeting(meeting);
 		
 		// fetch the newly created meeting from database
 		Meeting resultMeeting = ClientObjectFactory.getMeetingByID(id);
-		System.out.println(resultMeeting);
 		
 		// check if meeting fetched from database is the same as the initial meeting. 
 		assertEquals(meetingName, resultMeeting.getName());
@@ -123,6 +128,6 @@ public class TestRoutes extends JFCTestCase {
 	public static void main(String args[]) {
 		TestRoutes tr = new TestRoutes();
 		tr.testEmployee();
-		tr.testAddMeeting();
+		tr.testMeeting();
 	}
 }
