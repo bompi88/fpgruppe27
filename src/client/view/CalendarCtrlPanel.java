@@ -17,6 +17,9 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import framework.Observable;
+import framework.Observer;
+
 import resources.AppConstants;
 import utils.RelativeLayout;
 
@@ -24,28 +27,29 @@ import utils.RelativeLayout;
  * This is the control panel which handles Week traversal in calendar view.
  */
 @SuppressWarnings("serial")
-public class CalendarCtrlPanel extends JPanel {
-	
+public class CalendarCtrlPanel extends JPanel implements Observable{
+
+	private List<Observer> observers = new ArrayList<Observer>();
 	private Calendar calendar = new GregorianCalendar();
 	private JLabel l;
-	private Week selectedWeek;
-	
+	private static Week selectedWeek;
+
 	public CalendarCtrlPanel() {
-		
+
 		JButton nextButton = new JButton(">>");
 		PrevButton previousButton = new PrevButton("<<");
-		
+
 		JComboBox<Week> weekComboBox = new JComboBox<Week>();
 		List<Week> weeks = getWeeks(8);
-		
+
 		Week[] arrWeeks = new Week[weeks.size()];
 		weeks.toArray(arrWeeks);
 		weekComboBox.setModel(new DefaultComboBoxModel<Week>(arrWeeks));
 		setBackground(AppConstants.HEADER_BG_COLOR);
 		selectedWeek = arrWeeks[0];
-		
+
 		l = new JLabel(Integer.toString(selectedWeek.getWeekNumber()));
-		
+
 		RelativeLayout rl = new RelativeLayout(RelativeLayout.X_AXIS, 0);
 		rl.setAlignment(RelativeLayout.CENTER);
 		setLayout(rl);
@@ -53,12 +57,12 @@ public class CalendarCtrlPanel extends JPanel {
 		add(weekComboBox);
 		add(previousButton);
 		add(nextButton);
-		
+
 		addPropertyChangeListener(previousButton);
-		
+
 		// So the previous week button can set itself to a disabled state. Quick fix.
 		firePropertyChange("weekChange", 0, selectedWeek.getWeekNumber());
-		
+
 		previousButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -66,7 +70,7 @@ public class CalendarCtrlPanel extends JPanel {
 				setPreviousWeek();
 			}
 		});
-		
+
 		nextButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -75,37 +79,37 @@ public class CalendarCtrlPanel extends JPanel {
 			}
 		});
 	}
-	
+
 	public void setNextWeek() {			
 		int tmp = selectedWeek.getWeekNumber();
 		selectedWeek.setWeek(getNextWeek());
 		firePropertyChange("weekChange", tmp, selectedWeek.getWeekNumber());
-		
+
 		updateWeekLabel();
 	}
-	
+
 	public int getNextWeek() {
 		if(selectedWeek.getWeekNumber() + 1 > calendar.getWeeksInWeekYear())
 			selectedWeek.setWeek(0);
-		
+
 		return selectedWeek.getWeekNumber() + 1;
 	}
-	
+
 	public void setPreviousWeek() {
 		int tmp = selectedWeek.getWeekNumber();
 		selectedWeek.setWeek(getPreviousWeek());
 		firePropertyChange("weekChange", tmp, selectedWeek.getWeekNumber());
-		
+
 		updateWeekLabel();
 	}
-	
+
 	public int getPreviousWeek() {
 		if(selectedWeek.getWeekNumber() - 1 < 1)
 			selectedWeek.setWeek(calendar.getWeeksInWeekYear() + 1);
-		
+
 		return selectedWeek.getWeekNumber() - 1;
 	}
-	
+
 	public void updateWeekLabel() {
 		l.setText(Integer.toString(selectedWeek.getWeekNumber()));
 	}	
@@ -115,22 +119,22 @@ public class CalendarCtrlPanel extends JPanel {
 		// TODO Auto-generated method stub
 		return super.getParent();
 	}
-	
+
 	public void fillSizeOfParent() {
 		setPreferredSize(new Dimension((int)(getParent().getPreferredSize().width * (1 - CalendarView.titleBarScaleWidth)/2)+1, getParent().getPreferredSize().height));
 	}
-	
+
 	public List<Week> getWeeks(int numberOfWeeks) {
-		
+
 		List<Week> weeks = new ArrayList<Week>();
-		
+
 		int currentWeek = calendar.get(Calendar.WEEK_OF_YEAR);
 		int numberOfWeeksInYear = calendar.getWeeksInWeekYear();
-		
+
 		int numberOfWeeksAddedThisYear = 0;
-		
+
 		for(int i = 0; i < numberOfWeeks; i++) {
-			
+
 			if (currentWeek + i <= numberOfWeeksInYear) {
 				weeks.add(new Week(currentWeek + i));
 				numberOfWeeksAddedThisYear++;
@@ -140,39 +144,46 @@ public class CalendarCtrlPanel extends JPanel {
 		}
 		return weeks;
 	}
-	
+
+	public int getCurrentWeek() {
+		return selectedWeek.getWeekNumber();
+	}
+
 	public class Week {
 		private int weekNumber;
-		
+
 		public Week(int weekNumber) {
 			this.weekNumber = weekNumber;
 		}
-		
+
 		public void setWeek(int week) {
 			weekNumber = week;
 		}
-		
+
 		public int getWeekNumber() {
 			return weekNumber;
 		}
-		
+
 		@Override
 		public String toString() {
 			return Integer.toString(weekNumber);
 		}
 	}
-	
+
 	public class PrevButton extends JButton implements PropertyChangeListener {
 
 		public PrevButton() {}
-		
+
 		public PrevButton(String label) {
 			super(label);
 		}
-		
+
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			if(evt.getPropertyName().equals("weekChange")) {
+
+				fireObserverEvent(evt.getPropertyName(), getCurrentWeek());
+
 				if (getPreviousWeek() < calendar.get(Calendar.WEEK_OF_YEAR)) {
 					getSelf().setEnabled(false);
 				} else {
@@ -180,9 +191,20 @@ public class CalendarCtrlPanel extends JPanel {
 				}
 			}
 		}
-		
+
 		public JButton getSelf() {
 			return this;
 		}
+	}
+
+	@Override
+	public void addObserver(Observer ob) {
+		observers.add(ob);
+	}
+
+	@Override
+	public void fireObserverEvent(String event, Object obj) {
+		for (Observer o : observers)
+			o.changeEvent(event, obj);
 	}
 }
