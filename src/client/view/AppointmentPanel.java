@@ -213,7 +213,7 @@ public class AppointmentPanel extends JPanel implements PropertyChangeListener{
 	}
 	
 	public void setModel(Meeting m) {
-		model = m;
+		model.setModel(m);
 	}
 	
 	public void saveModel() {

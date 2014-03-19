@@ -43,10 +43,12 @@ public class AppointmentView extends JPanel implements Observable {
 		
 		this.meetingModel = model;
 		
-		meetingModel.addPropertyChangeListener(app);
+		
 
 		app = new AppointmentPanel(meetingModel);
 		part = new ParticipantPanel(participantModel);
+		
+		meetingModel.addPropertyChangeListener(app);
 
 		titlePanel = new TitlePanel();
 		saveButton = new JButton(AppConstants.SAVE_BUTTON_TEXT);
