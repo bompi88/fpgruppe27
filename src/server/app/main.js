@@ -625,32 +625,37 @@ server.put('/meeting_participants', function(req, res, next) {
 	
 	var meetName = undefined;
 	var outputMessage = undefined; 
-	var userInqestion = req.params.username;
+	var userInQestion = req.params.username;
 	var userAdmin = undefined; 	
+	
 	
 	//get Useradmin of meeting
 	connection.query("SELECT name, username FROM meeting WHERE meetid=" + req.params.meetid, function(err, rows, fields) {
 		if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 		
+		
 		userAdmin = rows[0].username;
 		meetName = rows[0].name;
 		
 		
-		if (req.status == 'ATTENDING'){
-			var outputMessage = userInQestion + " har bekreftet møteinkallingen til " + meetname; 
+		if (req.params.status == 'ATTENDING'){
+			var outputMessage = userInQestion + " har bekreftet mÃ¸teinkallingen til " + meetName; 
 		}
 	
-		else if (req.status == 'DECLINED'){
-			var outputMessage = userInQestion + " har avslått møteinkallingen til "+ meetname; 
+		else if (req.params.status == 'DECLINED'){
+			var outputMessage = userInQestion + " har avslÃ¥tt mÃ¸teinkallingen til "+ meetName; 
 		}
 		
-		if(req.status == 'ATTENDING' || req.status == 'DECLINED'){
+		if(req.params.status == 'ATTENDING' || req.params.status == 'DECLINED'){
 			connection.query("INSERT INTO message (message, time, meetid, owner, isSeen) VALUES('" + outputMessage + "',NOW(),'" + req.params.meetid + "','" + userAdmin + "','" + 0 + "')", function(err, rows, fields) {
 				if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))				
 		
 				res.charSet('utf-8');
 				res.send()
 			});
+		} else {
+			res.charSet('utf-8');
+			res.send()
 		}
 	});
 })
