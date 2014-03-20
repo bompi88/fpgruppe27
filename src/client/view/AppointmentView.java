@@ -25,10 +25,10 @@ import model.Participant;
 
 import framework.Observable;
 import framework.Observer;
-
+import framework.State;
 
 @SuppressWarnings("serial")
-public class AppointmentView extends JPanel implements Observable {
+public class AppointmentView extends JPanel implements Observable, State {
 	
 	private List<Observer> observers = new ArrayList<Observer>();
 	private AppointmentPanel app;
@@ -162,5 +162,13 @@ public class AppointmentView extends JPanel implements Observable {
 	public void fireObserverEvent(String event, Object obj) {
 		for (Observer o : observers)
 			o.changeEvent(event, obj);
+	}
+	
+	public void showState() {
+		setVisible(true);
+	}
+	
+	public void hideState() {
+		setVisible(false);
 	}
 }
