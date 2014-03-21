@@ -12,7 +12,6 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -30,7 +29,6 @@ public class SubscribeToCalendarPanel extends JPanel {
 
 	private JLabel addCalendarLabel;
 	private JTextField addCalendarTextField;
-	private JList<Employee> calendarSubscribedList;
 	private JButton addCalendarButton;
 	private JPanel topFormWrapper;
 	private SubscribedCalendarListPanel calendarListPanel;
@@ -44,7 +42,6 @@ public class SubscribeToCalendarPanel extends JPanel {
 		this.addCalendarTextField = new JTextField();
 		this.topFormWrapper = new JPanel();
 		this.calendarListPanel = new SubscribedCalendarListPanel();
-		this.calendarSubscribedList = new JList<Employee>();
 		this.rl = new RelativeLayout(RelativeLayout.Y_AXIS, 0);
 		this.rl.setAlignment(RelativeLayout.CENTER);
 		
@@ -52,8 +49,6 @@ public class SubscribeToCalendarPanel extends JPanel {
 		
 		setBackground(AppConstants.HEADER_BG_COLOR);
 		setLayout(rl);
-		
-		calendarSubscribedList.setBackground(AppConstants.HEADER_BG_COLOR);
 		
 		addCalendarTextField.setPreferredSize(new Dimension(100, 30));
 		

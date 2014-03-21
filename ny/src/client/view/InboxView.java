@@ -116,7 +116,7 @@ public class InboxView extends JPanel {
 			JLabel mess = new JLabel(message.getMessage());
 			mess.setPreferredSize(new Dimension(500,25));
 			add(mess);
-			JLabel button = new JLabel("Gå til");
+			JLabel button = new JLabel("G�� til");
 			button.setForeground(Color.BLUE);
 			add(button);
 			
@@ -140,6 +140,8 @@ public class InboxView extends JPanel {
 	}
 	
 	public class InboxListCellRenderer extends DefaultListCellRenderer {
+	
+		private InboxElementPanel element;
 		
 		@SuppressWarnings("rawtypes")
 		public Component getListCellRendererComponent(JList list,
@@ -149,7 +151,7 @@ public class InboxView extends JPanel {
 	            boolean cellHasFocus) {
 			
 			Message message = (Message) value; 
-			InboxElementPanel element = new InboxElementPanel(message); 
+			element = new InboxElementPanel(message); 
 			
 			return element;
 		}
