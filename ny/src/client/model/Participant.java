@@ -67,7 +67,7 @@ public class Participant extends Employee {
 		if (!(obj instanceof Participant)) {
 			return false;
 		}
-		return (getUsername().equals(((Employee)obj).getUsername()));
+		return (getUsername().equals(((Participant)obj).getUsername()));
 	}
 	
 	public int hashCode() {

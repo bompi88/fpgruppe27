@@ -51,7 +51,7 @@ public class EditMeetingStateController implements State {
 		Date to = getToTimeAsDate();
 		
 		// check if fields is filled in
-		if(!editMeetingView.getDescription().equals("") && !editMeetingView.getPlace().equals("") && !editMeetingView.getMeetingName().equals("")) {
+		if(!editMeetingView.getDescription().equals("") && (!editMeetingView.getPlace().equals("") || editMeetingView.getRoom().getRoomID() > 0) && !editMeetingView.getMeetingName().equals("")) {
 			if(editMeetingView.getToDate() != null && editMeetingView.getFromDate() != null && editMeetingView.getFromTime() != null && editMeetingView.getToTime() != null) {
 				if(to.compareTo(from) >= 0) {
 					return true;
@@ -127,6 +127,7 @@ public class EditMeetingStateController implements State {
 		meetingModel.setName(editMeetingView.getMeetingName());
 		meetingModel.setPlace(editMeetingView.getPlace());
 		meetingModel.setDescription(editMeetingView.getDescription());
+		meetingModel.setRoom(editMeetingView.getRoom());
 		
 		// set time
 		meetingModel.setStartTime(getFromTimeAsTimestamp());
@@ -182,17 +183,20 @@ public class EditMeetingStateController implements State {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Participant m = editMeetingView.getParticipant();
-				m.setStatus(Status.INVITED);
-				editMeetingView.addParticipant(m);
+				if (!m.getUsername().equals(CalendeerClient.getCurrentEmployee().getUsername())) {
+					m.setStatus(Status.INVITED);
+					editMeetingView.addParticipant(m);
+				}
 			}
 		});
 		
 		editMeetingView.addRemoveParticipantButtonListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Participant m = editMeetingView.getParticipant();
-				ClientObjectFactory.deleteParticipant(m.getUsername(),m.getMeetid());
+				Participant m = editMeetingView.getSelectedParticipant();
 				editMeetingView.removeParticipant(m);
+				ClientObjectFactory.deleteParticipant(m.getUsername(),m.getMeetid());
+				
 			}
 		});
 		

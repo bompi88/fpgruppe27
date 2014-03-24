@@ -418,6 +418,13 @@ public class ClientObjectFactory {
 	 * @return
 	 */
 	public static ArrayList<Room> getRooms() {
+		Room[] roomsPrim = getRoomsAsArray();
+		ArrayList<Room> rooms = new ArrayList<Room>(Arrays.asList(roomsPrim));
+
+		return rooms;
+	}
+	
+	public static Room[] getRoomsAsArray() {
 		request = new HttpGet(API + "room");
 		String roomsString = getRequest(request);
 		Gson builder = new GsonBuilder()
@@ -426,9 +433,31 @@ public class ClientObjectFactory {
 				.setExclusionStrategies(new ModelListenerExclusionStrategy())
 				.setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
 		Room[] roomsPrim = builder.fromJson(roomsString, Room[].class);
+		
+		return roomsPrim;
+	}
+	
+	public static ArrayList<Room> getRoomsByCapacity(int capacity) {
+		Room[] roomsPrim = getRoomsByCapacityAsArray(capacity);
 		ArrayList<Room> rooms = new ArrayList<Room>(Arrays.asList(roomsPrim));
 
 		return rooms;
+	}
+	
+	public static Room[] getRoomsByCapacityAsArray(int capacity) {
+		request = new HttpGet(API + "room?capacity=" + capacity);
+		String roomsString = getRequest(request);
+		Gson builder = new GsonBuilder()
+				.registerTypeAdapter(Boolean.class, booleanAsIntAdapter)
+				.registerTypeAdapter(boolean.class, booleanAsIntAdapter)
+				.setExclusionStrategies(new ModelListenerExclusionStrategy())
+				.setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+		Room[] roomsPrim = builder.fromJson(roomsString, Room[].class);
+		
+		if (roomsPrim != null)
+			return roomsPrim;
+		else
+			return null;
 	}
 
 	/**

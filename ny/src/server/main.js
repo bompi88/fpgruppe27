@@ -326,7 +326,7 @@ server.post('/meeting', function(req, res, next) {
 	// insert a meeting with corresponding values.
 	connection.query("INSERT INTO meeting (name, description, startTime, endTime, place, roomid, isAppointment, username) values ('" 
 						+ req.params.name + "','" + req.params.description + "','" + req.params.startTime + "','" + req.params.endTime 
-						+ "','" + req.params.place + "','" + req.params.room.roomID + "','" 
+						+ "','" + req.params.place + "','" + req.params.room.roomid + "','" 
 						+ req.params.isAppointment + "','" + req.params.responsible.username + "')", function(err, rows, fields) {
 		if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 		
@@ -445,29 +445,33 @@ server.put('/meeting', function(req, res, next) {
 
 		// Then update meeting with new values
 		connection.query("UPDATE meeting SET name='" + req.params.name + "', description='" + req.params.description + "', startTime='" + req.params.startTime +"', endTime='" + req.params.endTime +"', place='" 
-						+ req.params.place + "', roomid='" + req.params.room.roomID + "', isAppointment='" + req.params.isAppointment + "', username='" + req.params.responsible.username + "' WHERE meetid='" + req.params.meetid + "'", function(err, rows, fields) {
+						+ req.params.place + "', roomid='" + req.params.room.roomid + "', isAppointment='" + req.params.isAppointment + "', username='" + req.params.responsible.username + "' WHERE meetid='" + req.params.meetid + "'", function(err, rows, fields) {
 				
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+			// update all participants to have a status to be INVITED
+				connection.query("DELETE FROM meeting_participants WHERE meetid=" + req.params.meetid + " AND username!=" + req.params.responsible.username, function(err, rows, fields) {
 			
 			// if the meeting has participants
 			if(typeof req.params.participants !== "undefined") {
 				
-				// update all participants to have a status to be INVITED
-				connection.query("UPDATE meeting_participants SET status='INVITED' WHERE meetid=" + req.params.meetid, function(err, rows, fields) {
-					if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
-
-					// for all meeting participants send a message that the meeting has changed.
+								// for all meeting participants send a message that the meeting has changed.
 					for (var i = 0; i < req.params.participants.length; i++) { 
+					var participant = req.params.participants[i];
+						connection.query("INSERT INTO meeting_participants (meetid, username, status) values ('" + req.params.meetid + "','" + participant.username + "','" + participant.status + "')", function(err, rows, fields) {
+							if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+
+		
 						
-						var participant = req.params.participants[i];
 
 						connection.query("INSERT INTO message (message, time, meetid, owner, isSeen) VALUES('" + outputMessage + "',NOW(),'" + req.params.meetid + "' ,'" + participant.username + "','" + 0 + "')", function(err, rows, fields) {
 							if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 						
 						});	
+						});
+					}
 					}
 				});	
-			}
+			
 			res.charSet('utf-8');
 			res.send()
 		});
@@ -700,11 +704,19 @@ server.del('/meeting_participants', function(req, res, next) {
 //------------------------------------------------------------------------------------------------
 
 server.get('/room', function(req, res, next) {
-	
-	// if room id is specified
-	if(typeof req.params.roomID !== "undefined") {
+	// if capacity is specified
+	if(typeof req.params.capacity !== "undefined") {
 		// get room by id
-		connection.query("SELECT * FROM room WHERE roomid='" + req.params.roomID + "'", function(err, rows, fields) {
+		connection.query("SELECT * FROM room WHERE capacity>='" + req.params.capacity + "'", function(err, rows, fields) {
+			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
+
+			res.charSet('utf-8');
+			res.send(rows)
+		});
+	// else: get by roomid?
+	} else if(typeof req.params.roomid !== "undefined") {
+		// get room by id
+		connection.query("SELECT * FROM room WHERE roomid='" + req.params.roomid + "'", function(err, rows, fields) {
 			if (err) return next(new restify.InvalidArgumentError(JSON.stringify(err.errors)))
 
 			res.charSet('utf-8');

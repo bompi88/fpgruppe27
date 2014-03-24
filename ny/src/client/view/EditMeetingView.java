@@ -43,7 +43,7 @@ public class EditMeetingView extends JPanel {
 		RelativeLayout rl1 = new RelativeLayout(RelativeLayout.Y_AXIS, 0);
 		rl1.setAlignment(RelativeLayout.LEADING);
 		setLayout(rl1);
-		
+		setTitle(AppConstants.EDIT_APPOINTMENT_HEADER_TEXT);
 		// add elements
 		add(titlePanel);
 		mainWrapper.add(meetingPanel);
@@ -124,6 +124,10 @@ public class EditMeetingView extends JPanel {
 	
 	public Participant getParticipant() {
 		return participantPanel.getParticipant();
+	}
+	
+	public Participant getSelectedParticipant() {
+		return participantPanel.getSelectedParticipant();
 	}
 	
 	public void addParticipant(Participant p) {

@@ -3,12 +3,15 @@ package view;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.Calendar;
 import java.util.Date;
 
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -18,6 +21,8 @@ import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
+
+import database.ClientObjectFactory;
 
 import resources.AppConstants;
 
@@ -38,11 +43,14 @@ public class EditMeetingPanel extends JPanel {
 	private JLabel startTimeLabel, endTimeLabel, placeLabel, descLabel, nameLabel; 
 	private JTextArea descArea;
 	private JScrollPane descScroll;	
-	private JComboBox<Meeting> meetingSizeBox;
+	private JComboBox<Integer> meetingSizeBox;
 	private JComboBox<Room> roomPickerBox;
+	private DefaultComboBoxModel<Integer> capacityModel;
+	private DefaultComboBoxModel<Room> roomModel;
 	private JRadioButton placeRadio, roomRadio;
 	private ButtonGroup radioGroup;
 	private JSpinner timePickerFrom, timePickerTo;
+	private Integer[] capacity = { 1, 5, 10, 15, 25, 50};
 	
 	public EditMeetingPanel() {
 		this.placeRadio = new JRadioButton();
@@ -66,10 +74,18 @@ public class EditMeetingPanel extends JPanel {
 		this.descScroll  = new JScrollPane(descArea);
 		this.datePickerFrom = new JDatePickerImpl(datePanelFrom);
 		this.datePickerTo = new JDatePickerImpl(datePanelTo);
-		this.meetingSizeBox = new JComboBox<Meeting>();
+		this.meetingSizeBox = new JComboBox<Integer>();
 		this.roomPickerBox = new JComboBox<Room>();
 		this.nameLabel = new JLabel("Navn:");
-				
+		this.capacityModel = new DefaultComboBoxModel<Integer>(capacity);
+		Room[] rooms = ClientObjectFactory.getRoomsByCapacityAsArray(1);
+		
+		if(rooms != null) {
+			this.roomModel = new DefaultComboBoxModel<Room>(rooms);
+		} else {
+			this.roomModel = new DefaultComboBoxModel<Room>();
+		}
+		
 		this.radioGroup.add(placeRadio);
 		this.radioGroup.add(roomRadio);
 		
@@ -78,7 +94,26 @@ public class EditMeetingPanel extends JPanel {
 		this.placeRadio.addItemListener(new MyItemListener());
 		this.roomRadio.addItemListener(new MyItemListener());	
 		
+		meetingSizeBox.setModel(capacityModel);
+		roomModel.insertElementAt(new Room(0,0,"Velg rom"), 0);
+		roomPickerBox.setModel(roomModel);
+		roomPickerBox.setSelectedIndex(0);
 		addUIElements();
+		
+		meetingSizeBox.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				updateRoomComboBox();
+			}
+		});
+	}
+	
+	private void updateRoomComboBox() {
+		roomModel = new DefaultComboBoxModel<Room>(ClientObjectFactory.getRoomsByCapacityAsArray((int)meetingSizeBox.getSelectedItem()));
+		roomModel.insertElementAt(new Room(0,0,"Velg rom"), 0);
+		roomPickerBox.setModel(roomModel);
+		roomPickerBox.setSelectedIndex(0);
 	}
 	
 	private void addUIElements() {
@@ -128,6 +163,7 @@ public class EditMeetingPanel extends JPanel {
 				meetingSizeBox.setEnabled(false);
 				roomPickerBox.setEnabled(false);
 				placeField.setEnabled(true);
+				updateRoomComboBox();
 			} else if(source == roomRadio) {
 				meetingSizeBox.setEnabled(true);
 			    roomPickerBox.setEnabled(true);
@@ -145,12 +181,31 @@ public class EditMeetingPanel extends JPanel {
 		timePickerFrom.getModel().setValue(meeting.getStartTime());
 		dateModelTo.setValue(meeting.getEndTime());
 		timePickerTo.getModel().setValue(meeting.getEndTime());
+
+		meetingSizeBox.setSelectedIndex(0);
+		setRoom(meeting.getRoom());
 		
 		if(meeting.getRoom().getRoomID() != 0) {
 			roomRadio.setSelected(true);
+			meetingSizeBox.setEnabled(true);
+		    roomPickerBox.setEnabled(true);
+		    placeField.setEnabled(false);
 		} else {
+			meetingSizeBox.setEnabled(false);
+			roomPickerBox.setEnabled(false);
+			placeField.setEnabled(true);
 			placeRadio.setSelected(true);
 		}
+	}
+	
+	public void setRoom(Room room) {
+		updateRoomComboBox();
+		int index = 0;
+		for (int i = 0; i < roomModel.getSize(); i++) {
+			if (roomModel.getElementAt(i).getRoomID() == room.getRoomID())
+				index = i;
+		}
+		roomPickerBox.setSelectedIndex(index);	
 	}
 	
 	public String getMeetingName() {

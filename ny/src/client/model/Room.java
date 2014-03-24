@@ -5,13 +5,13 @@ import java.util.List;
 
 public class Room {
 
-	private int roomID;
+	private int roomid;
 	private int capacity;
 	private String name;
 	private List<Meeting> bookingList;
 	
 	public Room() {
-		this.roomID = 0;
+		this.roomid = 0;
 		this.capacity = 0;
 		this.name = "";
 		this.bookingList = new ArrayList<Meeting>();
@@ -19,7 +19,7 @@ public class Room {
 	
 	public Room(int roomID, int capacity, String name, List<Meeting> bookingList) {
 		super();
-		this.roomID = roomID;
+		this.roomid = roomID;
 		this.capacity = capacity;
 		this.name = name;
 		this.bookingList = bookingList;
@@ -27,7 +27,7 @@ public class Room {
 	
 	public Room(int roomID, int capacity, String name) {
 		super();
-		this.roomID = roomID;
+		this.roomid = roomID;
 		this.capacity = capacity;
 		this.name = name;
 	}
@@ -39,11 +39,11 @@ public class Room {
 	}
 
 	public int getRoomID() {
-		return roomID;
+		return roomid;
 	}
 
 	public void setRoomID(int roomID) {
-		this.roomID = roomID;
+		this.roomid = roomID;
 	}
 
 	public int getCapacity() {
@@ -68,5 +68,9 @@ public class Room {
 
 	public void setBookingList(List<Meeting> bookingList) {
 		this.bookingList = bookingList;
+	}
+	
+	public String toString() {
+		return getName();
 	}
 }

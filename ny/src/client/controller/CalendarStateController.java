@@ -150,7 +150,7 @@ public class CalendarStateController implements State, Observer {
 			
 			meet.removeParticipants(p);
 			if(calendarModel.remove(meet)){
-				if(p.getUsername().equals(meet.getResponsible().getUsername())){
+				if(emp.getUsername().equals(meet.getResponsible().getUsername())){
 					meet.delete();
 				} else{
 					meet.setNegativeAttendenceAndRemove(emp);

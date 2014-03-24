@@ -108,6 +108,10 @@ public class EditParticipantPanel extends JPanel {
 		return (Participant)participantPicker.getSelectedItem();
 	}
 	
+	public Participant getSelectedParticipant() {
+		return participantsList.getSelectedValue();
+	}
+	
 	public void addParticipant(Participant p) {
 		if (participants.add(p))
 			participantsListModel.addElement(p);

@@ -284,6 +284,7 @@ public class CalendeerClient {
 	public void setState(State newState) {
 		if (getCurrentState() != null)
 			getCurrentState().hideState();
+		updateAll();
 		newState.showState();
 		currentState = newState;
 	}
@@ -366,7 +367,7 @@ public class CalendeerClient {
 
 		// And From your main() method or any other method
 
-		// Timer timer = new Timer();
-		// timer.schedule(new UpdateThread(calendarClient), 0, 5*60*1000);
+		Timer timer = new Timer();
+		timer.schedule(new UpdateThread(calendarClient), 0, 5*60*1000);
 	}
 }

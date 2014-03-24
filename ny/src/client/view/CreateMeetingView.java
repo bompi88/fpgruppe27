@@ -122,6 +122,10 @@ public class CreateMeetingView extends JPanel {
 		return participantPanel.getParticipants();
 	}
 	
+	public Participant getSelectedParticipant() {
+		return participantPanel.getSelectedParticipant();
+	}
+	
 	public Participant getParticipant() {
 		return participantPanel.getParticipant();
 	}

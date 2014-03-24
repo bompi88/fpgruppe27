@@ -1,13 +1,19 @@
 package view;
 
 import java.awt.event.ActionListener;
+import java.util.List;
+
 import javax.swing.JButton;
 import javax.swing.JPanel;
+
+import controller.CalendeerClient;
 
 import resources.AppConstants;
 
 import utils.RelativeLayout;
 import model.Meeting;
+import model.Participant;
+import model.Status;
 
 @SuppressWarnings("serial")
 public class ViewMeetingView extends JPanel {
@@ -36,12 +42,29 @@ public class ViewMeetingView extends JPanel {
 		mainWrapper.setLayout(new RelativeLayout(RelativeLayout.X_AXIS, 0));
 		mainWrapper.add(app);
 		mainWrapper.add(part);
-				
+		
 		addUIElements();
 	}
 	
 	public void setMeetingModel(Meeting m) {
 		titlePanel.setTitle(m.getName());
+		
+		acceptButton.setEnabled(false);
+		declineButton.setEnabled(false);
+		
+		List<Participant> parts = m.getParticipants();
+		for (Participant part : parts) {
+			if (CalendeerClient.getCurrentEmployee().getUsername().equals(part.getUsername())) {
+				if(part.getStatus().equals(Status.DECLINED)) {
+					acceptButton.setEnabled(true);
+				} else if(part.getStatus().equals(Status.ATTENDING)) {
+					declineButton.setEnabled(true);
+				} else {
+					acceptButton.setEnabled(true);
+					declineButton.setEnabled(true);
+				}
+			}
+		}
 		app.setMeetingModel(m);
 		part.setParticipantModel(m.getParticipants());
 	}

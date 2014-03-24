@@ -50,7 +50,7 @@ public class CreateMeetingStateController implements State {
 		Date to = getToTimeAsDate();
 		
 		// check if fields is filled in
-		if(!createMeetingView.getDescription().equals("") && !createMeetingView.getPlace().equals("") && !createMeetingView.getMeetingName().equals("")) {
+		if(!createMeetingView.getDescription().equals("") && (!createMeetingView.getPlace().equals("") || createMeetingView.getRoom().getRoomID() > 0) && !createMeetingView.getMeetingName().equals("")) {
 			if(createMeetingView.getToDate() != null && createMeetingView.getFromDate() != null && createMeetingView.getFromTime() != null && createMeetingView.getToTime() != null) {
 				if(to.compareTo(from) >= 0) {
 					return true;
@@ -124,6 +124,7 @@ public class CreateMeetingStateController implements State {
 		meetingModel.setName(createMeetingView.getMeetingName());
 		meetingModel.setPlace(createMeetingView.getPlace());
 		meetingModel.setDescription(createMeetingView.getDescription());
+		meetingModel.setRoom(createMeetingView.getRoom());
 		
 		// set time
 		meetingModel.setStartTime(getFromTimeAsTimestamp());
@@ -188,9 +189,9 @@ public class CreateMeetingStateController implements State {
 		createMeetingView.addRemoveParticipantButtonListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Participant m = createMeetingView.getParticipant();
-				ClientObjectFactory.deleteParticipant(m.getUsername(),m.getMeetid());
+				Participant m = createMeetingView.getSelectedParticipant();
 				createMeetingView.removeParticipant(m);
+				ClientObjectFactory.deleteParticipant(m.getUsername(),m.getMeetid());
 			}
 		});
 		

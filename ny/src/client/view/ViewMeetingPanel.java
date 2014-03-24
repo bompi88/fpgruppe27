@@ -6,6 +6,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -14,7 +15,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import controller.CalendeerClient;
+
 import model.Meeting;
+import model.Participant;
 
 @SuppressWarnings("serial")
 public class ViewMeetingPanel extends JPanel {
@@ -44,21 +48,6 @@ public class ViewMeetingPanel extends JPanel {
 		endTimeField = new JTextField(19);
 		ownerField = new JTextField(12);
 				
-		
-		cancelButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// Skal sendes tilbake til calnderView
-				
-//				descArea.setText("");
-//				placeField.setText("");
-//				meetingNameField.setText("");
-//				ParticipantPanel.participantsModel.clear();
-//				
-//				((MainCtrl)((Controller)getCtrl()).getMainCtrl()).setState(CalendarCtrl.class);
-				
-			}
-		});
 		disableIUElements();
 		addUIElements();
 	}

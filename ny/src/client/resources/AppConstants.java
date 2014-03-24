@@ -31,6 +31,7 @@ public final class AppConstants {
 	public static final String CALENDAR_HEADER_TEXT = "Ukeskalender";
 	public static final String INBOX_HEADER_TEXT = "Din innboks";
 	public static final String APPOINTMENT_HEADER_TEXT = "Opprett avtale";
+	public static final String EDIT_APPOINTMENT_HEADER_TEXT = "Rediger avtale";
 	public static final String SHOW_CALENDAR_LABEL_TEXT = "Vis kalender til:";
 	public static final String SHOW_OTHER_CALENDARS_BUTTON_TEXT = "Vis";
 	public static final String WHOLE_DAY_TEXT = "hele dagen";
@@ -58,8 +59,8 @@ public final class AppConstants {
 	public static final String WEDNESDAY_TEXT = "Onsdag";
 	public static final String THURSDAY_TEXT = "Torsdag";
 	public static final String FRIDAY_TEXT = "Fredag";
-	public static final String SATURDAY_TEXT = "L��rdag";
-	public static final String SUNDAY_TEXT = "S��ndag";
+	public static final String SATURDAY_TEXT = "Lørdag";
+	public static final String SUNDAY_TEXT = "Søndag";
 	
 	public static final Color MEETING_BOX_COLOR_ADMIN = new Color(10,250,250,150);
 	public static final Color MEETING_BOX_COLOR_PART = new Color(179,255,255,255);
