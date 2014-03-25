@@ -171,6 +171,15 @@ public class WeeklyCalendarPanel extends JPanel {
 				sunday.add(m);
 			}
 		}
+		
+		mondayView.setHeaderText(AppConstants.MONDAY_TEXT + " " + mondayDate.getDate() + "." + mondayDate.getMonth());
+		thuesdayView.setHeaderText(AppConstants.THUESDAY_TEXT + " " + thuesdayDate.getDate() + "." + thuesdayDate.getMonth());
+		wednesdayView.setHeaderText(AppConstants.WEDNESDAY_TEXT + " " + wednesdayDate.getDate() + "." + wednesdayDate.getMonth());
+		thursdayView.setHeaderText(AppConstants.THURSDAY_TEXT + " " + thursdayDate.getDate() + "." + thursdayDate.getMonth());
+		fridayView.setHeaderText(AppConstants.FRIDAY_TEXT + " " + fridayDate.getDate() + "." + fridayDate.getMonth());
+		saturdayView.setHeaderText(AppConstants.SATURDAY_TEXT + " " + saturdayDate.getDate() + "." + saturdayDate.getMonth());
+		sundayView.setHeaderText(AppConstants.SUNDAY_TEXT + " " + sundayDate.getDate() + "." + sundayDate.getMonth());
+
 
 		mondayView.setModel(monday);
 		thuesdayView.setModel(thuesday);
