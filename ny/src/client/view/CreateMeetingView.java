@@ -137,4 +137,9 @@ public class CreateMeetingView extends JPanel {
 	public void removeParticipant(Participant p) {
 		participantPanel.removeParticipant(p);
 	}
+
+	public String getEmailList() {
+		return participantPanel.getEmailField();
+		
+	}
 }

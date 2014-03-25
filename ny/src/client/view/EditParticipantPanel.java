@@ -18,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 
 import resources.AppConstants;
@@ -33,6 +34,7 @@ public class EditParticipantPanel extends JPanel {
 	private JComboBox<Participant> participantPicker;
 	private JList<Participant> participantsList;
 	private JButton addParticipantButton;
+	private JTextField emailField;
 	private JButton removeParticipantButton;
 	private JButton addExternalParticipantsButton;
 	private DefaultListModel<Participant> participantsListModel; 
@@ -47,6 +49,7 @@ public class EditParticipantPanel extends JPanel {
 		addParticipantButton = new JButton(AppConstants.ADD_BUTTON_TEXT);
 		removeParticipantButton = new JButton(AppConstants.REMOVE_BUTTON_TEXT);
 		addExternalParticipantsButton = new JButton(AppConstants.ADD_EXTERNAL_PARTICIPANTS_BUTTON_TEXT);
+		emailField = new JTextField(20);
 		
 		participantsListModel = new DefaultListModel<Participant>();
 		participantsList = new JList<Participant>();
@@ -70,7 +73,9 @@ public class EditParticipantPanel extends JPanel {
 		add(new JScrollPane(participantsList), new GridBagConstraints(0,1,1,1,1,1,anc,0,in, 0,0));
 		add(removeParticipantButton, new GridBagConstraints(0,0,1,1,1,1,GridBagConstraints.EAST,0,in, 0,0));
 		add(addParticipantButton, new GridBagConstraints(1,0,1,1,1,1,anc,0,in, 0,0));
-		add(addExternalParticipantsButton, new GridBagConstraints(0,2,1,1,1,1,anc,0,in, 0,0));
+		add(addExternalParticipantsButton, new GridBagConstraints(0,3,1,1,1,1,anc,0,new Insets(4,12,4,0), 0,0));
+		add(emailField, new GridBagConstraints(0,2,1,1,1,1,anc,0,new Insets(4,0,4,12), 0,0));
+		emailField.setText("Skriv inn epostadresser kommaseparert");
 	}
 	
 	public void addAddExternalParticipantButtonListener(ActionListener listener) {
@@ -106,6 +111,10 @@ public class EditParticipantPanel extends JPanel {
 	
 	public Participant getParticipant() {
 		return (Participant)participantPicker.getSelectedItem();
+	}
+	
+	public String getEmailField() {
+		return emailField.getText();
 	}
 	
 	public Participant getSelectedParticipant() {

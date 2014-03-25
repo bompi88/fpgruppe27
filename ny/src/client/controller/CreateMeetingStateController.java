@@ -10,6 +10,14 @@ import java.net.URISyntaxException;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Properties;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -199,20 +207,53 @@ public class CreateMeetingStateController implements State {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Desktop desktop;
-				if (Desktop.isDesktopSupported() && (desktop = Desktop.getDesktop()).isSupported(Desktop.Action.MAIL)) {
-				
-					URI mailto;
-					
-					try {
-						mailto = new URI("mailto:ola@nordmann.no?subject=Moteinvitasjon&body=Du%20er%20invitert%20til%20mote");
-						desktop.mail(mailto);
-					} catch (URISyntaxException e1) {
-						e1.printStackTrace();
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
-				}
+				String to = createMeetingView.getEmailList();
+		    	  //String from = CalendeerClient.getCurrentEmployee().getEmail();
+				//hardkodet inntil videre
+		    	  String from = "andredri@stud.ntnu.no";
+		    	  
+		          // Assuming you are sending email from the NTNU servert
+		          String host = "smtp.stud.ntnu.no";
+
+		          // Get system properties
+		          Properties properties = System.getProperties();
+
+		          // Setup mail server
+		          properties.setProperty("mail.smtp.host", host);
+
+		          // Get the default Session object.
+		          Session session = Session.getDefaultInstance(properties);
+
+			      try{
+			    	  
+			    	  
+			          // Create a default MimeMessage object.
+			          MimeMessage message = new MimeMessage(session);
+
+			          // Set From: header field of the header.
+			          message.setFrom(new InternetAddress(from));
+
+			          // Set To: header field of the header.
+			          message.addRecipient(Message.RecipientType.TO,
+			                                   new InternetAddress(to));
+
+			          // Set Subject: header field
+			          message.setSubject("Møteinvitasjon");
+
+			          // Now set the actual message
+			          message.setText("Du er invitert til " + createMeetingView.getMeetingName() +  " fra "+ getFromTimeAsDate() +
+			        		  " til " + getToTimeAsDate() + ". " + "\r\n" + "Sted: " 
+			        		  + createMeetingView.getPlace() + "\r\n" + "Beskrivelse: " + createMeetingView.getDescription());
+
+			          // Send message
+			          Transport.send(message);
+			          System.out.println("Sent message successfully....");
+			          JOptionPane.showMessageDialog(new JFrame(),"E-post sendt", "E-post", JOptionPane.INFORMATION_MESSAGE);
+
+			       }catch (MessagingException mex) {
+			          mex.printStackTrace();
+			          JOptionPane.showMessageDialog(new JFrame(),"E-post IKKE sendt", "E-post", JOptionPane.ERROR_MESSAGE);
+			       }
 			}
 		});
 	}

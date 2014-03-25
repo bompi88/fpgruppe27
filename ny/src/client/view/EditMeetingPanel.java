@@ -110,7 +110,7 @@ public class EditMeetingPanel extends JPanel {
 	}
 	
 	private void updateRoomComboBox() {
-		roomModel = new DefaultComboBoxModel<Room>(ClientObjectFactory.getRoomsByCapacityAsArray((int)meetingSizeBox.getSelectedItem()));
+		roomModel = new DefaultComboBoxModel<Room>(ClientObjectFactory.getRoomsByCapacityAsArray((Integer)meetingSizeBox.getSelectedItem()));
 		roomModel.insertElementAt(new Room(0,0,"Velg rom"), 0);
 		roomPickerBox.setModel(roomModel);
 		roomPickerBox.setSelectedIndex(0);
