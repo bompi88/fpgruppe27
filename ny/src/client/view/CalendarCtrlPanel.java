@@ -2,6 +2,9 @@ package view;
 
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -27,8 +30,6 @@ public class CalendarCtrlPanel extends JPanel {
 	private JButton nextWeekButton, previousWeekButton;
 	private JComboBox<Week> weekSelector;
 	private DefaultComboBoxModel<Week> weeks;
-
-	private RelativeLayout rl;
 	
 	public CalendarCtrlPanel() {
 		
@@ -39,18 +40,15 @@ public class CalendarCtrlPanel extends JPanel {
 		this.weekSelector = new JComboBox<Week>();
 		this.weeks = new DefaultComboBoxModel<Week>();
 		
-		this.rl = new RelativeLayout(RelativeLayout.X_AXIS, 0);
-		this.rl.setAlignment(RelativeLayout.CENTER);
-		
 		weekSelector.setModel(weeks);
 		
-		setLayout(rl);
+		setLayout(new GridBagLayout());
 		setBackground(AppConstants.HEADER_BG_COLOR);
 		
-		add(weekLabel);
-		add(weekSelector);
-		add(previousWeekButton);
-		add(nextWeekButton);
+		add(weekLabel, new GridBagConstraints(1,1,1,1,1,1,GridBagConstraints.SOUTHEAST,0,new Insets(0,0,15,0),0,0));
+		add(previousWeekButton, new GridBagConstraints(0,1,1,1,1,1,GridBagConstraints.SOUTHEAST,0,new Insets(0,0,10,0),0,0));
+		add(nextWeekButton, new GridBagConstraints(2,1,1,1,1,1,GridBagConstraints.SOUTHEAST,0,new Insets(0,0,10,0),0,0));
+		
 		
 	}
 	
