@@ -46,7 +46,7 @@ import framework.State;
 /**
  * Calendeer Client is an application which displays your personal calendar in
  * an awesome and fabulous way. It communicates with a SQL-Database through
- * usage of tha' holy JDBC Driver. Or does it...?
+ * usage of tha' holy JDBC Driver. Or does it...? No it doesn't. The world is put to an end.
  * 
  * Here is where it all begins. Once upon a time there was a...
  */
