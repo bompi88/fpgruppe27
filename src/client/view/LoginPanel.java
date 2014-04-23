@@ -2,15 +2,8 @@ package view;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -21,20 +14,11 @@ import javax.swing.JTextField;
 import resources.AppConstants;
 import resources.ImageManager;
 
-import model.Employee;
-
-import controller.LoginCtrl;
-import database.PasswordHash;
-import framework.Controller;
-
 /**
  * LoginPanel is basically a login form, which fire login events on user request.
  */
-public class LoginPanel extends JPanel implements PropertyChangeListener {
-
-	private static final long serialVersionUID = -6617272538650375547L;
-
-	private Controller ctrl;
+@SuppressWarnings("serial")
+public class LoginPanel extends JPanel {
 	
 	private JTextField usernameField = new JTextField();
 	private JTextField passwordField = new JPasswordField();
@@ -42,9 +26,7 @@ public class LoginPanel extends JPanel implements PropertyChangeListener {
 	private Color backgroundColor = AppConstants.LOGIN_BG_COLOR;
 	private JLabel picLabel;
 	
-	public LoginPanel(Controller ctrl) {
-		
-		this.ctrl = ctrl;
+	public LoginPanel() {
 		
 		// panel setup
 		setPreferredSize(new Dimension(AppConstants.LOG_IN_DIALOG_WIDTH, AppConstants.LOG_IN_DIALOG_HEIGHT));
@@ -72,90 +54,33 @@ public class LoginPanel extends JPanel implements PropertyChangeListener {
 		wrapper.add(loginButton);
 	
 		add(wrapper);
-		
-		// Adds event listeners 
-		
-		usernameField.addKeyListener(new KeyListener() {
-			
-			@Override
-			public void keyTyped(KeyEvent e) {
-				
-			}
-			
-			@Override
-			public void keyReleased(KeyEvent e) {
-				
-			}
-			
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-					fireLogin();
-				}
-			}
-		});
-		
-		passwordField.addKeyListener(new KeyListener() {
-			
-			@Override
-			public void keyTyped(KeyEvent e) {
-				
-			}
-			
-			@Override
-			public void keyReleased(KeyEvent e) {
-				
-			}
-			
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-					fireLogin();
-				}
-			}
-		});
-		
-		loginButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				fireLogin();
-			}
-			
-		});
 	}
 	
-	/**
-	 * fires login 
-	 * @throws InvalidKeySpecException 
-	 * @throws NoSuchAlgorithmException 
-	 */
-	private void fireLogin() {
-		String hash = "";
-		try {
-			hash = PasswordHash.createHash(passwordField.getText());
-			((Employee)getCtrl().getModel()).setUsername(usernameField.getText());
-			((Employee)getCtrl().getModel()).setPassword(hash);
-			((LoginCtrl)getCtrl()).login(passwordField.getText());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-	}
-
-	public Controller getCtrl() {
-		return ctrl;
+	public void addLoginButtonListener(ActionListener listener) {
+		loginButton.addActionListener(listener);
 	}
 	
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		String propertyChanged = evt.getPropertyName();
-		Employee model = (Employee)ctrl.getModel();
-		
-		if (propertyChanged.equals("username")) {
-			usernameField.setText(model.getUsername());
-		} else if (propertyChanged.equals("password")) {
-			passwordField.setText(model.getPassword());
-		}
-	}	
+	public void addPasswordFieldKeyListener(KeyListener listener) {
+		passwordField.addKeyListener(listener);
+	}
+	
+	public void addUsernameFieldKeyListener(KeyListener listener) {
+		usernameField.addKeyListener(listener);
+	}
+	
+	public String getPassword() {
+		return usernameField.getText();
+	}
+	
+	public String getUsername() {
+		return passwordField.getText();
+	}
+	
+	public void setPassword(String password) {
+		passwordField.setText(password);
+	}
+	
+	public void setUsername(String username) {
+		usernameField.setText(username);
+	}
 }

@@ -74,7 +74,7 @@ public class TestRoutes extends JFCTestCase {
 		for(int i = 0; i < 5; i++) {
 			Employee emp = new Employee(name + i, username + i, email, password + i);
 			ClientObjectFactory.addEmployee(emp);
-			participants.add(new Participant(name + i, username + i, email, password + i, Status.INVITED));
+			participants.add(new Participant(username + i, name + i, email, password + i, Status.INVITED));
 		}
 		
 		// set time for meeting
@@ -101,8 +101,6 @@ public class TestRoutes extends JFCTestCase {
 		assertEquals(password, resultMeeting.getResponsible().getPassword());
 		assertEquals(name, resultMeeting.getResponsible().getName());
 		assertEquals(email, resultMeeting.getResponsible().getEmail());
-		//System.out.println(room.getCapacity());
-		//System.out.println(resultMeeting.getRoom().getCapacity());
 		//assertEquals(room.getCapacity(), resultMeeting.getRoom().getCapacity());
 		//assertEquals(room.getName(), resultMeeting.getRoom().getName());
 		

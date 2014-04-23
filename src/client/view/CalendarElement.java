@@ -8,8 +8,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -26,7 +24,7 @@ import framework.Observable;
 import framework.Observer;
 
 @SuppressWarnings("serial")
-public class CalendarElement extends RoundedPanel implements PropertyChangeListener, Observable {
+public class CalendarElement extends RoundedPanel implements Observable {
 	
 	private List<Observer> observers = new ArrayList<Observer>();
 	
@@ -41,14 +39,6 @@ public class CalendarElement extends RoundedPanel implements PropertyChangeListe
 	private Calendar cal = Calendar.getInstance();
 	private Color color; 
 	
-	public Color getColor() {
-		return color;
-	}
-
-	public void setColor(Color color) {
-		this.color = color;
-	}
-
 	@SuppressWarnings({ "static-access", "deprecation" })
 	public CalendarElement(Meeting model, Date thisDate, Color color) {
 		this.model = model;
@@ -108,24 +98,23 @@ public class CalendarElement extends RoundedPanel implements PropertyChangeListe
 		add(fromTimeLabel, new GridBagConstraints(0,1,1,1,1,1,GridBagConstraints.SOUTHWEST,0,new Insets(0,5,10,0),0,0));
 		add(toTimeLabel, new GridBagConstraints(0,1,1,1,1,1,GridBagConstraints.SOUTHEAST,0,new Insets(0,0,10,5),0,0));
 		
+		addActionListeners();
+	}
+	
+	private void addActionListeners() {
 		deleteButton.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				fireObserverEvent("delete",this);
-				
+				fireObserverEvent("delete", getSelf());	
 			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
 
 			@Override
@@ -139,10 +128,9 @@ public class CalendarElement extends RoundedPanel implements PropertyChangeListe
 				deleteButton.setIcon(normalDeleteIcon);
 				setBackground(getColor());
 			}
-			
 		});
 		
-		this.addMouseListener(new MouseListener() {
+		getSelf().addMouseListener(new MouseListener() {
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -159,14 +147,23 @@ public class CalendarElement extends RoundedPanel implements PropertyChangeListe
 			
 			@Override
 			public void mouseEntered(MouseEvent e) {
+				fireObserverEvent("set_color", getSelf());
 				setBackground(CalendarColumn.choiceColor(getModel(), true));
 			}
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				fireObserverEvent("view_appointment", this);
+				fireObserverEvent("edit", getSelf());
 			}
 		});
+	}
+
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
 	}
 	
 	public String parseTime(int timeVar) {
@@ -182,14 +179,10 @@ public class CalendarElement extends RoundedPanel implements PropertyChangeListe
 
 	public void setModel(Meeting model) {
 		this.model = model;
-		model.addPropertyChangeListener(this);
 	}
-
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals("name")) {
-			meetingTitle.setText(model.getName());
-		}
+	
+	private CalendarElement getSelf() {
+		return this;
 	}
 
 	@Override

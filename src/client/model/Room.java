@@ -3,50 +3,74 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-import framework.Model;
+public class Room {
 
-public class Room extends Model {
-	
-	private int roomID;
+	private int roomid;
 	private int capacity;
 	private String name;
 	private List<Meeting> bookingList;
 	
-	public Room() {}
+	public Room() {
+		this.roomid = 0;
+		this.capacity = 0;
+		this.name = "";
+		this.bookingList = new ArrayList<Meeting>();
+	}
+	
+	public Room(int roomID, int capacity, String name, List<Meeting> bookingList) {
+		super();
+		this.roomid = roomID;
+		this.capacity = capacity;
+		this.name = name;
+		this.bookingList = bookingList;
+	}
 	
 	public Room(int roomID, int capacity, String name) {
-		this.roomID = roomID;
+		super();
+		this.roomid = roomID;
 		this.capacity = capacity;
 		this.name = name;
 	}
-	
+
+	public Room(int capacity, String name) {
+		super();
+		this.capacity = capacity;
+		this.name = name;
+	}
+
 	public int getRoomID() {
-		return roomID;
+		return roomid;
 	}
+
 	public void setRoomID(int roomID) {
-		this.roomID = roomID;
+		this.roomid = roomID;
 	}
+
 	public int getCapacity() {
 		return capacity;
 	}
+
 	public void setCapacity(int capacity) {
 		this.capacity = capacity;
 	}
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public List<Meeting> getBookingList() {
 		return bookingList;
 	}
-	public void setBookingList(ArrayList<Meeting> bookingList) {
+
+	public void setBookingList(List<Meeting> bookingList) {
 		this.bookingList = bookingList;
 	}
 	
 	public String toString() {
-		return "Room [roomID=" + roomID + ", capacity=" + capacity + ", name="
-				+ name + "]";
+		return getName();
 	}
 }

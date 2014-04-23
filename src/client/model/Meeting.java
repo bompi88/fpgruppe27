@@ -1,34 +1,40 @@
 package model;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
-import framework.Model;
+import database.ClientObjectFactory;
 
-public class Meeting extends Model {
-	
-	private int meetid = 0;
-	private String description = "";
-	private Timestamp startTime = new Timestamp(System.currentTimeMillis());
-	private Timestamp endTime = new Timestamp(System.currentTimeMillis());
-	private Room room = new Room();
-	private String place = "";
-	private Employee responsible = new Employee();
-	private List<Participant> participants = new ArrayList<Participant>();
-	private boolean isAppointment = false;
-	private String name = "";
-	
+public class Meeting {
+
+	private int meetid;
+	private String description;
+	private Timestamp startTime;
+	private Timestamp endTime;
+	private Room room;
+	private String place;
+	private Employee responsible;
+	private List<Participant> participants;
+	private boolean isAppointment;
+	private String name;
 	
 	public Meeting() {
-		super();
+		this.meetid = 0;
+		this.description = "";
+		this.startTime = new Timestamp(System.currentTimeMillis());
+		this.endTime = new Timestamp(System.currentTimeMillis());
+		this.room = new Room();
+		this.place = "";
+		this.responsible = new Employee();
+		this.participants = new ArrayList<Participant>();
+		this.isAppointment = false;
+		this.name = "";
 	}
-	
+
 	public Meeting(int meetid, String description, Timestamp startTime,
 			Timestamp endTime, Room room, String place, Employee responsible,
-			ArrayList<Participant> participants, boolean isAppointment,
+			List<Participant> participants, boolean isAppointment,
 			String name) {
 		super();
 		this.meetid = meetid;
@@ -43,9 +49,9 @@ public class Meeting extends Model {
 		this.name = name;
 	}
 	
-	public Meeting(String description, Timestamp startTime,
-			Timestamp endTime, Room room, String place, Employee responsible,
-			ArrayList<Participant> participants, boolean isAppointment,
+	public Meeting(String description, Timestamp startTime, Timestamp endTime,
+			Room room, String place, Employee responsible,
+			List<Participant> participants, boolean isAppointment,
 			String name) {
 		super();
 		this.description = description;
@@ -57,110 +63,115 @@ public class Meeting extends Model {
 		this.participants = participants;
 		this.isAppointment = isAppointment;
 		this.name = name;
+	}
+
+	public void post() {
+		ClientObjectFactory.addMeeting(this);
+	}
+	
+	public void put() {
+		ClientObjectFactory.updateMeeting(this);
+	}
+	
+	public void delete() {
+		ClientObjectFactory.deleteMeeting(meetid);
+	}
+	
+	public void setNegativeAttendenceAndRemove(Employee emp) {
+		ClientObjectFactory.setNegAttandenceAndRemove(this, emp);
 	}
 	
 	public int getMeetid() {
 		return meetid;
 	}
+
 	public void setMeetid(int meetid) {
-		int oldValue = this.meetid;
 		this.meetid = meetid;
-		firePropertyChange("meetid", oldValue, this.meetid);
 	}
+
 	public String getDescription() {
 		return description;
 	}
+
 	public void setDescription(String description) {
-		String oldValue = this.description;
 		this.description = description;
-		firePropertyChange("description", oldValue, this.description);
 	}
+
 	public Timestamp getStartTime() {
 		return startTime;
 	}
+
+	public void setStartTime(Timestamp startTime) {
+		this.startTime = startTime;
+	}
+
 	public Timestamp getEndTime() {
 		return endTime;
 	}
+
+	public void setEndTime(Timestamp endTime) {
+		this.endTime = endTime;
+	}
+
 	public Room getRoom() {
 		return room;
 	}
+
 	public void setRoom(Room room) {
-		Room oldValue = this.room;
 		this.room = room;
-		firePropertyChange("room", oldValue, this.room);
 	}
+
 	public String getPlace() {
 		return place;
 	}
+
 	public void setPlace(String place) {
-		String oldValue = this.place;
 		this.place = place;
-		firePropertyChange("place", oldValue, this.place);
 	}
+
 	public Employee getResponsible() {
 		return responsible;
 	}
+
 	public void setResponsible(Employee responsible) {
-		Employee oldValue = this.responsible;
 		this.responsible = responsible;
-		firePropertyChange("responsible", oldValue, this.responsible);
 	}
+
 	public List<Participant> getParticipants() {
 		return participants;
 	}
+
 	public void setParticipants(List<Participant> participants) {
-		List<Participant> oldValue = this.participants;
 		this.participants = participants;
-		firePropertyChange("participants", oldValue, this.participants);
 	}
-	public void setParticipants(HashSet<Participant> participants) {
-		List<Participant> oldValue = this.participants;
-		this.participants = new ArrayList<Participant>(participants);
-		firePropertyChange("participants", oldValue, this.participants);
-	}
+
 	public boolean isAppointment() {
 		return isAppointment;
 	}
+
 	public void setAppointment(boolean isAppointment) {
-		boolean oldValue = this.isAppointment;
 		this.isAppointment = isAppointment;
-		firePropertyChange("isAppointment", oldValue, this.isAppointment);
 	}
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
-		String oldValue = this.name;
 		this.name = name;
-		firePropertyChange("name", oldValue, this.name);
-	}
-	public Date getStartDate() {
-		return new Date (startTime.getTime()); // maybe multiply by 1000?
 	}
 	
-	public String getStartDateAsString() {
-		return new Date (startTime.getTime()).toString();
-	}
-
-	public void setStartTime(Timestamp startTime) {
-		Timestamp oldValue = this.startTime;
-		this.startTime = startTime;
-		firePropertyChange("startTime", oldValue, this.startTime);
-	}
-
-	public Date getEndDate() {
-		return new Date (endTime.getTime());
-	}
-	
-	public String getEndDateAsString() {
-		return new Date (endTime.getTime()).toString();
-	}
-
-
-	public void setEndTime(Timestamp endTime) {
-		Timestamp oldValue = this.endTime;
-		this.endTime = endTime;
-		firePropertyChange("endTime", oldValue, this.endTime);
+	public void setModel(Meeting m) {
+			meetid = m.getMeetid();
+			description = m.getDescription();
+			startTime = m.getStartTime();
+			endTime = m.getEndTime();
+			room = m.getRoom();
+			place = m.getPlace();
+			responsible = m.getResponsible();
+			participants = m.getParticipants();
+			isAppointment = m.isAppointment();
+			name = m.getName();
 	}
 	
 	public void removeParticipants(Participant emp) {
@@ -169,34 +180,11 @@ public class Meeting extends Model {
 	
 	public boolean areUserpartInMeeting(String username){
 		boolean tempreturn = false; 
-		for(int i = 0; i < getParticipants().size(); i++){  
-			if(getParticipants().get(i).getUsername().equals(username)){
+		for(Participant p : getParticipants()){  
+			if(p.getUsername().equals(username)){
 				tempreturn = true; 
 			}
 		}
-		return tempreturn; 	
-	}
-
-	@Override
-	public String toString() {
-		return "Meeting [meetID=" + meetid + ", description=" + description
-				+ ", startTime=" + startTime + ", endTime=" + endTime
-				+ ", room=" + room + ", place=" + place + ", responsible="
-				+ responsible + ", participants=" + participants
-				+ ", isAppointment=" + isAppointment + ", name=" + name + "]";
-	}
-	
-	public void setModel(Meeting m) {
-		
-		setMeetid(m.getMeetid());
-		setDescription(m.getDescription());
-		setStartTime(m.getStartTime());
-		setEndTime(m.getEndTime());
-		setRoom(m.getRoom());
-		setPlace(m.getPlace());
-		setResponsible(m.getResponsible());
-		setParticipants(m.getParticipants());
-		setAppointment(m.isAppointment());
-		setName(m.getName());
+		return tempreturn;
 	}
 }

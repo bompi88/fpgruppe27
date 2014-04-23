@@ -139,7 +139,7 @@ public class ClientObjectFactory {
 	 */
 	public static void setMessageAsSeen(Message message) {
 
-		int messid = message.getMessID();
+		int messid = message.getMessid();
 		put = new HttpPut(API + "message?messid=" + messid + "&isSeen=1");
 		putRequest(put, "");
 		EntityUtils.consumeQuietly(response.getEntity());
@@ -204,10 +204,8 @@ public class ClientObjectFactory {
 				.registerTypeAdapter(boolean.class, booleanAsIntAdapter)
 				.setExclusionStrategies(new ModelListenerExclusionStrategy())
 				.setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
-		Participant[] employeePrim = builder.fromJson(employeesString,
-				Participant[].class);
-		ArrayList<Participant> employees = new ArrayList<Participant>(
-				Arrays.asList(employeePrim));
+		Participant[] employeePrim = builder.fromJson(employeesString, Participant[].class);
+		ArrayList<Participant> employees = new ArrayList<Participant>(Arrays.asList(employeePrim));
 
 		return employees;
 	}
@@ -265,10 +263,11 @@ public class ClientObjectFactory {
 				.setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
 		String meetingString = builder.toJson(meeting);
 		String meetid = postRequest(post, meetingString);
-		System.out.println("kk:" + meetingString);
-		System.out.println("ll:" + meetid);
 		EntityUtils.consumeQuietly(response.getEntity());
-		return Integer.valueOf(meetid);
+		if (meetid != null)
+			return Integer.valueOf(meetid);
+		else
+			return 0;
 	}
 
 	/**
@@ -283,7 +282,7 @@ public class ClientObjectFactory {
 		Gson builder = new GsonBuilder()
 				.registerTypeAdapter(Boolean.class, booleanAsIntAdapter)
 				.registerTypeAdapter(boolean.class, booleanAsIntAdapter)
-				.setExclusionStrategies(new ModelListenerExclusionStrategy())
+				//.setExclusionStrategies(new ModelListenerExclusionStrategy())
 				.setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
 		Meeting meeting = builder.fromJson(meetingString, Meeting.class);
 
@@ -299,8 +298,7 @@ public class ClientObjectFactory {
 	public static ArrayList<Meeting> getMeetingByWeek(int weekNumber,
 			String[] usernames) {
 		
-		SimpleDateFormat sdf = new SimpleDateFormat(
-				"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
 		String s = "";
 
@@ -325,19 +323,15 @@ public class ClientObjectFactory {
 		String meetingString = getRequest(request);
 		EntityUtils.consumeQuietly(response.getEntity());
 		
-		System.out.println(request); 
-		
 		Gson builder = new GsonBuilder()
 				.registerTypeAdapter(Boolean.class, booleanAsIntAdapter)
 				.registerTypeAdapter(boolean.class, booleanAsIntAdapter)
-				.setExclusionStrategies(new ModelListenerExclusionStrategy())
+				//.setExclusionStrategies(new ModelListenerExclusionStrategy())
 				.setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
-		Meeting[] meetingsPrim = builder.fromJson(meetingString,
-				Meeting[].class);
+		Meeting[] meetingsPrim = builder.fromJson(meetingString, Meeting[].class);
 		
 		if(meetingsPrim != null) {
 			ArrayList<Meeting> meetings = new ArrayList<Meeting>(Arrays.asList(meetingsPrim));
-	
 			return meetings;
 		} else {
 			return new ArrayList<Meeting>();
@@ -407,7 +401,7 @@ public class ClientObjectFactory {
 		Gson builder = new GsonBuilder()
 				.registerTypeAdapter(Boolean.class, booleanAsIntAdapter)
 				.registerTypeAdapter(boolean.class, booleanAsIntAdapter)
-				.setExclusionStrategies(new ModelListenerExclusionStrategy())
+				//.setExclusionStrategies(new ModelListenerExclusionStrategy())
 				.setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
 		Meeting[] meetingsPrim = builder.fromJson(meetingString,
 				Meeting[].class);
@@ -424,6 +418,13 @@ public class ClientObjectFactory {
 	 * @return
 	 */
 	public static ArrayList<Room> getRooms() {
+		Room[] roomsPrim = getRoomsAsArray();
+		ArrayList<Room> rooms = new ArrayList<Room>(Arrays.asList(roomsPrim));
+
+		return rooms;
+	}
+	
+	public static Room[] getRoomsAsArray() {
 		request = new HttpGet(API + "room");
 		String roomsString = getRequest(request);
 		Gson builder = new GsonBuilder()
@@ -432,9 +433,31 @@ public class ClientObjectFactory {
 				.setExclusionStrategies(new ModelListenerExclusionStrategy())
 				.setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
 		Room[] roomsPrim = builder.fromJson(roomsString, Room[].class);
+		
+		return roomsPrim;
+	}
+	
+	public static ArrayList<Room> getRoomsByCapacity(int capacity) {
+		Room[] roomsPrim = getRoomsByCapacityAsArray(capacity);
 		ArrayList<Room> rooms = new ArrayList<Room>(Arrays.asList(roomsPrim));
 
 		return rooms;
+	}
+	
+	public static Room[] getRoomsByCapacityAsArray(int capacity) {
+		request = new HttpGet(API + "room?capacity=" + capacity);
+		String roomsString = getRequest(request);
+		Gson builder = new GsonBuilder()
+				.registerTypeAdapter(Boolean.class, booleanAsIntAdapter)
+				.registerTypeAdapter(boolean.class, booleanAsIntAdapter)
+				.setExclusionStrategies(new ModelListenerExclusionStrategy())
+				.setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+		Room[] roomsPrim = builder.fromJson(roomsString, Room[].class);
+		
+		if (roomsPrim != null)
+			return roomsPrim;
+		else
+			return null;
 	}
 
 	/**
@@ -608,16 +631,16 @@ public class ClientObjectFactory {
 		return returnString;
 	}
 
-	public static boolean authenticate(Employee emp, String password)
+	public static boolean authenticate(Employee emp)
 			throws NoSuchAlgorithmException, InvalidKeySpecException {
 
 		if (emp.getUsername() != null && emp.getPassword() != null
 				&& !emp.getPassword().equals("")
 				&& !emp.getUsername().equals("")) {
-			// Not safe :p
+			
 			Employee e = getEmployeeByUsername(emp.getUsername());
 			if (e != null) {
-				if (PasswordHash.validatePassword(password, e.getPassword()))
+				if (PasswordHash.validatePassword(emp.getPassword(), e.getPassword()))
 					return true;
 			} else
 				return false;

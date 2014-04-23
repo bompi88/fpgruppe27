@@ -5,9 +5,8 @@ import javax.swing.JFrame;
 
 import resources.AppConstants;
 
+@SuppressWarnings("serial")
 public class MainView extends JFrame {
-
-	private static final long serialVersionUID = -2493841950980229151L;
 	
 	private Dimension windowSize = new Dimension(AppConstants.MAIN_FRAME_WIDTH, AppConstants.MAIN_FRAME_HEIGHT);
 	

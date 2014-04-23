@@ -2,49 +2,37 @@ package view;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import model.Employee;
-import model.Message;
-import controller.AppointmentCtrl;
-import controller.MainCtrl;
 import database.ClientObjectFactory;
-import framework.Controller;
+
 import resources.AppConstants;
 import utils.RelativeLayout;
 
+import model.Message;
+
 @SuppressWarnings("serial")
 public class InboxView extends JPanel {
-	
-	private float titleBarScaleWidth = 0.33f;
-	
+
 	private JPanel topPanelWrapper = new JPanel();
 	private InboxListPanel inboxPanel;
-	
 	private DefaultListModel<Message> inbox;
-	
-	private Controller ctrl;
-	private Employee emp;
-	
-	public InboxView(Controller controll, DefaultListModel<Message> inbox) {
-		this.inbox = inbox;
-		ctrl = controll;
+
+	public InboxView() {
 		
+		inbox = new DefaultListModel<Message>();
 		inboxPanel = new InboxListPanel();
 		
 		RelativeLayout rl = new RelativeLayout(RelativeLayout.Y_AXIS, 0);
@@ -60,44 +48,39 @@ public class InboxView extends JPanel {
 		
 		add(topPanelWrapper);
 		
-		InboxTitlePanel inboxTitlePanel = new InboxTitlePanel();
+		DefaultTitlePanel inboxTitlePanel = new DefaultTitlePanel();
+		inboxTitlePanel.setTitle(AppConstants.INBOX_HEADER_TEXT);
 		topPanelWrapper.add(inboxTitlePanel);
-		
-		inboxTitlePanel.fillSizeOfParent();
 		
 		add(inboxPanel);
 	}
 	
-	public class InboxTitlePanel extends JPanel {
-		
-		public InboxTitlePanel() {
-			setBorder(BorderFactory.createEmptyBorder(30, -2, 0, 0));
-			JLabel title = new JLabel(AppConstants.INBOX_HEADER_TEXT);
-			title.setFont(new Font("Arial", Font.PLAIN, 28));
-			setBackground(AppConstants.HEADER_BG_COLOR);
-			add(title);
-		}
-		
-		@Override
-		public Container getParent() {
-			return super.getParent();
-		}
-		
-		public void fillSizeOfParent() {
-			setPreferredSize(new Dimension((int)(getParent().getPreferredSize().width * titleBarScaleWidth)+1, getParent().getPreferredSize().height));
+	public void setModel(List<Message> messages) {
+		for(int i = 0; i < messages.size(); i++){
+			inbox.add(0, messages.get(i));  
 		}
 	}
 	
-	public class InboxListPanel extends JPanel implements ListSelectionListener {
+	public Message getSelectedMessage() {
+		return inboxPanel.getSelectedMessage();
+	}
+	
+	public void clearSelection() {
+		inboxPanel.clearSelection();
+	}
+	
+	public void addListSelectionListener(ListSelectionListener listener) {
+		inboxPanel.addListSelectionListener(listener);
+	}
+	
+	public class InboxListPanel extends JPanel {
 		
 		JList<Message> list;
 		
 		public InboxListPanel() {
 
 			list = new JList<Message>(inbox);
-			//list.setModel(testmessages);		
 			list.setCellRenderer(new InboxListCellRenderer());
-			list.addListSelectionListener(this);
 		
 			JScrollPane scrollPane = new JScrollPane();
 			scrollPane.setViewportView(list);
@@ -105,16 +88,17 @@ public class InboxView extends JPanel {
 			
 			add(scrollPane);
 		}
+		
+		public Message getSelectedMessage() {
+			return (Message)list.getSelectedValue();
+		}
+		
+		public void clearSelection() {
+			list.clearSelection();
+		}
 
-		public void valueChanged(ListSelectionEvent evt) {
-			// Aktiveres når noen trykker i innboksen
-			// UFERDIG, per nå sendes man bare til appointmentView
-			if (list.getSelectedValue() != null) {
-				((MainCtrl)ctrl.getMainCtrl()).setMeetingModel(ClientObjectFactory.getMeetingByID(list.getSelectedValue().getMeetID()));
-			
-				list.clearSelection();
-				ctrl.setState(AppointmentCtrl.class);
-			}
+		public void addListSelectionListener(ListSelectionListener listener) {
+			list.addListSelectionListener(listener);
 		}
 	}
 	
@@ -123,9 +107,6 @@ public class InboxView extends JPanel {
 		public InboxElementPanel(Message message) {
 			this.setLayout(new GridBagLayout());
 			
-//			JLabel space = new JLabel();
-//			space.setPreferredSize(new Dimension(10,25));
-//			add(space);
 			JLabel date = new JLabel(toDateString(message.getTime()));
 			date.setPreferredSize(new Dimension(100,25));
 			add(date);
@@ -135,7 +116,7 @@ public class InboxView extends JPanel {
 			JLabel mess = new JLabel(message.getMessage());
 			mess.setPreferredSize(new Dimension(500,25));
 			add(mess);
-			JLabel button = new JLabel("G� til");
+			JLabel button = new JLabel("G�� til");
 			button.setForeground(Color.BLUE);
 			add(button);
 			
@@ -159,6 +140,8 @@ public class InboxView extends JPanel {
 	}
 	
 	public class InboxListCellRenderer extends DefaultListCellRenderer {
+	
+		private InboxElementPanel element;
 		
 		@SuppressWarnings("rawtypes")
 		public Component getListCellRendererComponent(JList list,
@@ -168,37 +151,9 @@ public class InboxView extends JPanel {
 	            boolean cellHasFocus) {
 			
 			Message message = (Message) value; 
+			element = new InboxElementPanel(message); 
 			
-			InboxElementPanel element = new InboxElementPanel(message); 
-			//setText((String) value);
 			return element;
-		}
-	}
-	
-	public void initInbox(){
-		
-		emp = (Employee) ((MainCtrl)ctrl.getMainCtrl()).getModel();
-
-		Timestamp timeNull = new Timestamp(0); 
-		List<Message> messages = ClientObjectFactory.getMessages(emp.getUsername(), timeNull); 
-		
-		for(int i = 0; i < messages.size(); i++){
-			inbox.add(0, messages.get(i));  
-		}
-	}
-		
-	public void updateInbox(){
-		Timestamp timeLastMessage;
-		
-		if(inbox != null && inbox.size() > 0)
-			timeLastMessage = inbox.get(0).getTime();
-		else
-			timeLastMessage = new Timestamp(0);
-		
-		List<model.Message> messages = ClientObjectFactory.getMessages(emp.getUsername(), timeLastMessage); 
-		
-		for(int i = 0; i < messages.size(); i++){
-			inbox.add(0, messages.get(i)); 
 		}
 	}
 	
@@ -219,5 +174,14 @@ public class InboxView extends JPanel {
 				inbox.get(i).setSeen(true); 
 			} 
 		}
+	}
+	
+	public List<Message> getModel() {
+		List<Message> messages = new ArrayList<Message>();
+		
+		for (int i = 0; i < inbox.size(); i++) {
+			messages.add(inbox.get(i));
+		}
+		return messages;
 	}
 }

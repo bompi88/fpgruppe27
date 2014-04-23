@@ -1,45 +1,41 @@
 package model;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 
-import framework.Model;
+public class Message {
 
-import model.Meeting;
-import model.Participant;
-
-public class Message extends Model {
-	
-	private String type;
 	private Timestamp time; 
 	private String message;
 	private int meetid;
 	private boolean isSeen;
-	private Participant userInQuestion; 
-	private Participant messageOwner; 
-	private int messid;  
-
-//	protected String userHasConfirmedMessage = "Har bekreftet m??????teinkallingen til" + meeting.getMeetingName();   
-//	protected String userHasDeclinedMessage = "Har medlt avbud til" + meeting.getMeetingName();
+	private int messid;
 	
+	public Message() {
+		this.time = new Timestamp(System.currentTimeMillis());
+		this.message = "";
+		this.meetid = 0;
+		this.isSeen = false;
+		this.messid = 0;
+	}
 	
-	public Message(int meetid, String type, Participant messageOwner, Participant userInQuestion) {
+	public Message(Timestamp time, String message, int meetid, boolean isSeen,
+			int messid) {
 		super();
+		this.time = time;
+		this.message = message;
 		this.meetid = meetid;
-		this.type = type; 	
-		this.userInQuestion = userInQuestion; 
-		this.messageOwner = messageOwner; 
+		this.isSeen = isSeen;
+		this.messid = messid;
 	}
-	
-	public int getMessID(){
-		return messid; 
+
+	public Message(Timestamp time, String message, int meetid, boolean isSeen) {
+		super();
+		this.time = time;
+		this.message = message;
+		this.meetid = meetid;
+		this.isSeen = isSeen;
 	}
-	
-	public Date getDate() {
-		Date date = new Date(time.getTime());
-		return date;
-	}
-	
+
 	public Timestamp getTime() {
 		return time;
 	}
@@ -51,20 +47,33 @@ public class Message extends Model {
 	public String getMessage() {
 		return message;
 	}
-	
-	public int getMeetID() {
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public int getMeetid() {
 		return meetid;
 	}
-	
-	public void setMeetID(int meetid) {
+
+	public void setMeetid(int meetid) {
 		this.meetid = meetid;
 	}
-	
+
 	public boolean isSeen() {
 		return isSeen;
 	}
-	
-	public void setSeen(boolean isSeen){
+
+	public void setSeen(boolean isSeen) {
 		this.isSeen = isSeen;
 	}
+
+	public int getMessid() {
+		return messid;
+	}
+
+	public void setMessid(int messid) {
+		this.messid = messid;
+	}
+	
 }

@@ -14,17 +14,12 @@ import resources.AppConstants;
 import resources.ImageManager;
 import utils.RelativeLayout;
 
-import model.Employee;
+import model.Meeting;
 
-import controller.AppointmentCtrl;
-import controller.CalendarCtrl;
-import controller.InboxCtrl;
-import controller.MainCtrl;
-import framework.Controller;
-import framework.Observer;
+import controller.CalendeerClient;
 
 @SuppressWarnings("serial")
-public class SideBarView extends JPanel implements Observer {
+public class SideBarView extends JPanel {
 
 	private Dimension sidebarSize = new Dimension(150,800);
 	
@@ -35,10 +30,10 @@ public class SideBarView extends JPanel implements Observer {
 	private JLabel appIcon = new JLabel("");
 	private JLabel loggedInUser = new JLabel("");
 	
-	private Controller ctrl;
+	private CalendeerClient context;
 	
-	public SideBarView (Controller ctrl) {
-		this.ctrl = ctrl;
+	public SideBarView (CalendeerClient context) {
+		this.context = context;
 		
 		ImageManager.getInstance();
 		appIcon.setIcon(ImageManager.getAppIcon());
@@ -69,7 +64,7 @@ public class SideBarView extends JPanel implements Observer {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				((MainCtrl)getCtrl()).setState(CalendarCtrl.class);
+				getContext().setState(getContext().getCalendarState());
 			}
 			
 		});
@@ -78,7 +73,8 @@ public class SideBarView extends JPanel implements Observer {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				((MainCtrl)getCtrl()).setState(AppointmentCtrl.class);
+				getContext().setMeetingModel(new Meeting());
+				getContext().setState(getContext().getCreateMeetingState());
 			}
 			
 		});
@@ -87,7 +83,7 @@ public class SideBarView extends JPanel implements Observer {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				((MainCtrl)getCtrl()).setState(InboxCtrl.class);
+				getContext().setState(getContext().getInboxState());
 			}
 			
 		});
@@ -96,14 +92,14 @@ public class SideBarView extends JPanel implements Observer {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				((MainCtrl)getCtrl()).logout();
+				getContext().logout();
 			}
 			
 		});
 	}
 	
-	public Controller getCtrl() {
-		return ctrl;
+	public CalendeerClient getContext() {
+		return context;
 	}
 	
 	public void setNumberOfUnseenMessages(int count) {
@@ -111,13 +107,6 @@ public class SideBarView extends JPanel implements Observer {
 	}
 
 	public void init() {
-		loggedInUser.setText("<html><b>user:</b> " + ((Employee)((MainCtrl)ctrl.getMainCtrl()).getModel()).getUsername() + "</html>");
-	}
-
-	@Override
-	public void changeEvent(String event, Object obj) {
-		if (event.equals("inboxSeen")) {
-			setNumberOfUnseenMessages(0);
-		}
+		loggedInUser.setText("<html><b>user:</b> " + CalendeerClient.getCurrentEmployee().getUsername() + "</html>");
 	}
 }
